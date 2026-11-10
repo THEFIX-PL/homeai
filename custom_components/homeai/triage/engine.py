@@ -103,7 +103,11 @@ class Triage:
         """Store an AI tier's assessment (already validated) for the current set of signals."""
         s.assessment = {
             **self.assess(s),
-            **{k: v for k, v in result.items() if k in ("severity", "who", "confidence", "reason", "steps", "dispute")},
+            **{
+                k: v
+                for k, v in result.items()
+                if k in ("severity", "who", "confidence", "reason", "steps", "dispute", "actions")
+            },
             "assessed_by": tier,
             "assessed_at": dt_util.utcnow().isoformat(timespec="seconds"),
             "signal_ids": sorted(s.signals),

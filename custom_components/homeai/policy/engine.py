@@ -118,6 +118,8 @@ class Policy:
 
     async def _person(self, request: ActionRequest, risk: Risk) -> Decision:
         user = await self.rt.hass.auth.async_get_user(request.user_id) if request.user_id else None
+        if user is None and not request.user_id and risk <= Risk.R1:
+            return Decision(Verdict.ALLOW, risk, "anonymous")  # e.g. a voice satellite without a user
         if user is None or not user.is_active:
             return Decision(Verdict.DENY, risk, "no_user")
         admin = user.is_admin

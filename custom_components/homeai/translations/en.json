@@ -260,6 +260,11 @@
       "presence": {
         "name": "Presence"
       }
+    },
+    "conversation": {
+      "assistant": {
+        "name": "Assistant"
+      }
     }
   },
   "services": {

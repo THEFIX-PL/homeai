@@ -32,3 +32,20 @@ jobs:
           python-version: "3.14"
       - run: pip install -r requirements_test.txt
       - run: pytest
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      # the built module is committed so HACS installs work without a build step
+      - run: git diff --exit-code -- ../custom_components/homeai/frontend

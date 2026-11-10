@@ -260,6 +260,11 @@
       "presence": {
         "name": "Obecność"
       }
+    },
+    "conversation": {
+      "assistant": {
+        "name": "Asystent"
+      }
     }
   },
   "services": {

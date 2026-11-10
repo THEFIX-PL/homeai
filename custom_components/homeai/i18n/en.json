@@ -3,10 +3,14 @@
     "describe": "{service}: {targets}"
   },
   "ai": {
+    "all_quiet": "Everything is fine at home. Nothing needs attention.",
     "budget_over": "AI budget for this {period} is used up ({spent} of {limit}).",
     "budget_warn": "AI has used {spent} of the {limit} budget for this {period}.",
+    "no_tier": "No AI tier is configured. Add one in HomeAI's integration settings.",
+    "open_summary": "{count} matters are open: {titles}.",
     "period_day": "day",
-    "period_month": "month"
+    "period_month": "month",
+    "unavailable": "I cannot answer right now. Please try again later."
   },
   "common": {
     "and": "and"
@@ -61,6 +65,10 @@
     "ai.budget_mode": {
       "block": "Stop AI calls",
       "warn": "Only warn"
+    },
+    "ai.chat_tier": {
+      "p1": "P1 — everyday brain",
+      "p2": "P2 — investigation"
     },
     "general.language": {
       "auto": "Auto",
@@ -246,6 +254,18 @@
       "description": "Warn when this share of a budget is used.",
       "label": "Warn at"
     },
+    "ai.chat_max_steps": {
+      "description": "Most tool calls in one answer.",
+      "label": "Conversation steps"
+    },
+    "ai.chat_tier": {
+      "description": "Which tier talks with people (the other one is used when it is missing).",
+      "label": "Conversation tier"
+    },
+    "ai.chat_turns": {
+      "description": "How many recent exchanges a conversation remembers.",
+      "label": "Conversation memory"
+    },
     "ai.enabled": {
       "description": "Use the AI tiers added as subentries. HomeAI works without them.",
       "label": "AI"
@@ -261,6 +281,10 @@
     "ai.p2_confidence": {
       "description": "When P1 is less sure than this, the investigation tier (P2) looks again.",
       "label": "Investigate when unsure"
+    },
+    "ai.p2_max_steps": {
+      "description": "Most tool calls P2 makes while investigating one situation.",
+      "label": "Investigation steps"
     },
     "ai.p2_min_severity": {
       "description": "Situations at least this serious are also checked by P2 (5 = never).",

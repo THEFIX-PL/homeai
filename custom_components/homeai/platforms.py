@@ -10,4 +10,5 @@ PLATFORMS: list[Platform] = [
     Platform.EVENT,
     Platform.SWITCH,
     Platform.CALENDAR,
+    Platform.CONVERSATION,
 ]

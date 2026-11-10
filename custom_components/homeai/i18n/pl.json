@@ -3,10 +3,14 @@
     "describe": "{service}: {targets}"
   },
   "ai": {
+    "all_quiet": "W domu wszystko w porządku. Nic nie wymaga uwagi.",
     "budget_over": "Budżet AI na ten {period} się skończył ({spent} z {limit}).",
     "budget_warn": "AI zużyło {spent} z budżetu {limit} na ten {period}.",
+    "no_tier": "Nie skonfigurowano poziomu AI. Dodaj go w ustawieniach integracji HomeAI.",
+    "open_summary": "Otwartych spraw: {count}: {titles}.",
     "period_day": "dzień",
-    "period_month": "miesiąc"
+    "period_month": "miesiąc",
+    "unavailable": "Nie mogę teraz odpowiedzieć. Spróbuj później."
   },
   "common": {
     "and": "i"
@@ -61,6 +65,10 @@
     "ai.budget_mode": {
       "block": "Wstrzymaj AI",
       "warn": "Tylko ostrzegaj"
+    },
+    "ai.chat_tier": {
+      "p1": "P1 — codzienny mózg",
+      "p2": "P2 — badanie"
     },
     "general.language": {
       "auto": "Auto",
@@ -246,6 +254,18 @@
       "description": "Ostrzegaj, gdy zużyto taką część budżetu.",
       "label": "Ostrzegaj przy"
     },
+    "ai.chat_max_steps": {
+      "description": "Najwięcej wywołań narzędzi w jednej odpowiedzi.",
+      "label": "Kroki rozmowy"
+    },
+    "ai.chat_tier": {
+      "description": "Który poziom rozmawia z ludźmi (drugi, gdy tego brakuje).",
+      "label": "Poziom rozmowy"
+    },
+    "ai.chat_turns": {
+      "description": "Ile ostatnich wymian pamięta rozmowa.",
+      "label": "Pamięć rozmowy"
+    },
     "ai.enabled": {
       "description": "Używaj poziomów AI dodanych jako podwpisy. HomeAI działa też bez nich.",
       "label": "AI"
@@ -261,6 +281,10 @@
     "ai.p2_confidence": {
       "description": "Gdy P1 jest mniej pewny niż ta wartość, poziom badawczy (P2) patrzy jeszcze raz.",
       "label": "Badaj przy niepewności"
+    },
+    "ai.p2_max_steps": {
+      "description": "Najwięcej wywołań narzędzi, które P2 wykonuje przy badaniu jednej sprawy.",
+      "label": "Kroki badania"
     },
     "ai.p2_min_severity": {
       "description": "Sprawy co najmniej tak poważne sprawdza też P2 (5 = nigdy).",

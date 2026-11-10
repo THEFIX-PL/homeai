@@ -17,6 +17,7 @@ from homeassistant.util import dt as dt_util
 from ..const import LOGGER
 from ..situations.model import Phase, Situation
 from .budget import Ledger
+from .missions.investigate import investigate
 from .missions.triage import needs_triage, run_triage
 from .privacy import Privacy
 from .prompts import DIGEST
@@ -39,6 +40,7 @@ class AIModule:
         self._unsubs: list[Callable[[], None]] = []
         self.last_prompts: dict[str, dict[str, Any]] = {}
         self.status: dict[str, str] = {}  # subentry id → "ok" | error code
+        self.threads: dict[str, dict[str, Any]] = {}  # conversation id → chat thread
 
     async def async_setup(self) -> None:
         await self.ledger.async_load()
@@ -53,6 +55,14 @@ class AIModule:
         engine = self.rt.module("situations")
         if engine is not None:
             self._unsubs.append(engine.listen(self._on_situation))
+        from homeassistant.helpers import llm
+
+        from .llm_api import HomeAIAPI
+
+        try:
+            self._unsubs.append(llm.async_register_api(self.hass, HomeAIAPI(self.hass, self.rt)))
+        except Exception:
+            LOGGER.exception("Registering the HomeAI LLM API failed")
 
     async def async_unload(self) -> None:
         for unsub in self._unsubs:
@@ -90,7 +100,9 @@ class AIModule:
         return sum(1 for t, at in self._calls if t == tier and at > since) < limit
 
     # ——— Asking ———
-    async def ask(self, tier: str, request: AIRequest, *, situation_id: str | None = None) -> AIResponse | None:
+    async def ask(
+        self, tier: str, request: AIRequest, *, situation_id: str | None = None, only: str | None = None
+    ) -> AIResponse | None:
         """Ask a tier; tries its providers in order. None when AI is off, over budget or every provider failed."""
         if not self.available(tier):
             return None
@@ -102,6 +114,8 @@ class AIModule:
             return None
         request.timeout = float(self.rt.settings.get(TIER_TIMEOUT.get(tier, "ai.timeout")))
         for cfg in self.tiers.get(tier, []):
+            if only is not None and cfg.subentry_id != only:
+                continue  # a tool loop stays with the provider that started it
             if request.effort is None and cfg.effort:
                 request.effort = cfg.effort
             try:
@@ -117,6 +131,7 @@ class AIModule:
                 LOGGER.exception("AI %s (%s) crashed for %s", tier, cfg.model, request.purpose)
                 continue
             self.status[cfg.subentry_id] = "ok"
+            response.source = cfg.subentry_id
             self.ledger.record(
                 tier, response.model, response.cost, response.input_tokens, response.output_tokens, request.purpose
             )
@@ -168,7 +183,7 @@ class AIModule:
             or (p1["severity"] >= int(settings.get("ai.p2_min_severity")))
         )
         if need_p2 and self.available("p2"):
-            p2 = await run_triage(self, s, "p2")
+            p2 = await investigate(self, s)
             if p2 is not None:
                 s.log("ai_assessed", tier="p2", severity=p2["severity"], who=p2["who"], confidence=p2["confidence"])
                 if p1 is not None and (abs(p1["severity"] - p2["severity"]) >= 2 or p1["who"] != p2["who"]):
@@ -198,6 +213,12 @@ class AIModule:
         else:
             engine.save()
         return result
+
+    # ——— Conversations ———
+    async def chat(self, text: str, conversation_id: str, user_id: str | None) -> tuple[str, list[dict[str, Any]]]:
+        from .missions.chat import chat
+
+        return await chat(self, text, conversation_id, user_id)
 
     # ——— Digest ———
     async def narrate_digest(self, text: str) -> str | None:

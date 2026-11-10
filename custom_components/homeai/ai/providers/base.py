@@ -55,6 +55,7 @@ class AIResponse:
     cost: float = 0.0
     assistant_message: dict[str, Any] | None = None  # to append to `messages` when continuing a tool loop
     provider: str = ""
+    source: str = ""  # the tier entry (subentry id) that answered
 
 
 class Provider(Protocol):

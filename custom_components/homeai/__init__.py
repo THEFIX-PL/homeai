@@ -39,6 +39,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: HomeAIConfigEntry) -> bo
     await runtime.async_setup()
     runtime.subentry_snapshot = _subentries(entry)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    from .panel import async_setup_panel
+
+    await async_setup_panel(hass, runtime)
     entry.async_on_unload(entry.add_update_listener(_async_update_listener))
     return True
 
@@ -64,5 +67,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: HomeAIConfigEntry) -> b
     """Unload a HomeAI config entry."""
     ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if ok:
+        from .panel import async_remove_panel
+
+        async_remove_panel(hass)
         await entry.runtime_data.async_unload()
     return ok

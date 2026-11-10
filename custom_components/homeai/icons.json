@@ -89,6 +89,11 @@
       "presence": {
         "default": "mdi:calendar-account"
       }
+    },
+    "conversation": {
+      "assistant": {
+        "default": "mdi:home-heart"
+      }
     }
   }
 }
