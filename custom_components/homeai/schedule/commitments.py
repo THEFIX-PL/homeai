@@ -13,6 +13,7 @@ from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.storage import Store
 from homeassistant.util import dt as dt_util, ulid as ulid_util
 
+from .. import i18n
 from ..const import DOMAIN, LOGGER
 
 STORAGE_KEY = f"{DOMAIN}.commitments"
@@ -154,7 +155,10 @@ class Commitments:
 
     def describe(self, item: dict[str, Any]) -> str:
         what = self.rt.world.display_name(item["entity_id"]) or item["entity_id"]
-        return self.rt.text(f"schedule|watch_{item['condition']}", name=what, value=item.get("value"))
+        value = item.get("value")
+        if isinstance(value, str) and i18n.has(self.rt.language, f"states|{value}"):
+            value = self.rt.text(f"states|{value}")  # “off” → “wyłączone”
+        return self.rt.text(f"schedule|watch_{item['condition']}", name=what, value=value)
 
     # ——— Watching ———
     @callback

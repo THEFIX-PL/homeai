@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t, when } from "../i18n";
 import { shared } from "../styles";
 import type { HomeAssistant } from "../types";
@@ -74,7 +75,7 @@ export function describeWhen(w: When, lang: string): string {
 }
 
 // The home's plan: what happens next, every entry, and a form to add or change one.
-@customElement("homeai-plan")
+@element("homeai-plan")
 export class HomeAIPlan extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private occurrences: Occurrence[] = [];
@@ -82,6 +83,7 @@ export class HomeAIPlan extends LitElement {
   @state() private watches: Watch[] = [];
   @state() private draft?: Draft;
   @state() private error = "";
+  @state() private all = false;
 
   static styles = shared;
 
@@ -225,10 +227,11 @@ export class HomeAIPlan extends LitElement {
       ${this.draft ? this.form() : nothing}
       ${this.entries.length ? html`
         <div class="card"><div class="title">${t(lang, "plan_next")}</div><ul class="plain">
-          ${this.occurrences.slice(0, 40).map((o) => html`<li class="row"><span class="muted">${when(o.at, lang)}</span>
+          ${this.occurrences.slice(0, this.all ? 200 : 12).map((o) => html`<li class="row"><span class="muted">${when(o.at, lang)}</span>
             <span class="grow">${o.title}${o.external ? html` <span class="muted">· ${this.hass.states[o.source ?? ""]?.attributes.friendly_name ?? o.source}</span>` : nothing}</span>
             ${o.external ? nothing : html`<button title=${t(lang, "plan_skip")} @click=${() => this.skip(o)}>${t(lang, "plan_skip")}</button>`}</li>`)}
-        </ul></div>
+        </ul>
+        ${this.occurrences.length > 12 ? html`<button style="margin-top: 8px" @click=${() => (this.all = !this.all)}>${this.all ? t(lang, "show_less") : `${t(lang, "show_all")} (${this.occurrences.length})`}</button>` : nothing}</div>
         <div class="card"><div class="title">${t(lang, "plan_entries")}</div><ul class="plain">
           ${this.entries.map(
             (e) => html`<li class="row"><span class="grow">${e.enabled ? "" : html`<span class="muted">(${t(lang, "rule_off")}) </span>`}${e.title}<br />

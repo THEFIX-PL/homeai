@@ -1,5 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { property, query, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t } from "../i18n";
 import { shared } from "../styles";
 import type { ChatMessage, HomeAssistant } from "../types";
@@ -24,7 +25,7 @@ function remember(key: string, value: string | null): void {
 }
 
 // A conversation with HomeAI in the viewer's own account. Used by the panel's Chat tab and the chat card.
-@customElement("homeai-chat")
+@element("homeai-chat")
 export class HomeAIChat extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ attribute: "storage-key" }) storageKey = STORAGE_KEY;

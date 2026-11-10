@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t, when } from "../i18n";
 import { shared } from "../styles";
 import type { HomeAssistant, SettingItem, SettingsSchema, WorldSummary } from "../types";
@@ -11,7 +12,7 @@ interface Change { ts: string; key: string; scope: string; old: unknown; new: un
 
 // Every setting is rendered from the backend's registry: adding a setting needs no frontend change.
 // A scope (floor, room, device, entity, person) shows only the settings that can be overridden there.
-@customElement("homeai-settings")
+@element("homeai-settings")
 export class HomeAISettings extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private schema?: SettingsSchema;

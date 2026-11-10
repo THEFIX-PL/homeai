@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "./define";
 import { t } from "./i18n";
 import { shared } from "./styles";
 import type { HomeAssistant } from "./types";
@@ -17,7 +18,7 @@ import "./views/presence";
 const TABS = ["situations", "approvals", "chat", "plan", "presence", "learning", "rules", "journal", "settings", "ai"] as const;
 type Tab = (typeof TABS)[number];
 
-@customElement("homeai-panel")
+@element("homeai-panel")
 export class HomeAIPanel extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ type: Boolean }) narrow = false;

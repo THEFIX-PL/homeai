@@ -1,10 +1,11 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t, when } from "../i18n";
 import { shared } from "../styles";
 import type { Approval, HomeAssistant } from "../types";
 
-@customElement("homeai-approvals")
+@element("homeai-approvals")
 export class HomeAIApprovals extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private pending: Approval[] = [];

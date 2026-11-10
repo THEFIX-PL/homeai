@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t, when } from "../i18n";
 import { shared } from "../styles";
 import type { HomeAssistant, WorldSummary } from "../types";
@@ -20,8 +21,22 @@ function localDay(iso: string, end = false): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+function midnight(iso: string): boolean {
+  const d = new Date(iso);
+  return d.getHours() === 0 && d.getMinutes() === 0;
+}
+
+// Whole days as dates with the last day included; anything else with times.
+function span(start: string, end: string, lang: string): string {
+  if (!midnight(start) || !midnight(end)) return `${when(start, lang)} → ${when(end, lang)}`;
+  const fmt = (d: Date) => d.toLocaleDateString(lang, { weekday: "short", day: "numeric", month: "short" });
+  const first = new Date(start);
+  const last = new Date(new Date(end).getTime() - 1000);
+  return first.toDateString() === last.toDateString() ? fmt(first) : `${fmt(first)} – ${fmt(last)}`;
+}
+
 // Trips, guests, working from home: exceptions HomeAI and every automation can read from calendar.homeai_presence.
-@customElement("homeai-presence")
+@element("homeai-presence")
 export class HomeAIPresence extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private items: Item[] = [];
@@ -99,7 +114,7 @@ export class HomeAIPresence extends LitElement {
       ${this.items.length
         ? html`<div class="card"><ul class="plain">${this.items.map(
             (i) => html`<li class="row"><span class="grow">${t(lang, `presence_${i.kind}`)} · ${this.personName(i.person)}<br />
-              <span class="muted">${when(i.start, lang)} → ${when(i.end, lang)}${i.note ? ` · ${i.note}` : ""}</span></span>
+              <span class="muted">${span(i.start, i.end, lang)}${i.note ? ` · ${i.note}` : ""}</span></span>
               <button @click=${() => (this.draft = { id: i.id, kind: i.kind, person: i.person ?? "", start: localDay(i.start), end: localDay(i.end, true), note: i.note })}>${t(lang, "edit")}</button>
               <button @click=${() => this.removeItem(i.id)}>${t(lang, "remove")}</button></li>`,
           )}</ul></div>`

@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "./define";
 import { t, when } from "./i18n";
 import { shared } from "./styles";
 import type { HomeAssistant } from "./types";
@@ -9,7 +10,7 @@ interface CardConfig { type: string; entity?: string; title?: string; min_severi
 interface Item { id: string; title: string; severity: number; since: string; acknowledged: boolean; repairing: boolean; who: string | null }
 
 // Lovelace card: open situations with quick reactions. Reads sensor.homeai_situations; no setup needed.
-@customElement("homeai-situations-card")
+@element("homeai-situations-card")
 export class HomeAISituationsCard extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private config: CardConfig = { type: "custom:homeai-situations-card" };
@@ -59,7 +60,7 @@ export class HomeAISituationsCard extends LitElement {
 interface PlanCardConfig { type: string; title?: string; days?: number; limit?: number }
 
 // Lovelace card: what the home's plan does next. Reads the plan through the WebSocket API.
-@customElement("homeai-plan-card")
+@element("homeai-plan-card")
 export class HomeAIPlanCard extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private config: PlanCardConfig = { type: "custom:homeai-plan-card" };
@@ -120,7 +121,7 @@ export class HomeAIPlanCard extends LitElement {
 interface ChatCardConfig { type: string; title?: string }
 
 // Lovelace card: talk to HomeAI in your own account, right on a dashboard.
-@customElement("homeai-chat-card")
+@element("homeai-chat-card")
 export class HomeAIChatCard extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private config: ChatCardConfig = { type: "custom:homeai-chat-card" };

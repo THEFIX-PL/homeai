@@ -1747,5 +1747,17 @@
   },
   "situation": {
     "and_more": "{title} and {count} more"
+  },
+  "states": {
+    "closed": "closed",
+    "home": "home",
+    "idle": "idle",
+    "locked": "locked",
+    "not_home": "away",
+    "off": "off",
+    "on": "on",
+    "open": "open",
+    "running": "running",
+    "unlocked": "unlocked"
   }
 }

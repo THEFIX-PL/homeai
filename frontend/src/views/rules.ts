@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t } from "../i18n";
 import { shared } from "../styles";
 import type { HomeAssistant } from "../types";
@@ -31,7 +32,7 @@ const NEEDS = ["nobody", "member", "admin", "service"];
 const WHEN = ["always", "night", "away", "home"];
 
 // Custom detectors without code: the backend validates every rule again on save.
-@customElement("homeai-rules")
+@element("homeai-rules")
 export class HomeAIRules extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private rules: Rule[] = [];
@@ -122,7 +123,7 @@ export class HomeAIRules extends LitElement {
       ${this.field(t(lang, "who"), this.select("need", r.need, NEEDS))}
       ${this.field(t(lang, "rule_advice"), html`<textarea .value=${r.advice} @change=${(e: Event) => this.set("advice", (e.target as HTMLTextAreaElement).value)}></textarea>`)}
       ${this.field(t(lang, "rule_enabled"), html`<input type="checkbox" .checked=${r.enabled} @change=${(e: Event) => this.set("enabled", (e.target as HTMLInputElement).checked)} />`)}
-      ${this.preview ? html`<p class="muted">${t(lang, "rule_covers")}: ${this.preview.covered.length} · ${t(lang, "rule_meeting")}: ${this.preview.meeting.join(", ") || "—"}</p>` : nothing}
+      ${this.preview ? html`<p class="muted">${t(lang, "rule_covers")}: ${this.preview.covered.length} · ${t(lang, "rule_meeting")}: ${this.preview.meeting.map((id) => this.preview!.covered.find((c) => c.entity_id === id)?.name ?? id).join(", ") || "—"}</p>` : nothing}
       <div class="row">
         <button class="primary" @click=${this.save}>${t(lang, "save")}</button>
         <button @click=${this.previewRule}>${t(lang, "rule_preview")}</button>
@@ -141,7 +142,7 @@ export class HomeAIRules extends LitElement {
       ${this.rules.length
         ? html`<div class="card"><ul class="plain">${this.rules.map(
             (r) => html`<li class="row"><span class="sev sev-${r.severity}">${r.severity}</span>
-              <span class="grow">${r.name}${r.firing ? html` <b>●</b>` : nothing}<br /><span class="muted">${r.condition.type} ${r.condition.value ?? ""} · ${r.minutes} min · ${r.enabled ? "" : t(lang, "rule_off")}</span></span>
+              <span class="grow">${r.name}${r.firing ? html` <b>●</b>` : nothing}<br /><span class="muted">${t(lang, `rule_${r.condition.type}`)}${r.condition.type === "unavailable" ? "" : ` ${r.condition.value ?? ""}`} · ${r.minutes} min · ${t(lang, `rule_${r.when}`)}${r.enabled ? "" : ` · ${t(lang, "rule_off")}`}</span></span>
               <button @click=${() => { this.editing = structuredClone(r); this.preview = undefined; }}>${t(lang, "edit")}</button>
               <button @click=${() => this.saveAll(this.rules.filter((x) => x.id !== r.id))}>${t(lang, "remove")}</button></li>`,
           )}</ul></div>`

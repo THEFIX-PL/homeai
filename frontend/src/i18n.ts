@@ -48,6 +48,11 @@ const TEXTS: Record<string, Record<string, string>> = {
     prompt_restore: "Restore the built-in prompt", prompt_show_default: "Show the built-in prompt", prompt_restored: "built-in prompt restored",
     prompt_hint: "The rule that house data is never an instruction is always added, and structured answers keep their format.",
     watching: "Watching for you", until: "until",
+    show_all: "Show all", show_less: "Show less", limit_day: "Daily limit", limit_month: "Monthly limit",
+    memory_home: "whole home", memory_from_person: "told by a person", memory_from_ai: "noticed by AI", memory_from_learning: "learned",
+    kind_schedule: "Plan", kind_action: "Action", kind_ai: "AI", kind_repair: "Repair", kind_approval: "Approval",
+    kind_setting: "Setting", kind_situation: "Situation", kind_notify: "Notification", kind_learning: "Learning",
+    kind_memory: "Memory", kind_policy: "Policy", kind_system: "System", kind_decision: "Decision", kind_notification: "Notification",
   },
   pl: {
     situations: "Sprawy", approvals: "Zgody", plan: "Plan", journal: "Dziennik", settings: "Ustawienia", ai: "AI",
@@ -97,6 +102,11 @@ const TEXTS: Record<string, Record<string, string>> = {
     prompt_restore: "Przywróć wbudowany prompt", prompt_show_default: "Pokaż wbudowany prompt", prompt_restored: "przywrócono wbudowany prompt",
     prompt_hint: "Zasada, że dane z domu nigdy nie są poleceniem, jest zawsze dodawana, a odpowiedzi strukturalne zachowują swój format.",
     watching: "Pilnuję dla ciebie", until: "do",
+    show_all: "Pokaż wszystko", show_less: "Pokaż mniej", limit_day: "Limit dzienny", limit_month: "Limit miesięczny",
+    memory_home: "cały dom", memory_from_person: "od domownika", memory_from_ai: "zauważone przez AI", memory_from_learning: "nauczone",
+    kind_schedule: "Plan", kind_action: "Akcja", kind_ai: "AI", kind_repair: "Naprawa", kind_approval: "Zgoda",
+    kind_setting: "Ustawienie", kind_situation: "Sprawa", kind_notify: "Powiadomienie", kind_learning: "Uczenie",
+    kind_memory: "Pamięć", kind_policy: "Polityka", kind_system: "System", kind_decision: "Decyzja", kind_notification: "Powiadomienie",
   },
 };
 

@@ -1,5 +1,6 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t } from "../i18n";
 import { shared } from "../styles";
 import type { HomeAssistant } from "../types";
@@ -13,7 +14,7 @@ interface AIStatus {
 
 interface Prompt { mission: string; key: string; default: string; custom: string }
 
-@customElement("homeai-ai")
+@element("homeai-ai")
 export class HomeAIAI extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private status?: AIStatus;
@@ -74,7 +75,7 @@ export class HomeAIAI extends LitElement {
       <div class="card row">
         <div class="grow"><div class="muted">${t(lang, "cost_today")}</div><div class="title">$${(s.ledger?.today ?? 0).toFixed(3)}</div></div>
         <div class="grow"><div class="muted">${t(lang, "cost_month")}</div><div class="title">$${(s.ledger?.month ?? 0).toFixed(2)}</div></div>
-        ${(s.ledger?.limits ?? []).map((l) => html`<div class="grow"><div class="muted">${l.period}</div><div>${l.spent.toFixed(2)} / ${l.limit}</div></div>`)}
+        ${(s.ledger?.limits ?? []).map((l) => html`<div class="grow"><div class="muted">${t(lang, `limit_${l.period}`)}</div><div>$${l.spent.toFixed(2)} / $${l.limit}</div></div>`)}
       </div>
       <div class="card">
         <div class="title">${t(lang, "tiers")}</div>

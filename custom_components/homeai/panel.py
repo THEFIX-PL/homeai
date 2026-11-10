@@ -27,7 +27,10 @@ async def async_setup_panel(hass: HomeAssistant, rt: Any) -> None:
         if "frontend" in hass.config.components:
             from homeassistant.components.frontend import add_extra_js_url
 
-            add_extra_js_url(hass, module_url)  # makes the cards available on dashboards
+            # Makes the cards available on dashboards: as a module for current browsers, and as a plain script
+            # for browsers Home Assistant serves its legacy build to (e.g. iOS before 18.1).
+            add_extra_js_url(hass, module_url)
+            add_extra_js_url(hass, module_url, es5=True)
     if "frontend" not in hass.config.components or not rt.settings.get("general.panel_sidebar"):
         return
     from homeassistant.components import panel_custom

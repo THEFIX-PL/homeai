@@ -1747,5 +1747,17 @@
   },
   "situation": {
     "and_more": "{title} i {count} więcej"
+  },
+  "states": {
+    "closed": "zamknięte",
+    "home": "w domu",
+    "idle": "bezczynne",
+    "locked": "zamknięte na klucz",
+    "not_home": "poza domem",
+    "off": "wyłączone",
+    "on": "włączone",
+    "open": "otwarte",
+    "running": "pracuje",
+    "unlocked": "otwarte"
   }
 }
