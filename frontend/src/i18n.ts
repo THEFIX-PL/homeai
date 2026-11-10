@@ -11,6 +11,8 @@ const TEXTS: Record<string, Record<string, string>> = {
     cost_today: "Cost today", cost_month: "This month", tiers: "Tiers", no_tiers: "No AI tier yet. Add one in the integration's settings (Add AI tier).",
     last_prompt: "Last request", resolved: "Recently resolved", admin_only: "Only administrators can change settings.",
     since: "since", reason: "Why", steps: "Steps",
+    learning: "Learning", proposals: "Proposals", no_proposals: "No proposals yet.", memory: "Memory",
+    remember: "Remember", remember_hint: "Something HomeAI should know", review: "Weekly review",
   },
   pl: {
     situations: "Sprawy", approvals: "Zgody", plan: "Plan", journal: "Dziennik", settings: "Ustawienia", ai: "AI",
@@ -23,6 +25,8 @@ const TEXTS: Record<string, Record<string, string>> = {
     cost_today: "Koszt dziś", cost_month: "W tym miesiącu", tiers: "Poziomy", no_tiers: "Brak poziomu AI. Dodaj go w ustawieniach integracji (Dodaj poziom AI).",
     last_prompt: "Ostatnie zapytanie", resolved: "Ostatnio rozwiązane", admin_only: "Ustawienia zmieniają tylko administratorzy.",
     since: "od", reason: "Dlaczego", steps: "Kroki",
+    learning: "Uczenie", proposals: "Propozycje", no_proposals: "Brak propozycji.", memory: "Pamięć",
+    remember: "Zapamiętaj", remember_hint: "Coś, co HomeAI powinno wiedzieć", review: "Przegląd tygodniowy",
   },
 };
 

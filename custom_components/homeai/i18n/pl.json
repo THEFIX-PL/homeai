@@ -50,6 +50,21 @@
     "situation_opened": "Sprawa: {title}",
     "situation_resolved": "Ustąpiło: {title}"
   },
+  "learning": {
+    "habit_title": "{what}: {action} o {time} w {days}",
+    "habits_found": "Znaleziono nawyki do zaproponowania: {count}",
+    "review_actions": "Akcje: {done} wykonane, {undone} cofnięte, {observed} tylko zaobserwowane.",
+    "review_approvals": "Prośby: {approved} zatwierdzone, {denied} odrzucone, {expired} wygasłe.",
+    "review_cost": "Koszt AI w tym tygodniu: ${cost}.",
+    "review_proposals": "Propozycji czekających w panelu HomeAI: {count}.",
+    "review_raise": "Te akcje zawsze zatwierdzano; HomeAI mogłoby robić je samo: {actions}.",
+    "review_sent": "Wysłano przegląd tygodniowy",
+    "review_situations": "Spraw rozwiązanych w tym tygodniu: {count}; otwartych teraz: {open}.",
+    "review_title": "Przegląd tygodniowy HomeAI",
+    "review_top": "Najczęstsze: {kinds}.",
+    "weekend": "weekendy",
+    "workday": "dni robocze"
+  },
   "notify": {
     "action_ack": "Wiem",
     "action_approve": "Zgoda",
@@ -86,6 +101,15 @@
       "auto": "Auto",
       "en": "English",
       "pl": "Polski"
+    },
+    "learning.review_weekday": {
+      "0": "Poniedziałek",
+      "1": "Wtorek",
+      "2": "Środa",
+      "3": "Czwartek",
+      "4": "Piątek",
+      "5": "Sobota",
+      "6": "Niedziela"
     },
     "notify.digest_to": {
       "admins": "Administratorzy",
@@ -187,6 +211,10 @@
     "general": {
       "description": "Język, pory dnia, dziennik i panel.",
       "label": "Ogólne"
+    },
+    "learning": {
+      "description": "Normy, anomalie, nawyki i przegląd tygodniowy.",
+      "label": "Uczenie"
     },
     "notify": {
       "description": "Kto, jak i kiedy się dowiaduje.",
@@ -353,6 +381,10 @@
     "ai.triage_new_kinds": {
       "description": "Pozwól AI sprawdzić rodzaj sprawy, gdy zdarza się po raz pierwszy.",
       "label": "Sprawdzaj nowe rodzaje"
+    },
+    "detectors.anomaly.enabled": {
+      "description": "Zgłaszaj wartości daleko poza zwykłym zakresem dla tej godziny tygodnia.",
+      "label": "Anomalie: obserwuj"
     },
     "detectors.availability.enabled": {
       "description": "Obserwuj urządzenia, których wszystkie encje są niedostępne.",
@@ -746,6 +778,78 @@
       "description": "Jak często działają sprawdzenia zależne od czasu (niedostępność, terminy, harmonogram).",
       "label": "Co ile sprawdzać"
     },
+    "learning.anomaly_minutes": {
+      "description": "Jak długo wartość musi być nietypowa, zanim zostanie zgłoszona.",
+      "label": "Nietypowe przez"
+    },
+    "learning.anomaly_severity": {
+      "description": "Waga 0–4 nietypowej wartości.",
+      "label": "Anomalia: waga"
+    },
+    "learning.anomaly_sigma": {
+      "description": "Ile odchyleń od normy uznać za nietypowe.",
+      "label": "Próg anomalii"
+    },
+    "learning.baseline_weeks": {
+      "description": "Ile minionych tygodni tworzy normę każdej godziny tygodnia.",
+      "label": "Normy z"
+    },
+    "learning.deny_quiet_days": {
+      "description": "Ile dni HomeAI czeka, zanim znów zapyta o akcję, której ktoś odmówił.",
+      "label": "Nie pytaj ponownie przez"
+    },
+    "learning.enabled": {
+      "description": "Ucz się norm, zauważaj anomalie i nawyki, wysyłaj przegląd tygodniowy.",
+      "label": "Uczenie"
+    },
+    "learning.habit_days": {
+      "description": "Ile minionych dni przeszukiwać pod kątem nawyków.",
+      "label": "Nawyki z"
+    },
+    "learning.habit_min_days": {
+      "description": "Przez ile dni coś musi się powtarzać, żeby stać się propozycją.",
+      "label": "Nawyk po"
+    },
+    "learning.habit_window": {
+      "description": "Jak blisko w czasie muszą być powtarzane czynności.",
+      "label": "Okno czasu nawyku"
+    },
+    "learning.habits": {
+      "description": "Zauważaj rzeczy robione ręcznie o tej samej porze i proponuj je do planu.",
+      "label": "Nawyki"
+    },
+    "learning.min_samples": {
+      "description": "Ile wartości godzinowych potrzeba, zanim encja ma normę.",
+      "label": "Minimum danych"
+    },
+    "learning.nightly_time": {
+      "description": "Kiedy przeliczać normy i nawyki.",
+      "label": "Nocne uczenie o"
+    },
+    "learning.raise_after": {
+      "description": "Liczba zgód bez odmowy, po której przegląd tygodniowy proponuje, by HomeAI działało samo.",
+      "label": "Proponuj więcej samodzielności po"
+    },
+    "learning.review_ai": {
+      "description": "Pozwól poziomowi AI przepisać przegląd tygodniowy.",
+      "label": "Przegląd pisany przez AI"
+    },
+    "learning.review_push": {
+      "description": "Wysyłaj przegląd tygodniowy na telefony administratorów.",
+      "label": "Wysyłaj przegląd na telefony"
+    },
+    "learning.review_time": {
+      "description": "Godzina przeglądu tygodniowego.",
+      "label": "Przegląd tygodniowy o"
+    },
+    "learning.review_weekday": {
+      "description": "Dzień przeglądu tygodniowego.",
+      "label": "Przegląd tygodniowy w"
+    },
+    "learning.undo_limit": {
+      "description": "Po tylu cofnięciach automatyczna akcja wraca do „proponuj”.",
+      "label": "Zbyt często cofane po"
+    },
     "notify.announce_resolved": {
       "description": "Wyślij krótką wiadomość, gdy zgłoszona sprawa ustąpi.",
       "label": "Informuj o ustąpieniu"
@@ -1088,6 +1192,10 @@
     }
   },
   "signals": {
+    "anomaly": {
+      "description": "{name} pokazuje {value}; zwykle o tej porze około {usual}.",
+      "title": "Nietypowe: {name}"
+    },
     "automation_error": {
       "description": "{when}: {error}",
       "title": "Automatyzacja z błędem: {name}"

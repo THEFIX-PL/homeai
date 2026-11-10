@@ -76,6 +76,18 @@ def _arbiter(rt: Any) -> Any:
     return Arbiter(rt)
 
 
+def _memory(rt: Any) -> Any:
+    from .memory.store import Memory
+
+    return Memory(rt)
+
+
+def _learning(rt: Any) -> Any:
+    from .learning.module import Learning
+
+    return Learning(rt)
+
+
 def _triage(rt: Any) -> Any:
     from .triage.engine import Triage
 
@@ -102,4 +114,6 @@ STAGES: list[tuple[str, Callable[[Any], Any]]] = [
     ("scheduler", _scheduler),
     ("ai", _ai),
     ("arbiter", _arbiter),
+    ("memory", _memory),
+    ("learning", _learning),
 ]

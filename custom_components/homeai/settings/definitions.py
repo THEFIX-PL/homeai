@@ -433,6 +433,31 @@ def _ai() -> list[Setting]:
     ]
 
 
+def _learning() -> list[Setting]:
+    s = "learning"
+    return [
+        Setting("learning.enabled", T.BOOL, True, s),
+        Setting("learning.nightly_time", T.TIME, "03:17", s, advanced=True),
+        Setting("learning.baseline_weeks", T.INT, 4, s, min=1, max=12, unit="wk", advanced=True),
+        Setting("learning.min_samples", T.INT, 100, s, min=10, max=5000, advanced=True),
+        Setting("detectors.anomaly.enabled", T.BOOL, True, s),
+        Setting("learning.anomaly_sigma", T.FLOAT, 3.0, s, min=1.5, max=10, step=0.5),
+        Setting("learning.anomaly_minutes", T.INT, 30, s, scopes=THING, min=5, max=720, unit="min"),
+        _sev("learning.anomaly_severity", 1, s, THING),
+        Setting("learning.habits", T.BOOL, True, s),
+        Setting("learning.habit_days", T.INT, 21, s, min=7, max=60, unit="d", advanced=True),
+        Setting("learning.habit_min_days", T.INT, 8, s, min=3, max=60, unit="d", advanced=True),
+        Setting("learning.habit_window", T.INT, 20, s, min=5, max=90, unit="min", advanced=True),
+        Setting("learning.undo_limit", T.INT, 2, s, min=1, max=20),
+        Setting("learning.deny_quiet_days", T.INT, 14, s, min=1, max=365, unit="d"),
+        Setting("learning.raise_after", T.INT, 5, s, min=2, max=100, advanced=True),
+        Setting("learning.review_weekday", T.SELECT, "6", s, options=("0", "1", "2", "3", "4", "5", "6")),
+        Setting("learning.review_time", T.TIME, "18:43", s),
+        Setting("learning.review_push", T.BOOL, True, s),
+        Setting("learning.review_ai", T.BOOL, True, s),
+    ]
+
+
 SECTIONS = [
     _general,
     _world,
@@ -448,6 +473,7 @@ SECTIONS = [
     _adapters,
     _schedule,
     _ai,
+    _learning,
 ]
 
 

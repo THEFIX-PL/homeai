@@ -50,6 +50,21 @@
     "situation_opened": "Situation: {title}",
     "situation_resolved": "Resolved: {title}"
   },
+  "learning": {
+    "habit_title": "{what}: {action} at {time} on {days}",
+    "habits_found": "Found {count} habits to propose",
+    "review_actions": "Actions: {done} done, {undone} undone, {observed} only observed.",
+    "review_approvals": "Requests: {approved} approved, {denied} refused, {expired} expired.",
+    "review_cost": "AI cost this week: ${cost}.",
+    "review_proposals": "{count} proposals wait for you in the HomeAI panel.",
+    "review_raise": "These were always approved; HomeAI could do them alone: {actions}.",
+    "review_sent": "Weekly review sent",
+    "review_situations": "Situations resolved this week: {count}; open now: {open}.",
+    "review_title": "HomeAI weekly review",
+    "review_top": "Most common: {kinds}.",
+    "weekend": "weekends",
+    "workday": "working days"
+  },
   "notify": {
     "action_ack": "Got it",
     "action_approve": "Approve",
@@ -86,6 +101,15 @@
       "auto": "Auto",
       "en": "English",
       "pl": "Polski"
+    },
+    "learning.review_weekday": {
+      "0": "Monday",
+      "1": "Tuesday",
+      "2": "Wednesday",
+      "3": "Thursday",
+      "4": "Friday",
+      "5": "Saturday",
+      "6": "Sunday"
     },
     "notify.digest_to": {
       "admins": "Administrators",
@@ -187,6 +211,10 @@
     "general": {
       "description": "Language, parts of the day, journal and panel.",
       "label": "General"
+    },
+    "learning": {
+      "description": "Norms, anomalies, habits and the weekly review.",
+      "label": "Learning"
     },
     "notify": {
       "description": "Who hears what, how and when.",
@@ -353,6 +381,10 @@
     "ai.triage_new_kinds": {
       "description": "Let AI check a kind of situation the first time it happens.",
       "label": "Check new kinds"
+    },
+    "detectors.anomaly.enabled": {
+      "description": "Report values far outside their usual range for that hour of the week.",
+      "label": "Anomalies: watch"
     },
     "detectors.availability.enabled": {
       "description": "Watch devices whose entities are all unavailable.",
@@ -746,6 +778,78 @@
       "description": "How often time-based checks run (unavailability, deadlines, schedules).",
       "label": "Evaluation interval"
     },
+    "learning.anomaly_minutes": {
+      "description": "How long a value must stay unusual before it is reported.",
+      "label": "Unusual for"
+    },
+    "learning.anomaly_severity": {
+      "description": "Severity 0–4 of an unusual value.",
+      "label": "Anomaly: severity"
+    },
+    "learning.anomaly_sigma": {
+      "description": "How many spreads away from the norm counts as unusual.",
+      "label": "Anomaly threshold"
+    },
+    "learning.baseline_weeks": {
+      "description": "How many past weeks make the norm of each hour of the week.",
+      "label": "Norms from"
+    },
+    "learning.deny_quiet_days": {
+      "description": "Days HomeAI waits before asking again about an action someone refused.",
+      "label": "Do not ask again for"
+    },
+    "learning.enabled": {
+      "description": "Learn norms, notice anomalies and habits, and send the weekly review.",
+      "label": "Learning"
+    },
+    "learning.habit_days": {
+      "description": "How many past days are searched for habits.",
+      "label": "Habits from"
+    },
+    "learning.habit_min_days": {
+      "description": "On how many days something must repeat to become a proposal.",
+      "label": "Habit after"
+    },
+    "learning.habit_window": {
+      "description": "How close in time repeated actions must be.",
+      "label": "Habit time window"
+    },
+    "learning.habits": {
+      "description": "Notice things done by hand at the same time and propose them for the plan.",
+      "label": "Habits"
+    },
+    "learning.min_samples": {
+      "description": "Hourly values needed before an entity has a norm.",
+      "label": "Minimum data"
+    },
+    "learning.nightly_time": {
+      "description": "When norms and habits are recomputed.",
+      "label": "Nightly learning at"
+    },
+    "learning.raise_after": {
+      "description": "Approvals without a refusal after which the weekly review suggests letting HomeAI act alone.",
+      "label": "Suggest more autonomy after"
+    },
+    "learning.review_ai": {
+      "description": "Let the AI tier rewrite the weekly review.",
+      "label": "Write the review with AI"
+    },
+    "learning.review_push": {
+      "description": "Send the weekly review to administrators' phones.",
+      "label": "Send the review to phones"
+    },
+    "learning.review_time": {
+      "description": "Time of the weekly review.",
+      "label": "Weekly review at"
+    },
+    "learning.review_weekday": {
+      "description": "Day of the weekly review.",
+      "label": "Weekly review on"
+    },
+    "learning.undo_limit": {
+      "description": "After this many undos an automatic action goes back to “propose”.",
+      "label": "Undone too often after"
+    },
     "notify.announce_resolved": {
       "description": "Send a short message when a notified situation resolves.",
       "label": "Tell when resolved"
@@ -1088,6 +1192,10 @@
     }
   },
   "signals": {
+    "anomaly": {
+      "description": "{name} shows {value}; usually about {usual} at this time.",
+      "title": "Unusual: {name}"
+    },
     "automation_error": {
       "description": "{when}: {error}",
       "title": "Automation failed: {name}"

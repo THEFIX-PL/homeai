@@ -129,6 +129,9 @@ class Executor:
         if decision.verdict is Verdict.CONFIRM:
             return ActionResult("needs_confirmation", message=decision.reason, **result_base)
         if decision.verdict is Verdict.ASK:
+            learning = self.rt.module("learning")
+            if learning is not None and request.actor != "person" and learning.quiet(request):
+                return self._finish(request, ActionResult("denied", message="recently_refused", **result_base))
             approvals = self.rt.module("approvals")
             if approvals is None:
                 return self._finish(request, ActionResult("denied", message="no_approvals", **result_base))

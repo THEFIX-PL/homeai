@@ -8,7 +8,7 @@ from homeassistant.util import dt as dt_util
 
 from ..agent import run_agent
 from ..context import home_card, moment_card
-from ..privacy import Privacy
+from ..privacy import Privacy, clean
 from ..prompts import CHAT
 from ..tools import ToolContext
 
@@ -40,10 +40,15 @@ async def chat(ai: Any, text: str, conversation_id: str, user_id: str | None) ->
         ai.threads.pop(next(iter(ai.threads)))
     person = next((p.name for p in rt.world.persons.values() if user_id and p.user_id == user_id), None)
     speaker = privacy.person(person) if person else "unknown"
-    messages = [
-        *thread["messages"],
-        {"role": "user", "content": f"{moment_card(rt, privacy, journal=4)}\n\n<speaker>{speaker}</speaker>\n{text}"},
-    ]
+    facts = ""
+    memory = rt.module("memory")
+    if memory is not None and privacy.level != "minimal":
+        person_id = next((p.entity_id for p in rt.world.persons.values() if user_id and p.user_id == user_id), None)
+        found = memory.search(text, scopes=["home", *([f"person:{person_id}"] if person_id else [])], limit=5)
+        if found:
+            facts = "<facts>\n" + "\n".join(f"- {clean(f['text'], 200)}" for f in found) + "\n</facts>\n"
+    content = f"{moment_card(rt, privacy, journal=4)}\n{facts}\n<speaker>{speaker}</speaker>\n{text}"
+    messages = [*thread["messages"], {"role": "user", "content": content}]
     system = CHAT.replace("{name}", str(rt.settings.get("general.assistant_name"))) + "\n" + home_card(rt, privacy)
     ctx = ToolContext(rt, privacy, actor="person", user_id=user_id)
     result = await run_agent(

@@ -248,6 +248,27 @@ async def handle_situation(ctx: ToolContext, args: dict[str, Any]) -> Any:
     return {"done": s is not None}
 
 
+async def remember(ctx: ToolContext, args: dict[str, Any]) -> Any:
+    memory = ctx.rt.module("memory")
+    if memory is None:
+        return {"error": "memory_off"}
+    scope = "home"
+    if args.get("about_me") and ctx.user_id:
+        person = next((p for p in ctx.rt.world.persons.values() if p.user_id == ctx.user_id), None)
+        scope = f"person:{person.entity_id}" if person else "home"
+    source = "person" if ctx.actor == "person" else "ai"
+    fact = memory.add(ctx.privacy.restore(str(args.get("fact") or "")), scope=scope, source=source, author=ctx.user_id)
+    return {"remembered": fact["text"], "approved": fact["approved"]}
+
+
+async def recall(ctx: ToolContext, args: dict[str, Any]) -> Any:
+    memory = ctx.rt.module("memory")
+    if memory is None:
+        return []
+    facts = memory.search(str(args.get("words") or ""), limit=10)
+    return [{"fact": clean(f["text"], 300), "scope": f["scope"].split(":", 1)[0]} for f in facts]
+
+
 TOOLS: dict[str, Tool] = {
     t.name: t
     for t in (
@@ -354,6 +375,14 @@ TOOLS: dict[str, Tool] = {
             handle_situation,
             changes=True,
         ),
+        Tool(
+            "remember",
+            "Remember a fact or preference a person told you (about_me: it concerns the speaker).",
+            _obj({"fact": STR, "about_me": {"type": "boolean"}}, ["fact"]),
+            remember,
+            changes=True,
+        ),
+        Tool("recall", "Look up remembered facts and preferences by words.", _obj({"words": STR}), recall),
     )
 }
 
@@ -366,6 +395,7 @@ READ_TOOLS = (
     "get_journal",
     "get_system_log",
     "get_plan",
+    "recall",
 )
 SETS = {
     "p1": READ_TOOLS[:5],

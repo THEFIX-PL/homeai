@@ -168,6 +168,9 @@ class Approvals:
         result = await self.rt.module("executor").execute(request)
         item["result"] = result.as_dict()
         self.rt.journal.add("approval", self.rt.text("journal|approval_granted", what=item["what"], who=who))
+        learning = self.rt.module("learning")
+        if learning is not None:
+            learning.feedback("approve", item)
         await self._clear(item)
         self._changed(item)
         return item

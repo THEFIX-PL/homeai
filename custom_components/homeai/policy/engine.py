@@ -167,6 +167,9 @@ class Policy:
         level = self.level(risk)
         if risk in (Risk.R1, Risk.R2) and self.observing(now) and level in ("act", "act_tell"):
             level = "observe"
+        learning = self.rt.module("learning")
+        if level in ("act", "act_tell") and learning is not None and learning.restricted(request):
+            level = "propose"  # people undid this too often
         if level == "never":
             return Decision(Verdict.DENY, risk, "level_never")
         if level == "observe":
