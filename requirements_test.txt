@@ -1,0 +1,4 @@
+# Home Assistant test harness. Its version pins the Home Assistant version used in tests.
+# 0.13.375 pins homeassistant 2026.10.4; move to the release that pins 2026.11.x as soon as it is published.
+pytest-homeassistant-custom-component==0.13.375
+ruff==0.17.4

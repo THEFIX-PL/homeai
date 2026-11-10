@@ -1,0 +1,36 @@
+name: Bug report
+description: Something in HomeAI does not work as expected.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what happened, and what you expected instead.
+    validations:
+      required: true
+  - type: input
+    id: homeai
+    attributes:
+      label: HomeAI version
+    validations:
+      required: true
+  - type: input
+    id: ha
+    attributes:
+      label: Home Assistant version
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: >
+        Download diagnostics from Settings → Devices & services → HomeAI → ⋮ → Download diagnostics and attach the
+        file. Secrets are removed automatically.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant lines from the Home Assistant log.
+      render: text
