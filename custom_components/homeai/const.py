@@ -17,6 +17,7 @@ EVENT_NOTIFICATION: Final = "homeai_notification"
 
 # Config entry data keys
 CONF_SYSTEM_USER: Final = "system_user_id"
+CONF_INSTALLED_AT: Final = "installed_at"
 CONF_INITIAL_SETTINGS: Final = "initial_settings"
 
 PANEL_URL: Final = "homeai"

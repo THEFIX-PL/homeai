@@ -75,7 +75,7 @@ class Home:
         area: str | None = None,
         attrs: dict[str, Any] | None = None,
         device_class: str | None = None,
-        labels: tuple[str, ...] = (),
+        labels: tuple[str, ...] = (),  # label names
         category: str | None = None,
         hidden: bool = False,
         translation_key: str | None = None,

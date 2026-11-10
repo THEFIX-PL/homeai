@@ -94,6 +94,51 @@
         "admin": "An administrator",
         "service": "A technician"
       }
+    },
+    "plan_to": {
+      "options": {
+        "all": "Everyone",
+        "home": "People at home",
+        "home_or_all": "People at home, else everyone",
+        "admins": "Administrators"
+      }
+    },
+    "plan_kind": {
+      "options": {
+        "once": "Once",
+        "daily": "Every day",
+        "weekly": "Chosen weekdays",
+        "sun": "Sunrise or sunset"
+      }
+    },
+    "weekday": {
+      "options": {
+        "0": "Monday",
+        "1": "Tuesday",
+        "2": "Wednesday",
+        "3": "Thursday",
+        "4": "Friday",
+        "5": "Saturday",
+        "6": "Sunday"
+      }
+    },
+    "sun_event": {
+      "options": {
+        "sunrise": "Sunrise",
+        "sunset": "Sunset",
+        "dawn": "Dawn",
+        "dusk": "Dusk",
+        "solar_noon": "Solar noon"
+      }
+    },
+    "presence_kind": {
+      "options": {
+        "away": "Away",
+        "vacation": "Vacation",
+        "guests": "Guests",
+        "home_office": "Working from home",
+        "sick": "Sick"
+      }
     }
   },
   "exceptions": {
@@ -102,6 +147,18 @@
     },
     "bad_signal": {
       "message": "The signal is not valid. Check the ID, title and severity."
+    },
+    "person_required": {
+      "message": "Only a person can approve or deny, not an automation."
+    },
+    "approval_unavailable": {
+      "message": "This request is no longer pending, or you may not decide it."
+    },
+    "plan_invalid": {
+      "message": "The plan entry was not saved: {reason}."
+    },
+    "presence_invalid": {
+      "message": "The presence exception was not saved: {reason}."
     }
   },
   "entity": {
@@ -158,6 +215,14 @@
     "switch": {
       "notifications_paused": {
         "name": "Pause notifications"
+      }
+    },
+    "calendar": {
+      "plan": {
+        "name": "Plan"
+      },
+      "presence": {
+        "name": "Presence"
       }
     }
   },
@@ -261,6 +326,154 @@
     "send_digest": {
       "name": "Send digest",
       "description": "Sends the summary of open matters now."
+    },
+    "approve": {
+      "name": "Approve",
+      "description": "Approves an action HomeAI asked about. Residents may approve comfort and device actions, administrators everything else.",
+      "fields": {
+        "approval_id": {
+          "name": "Approval ID",
+          "description": "The request to approve."
+        }
+      }
+    },
+    "deny": {
+      "name": "Deny",
+      "description": "Refuses an action HomeAI asked about.",
+      "fields": {
+        "approval_id": {
+          "name": "Approval ID",
+          "description": "The request to refuse."
+        }
+      }
+    },
+    "undo": {
+      "name": "Undo",
+      "description": "Restores the states from before a comfort or device action.",
+      "fields": {
+        "action_id": {
+          "name": "Action ID",
+          "description": "The action to undo."
+        }
+      }
+    },
+    "plan_add": {
+      "name": "Add to the plan",
+      "description": "Adds an action or a reminder to the home's plan. People who are not administrators may plan only simple device actions.",
+      "fields": {
+        "title": {
+          "name": "Title",
+          "description": "Shown in the calendar."
+        },
+        "service": {
+          "name": "Action",
+          "description": "Service to run, e.g. light.turn_on."
+        },
+        "entity_id": {
+          "name": "Entities",
+          "description": "Targets of the action."
+        },
+        "data": {
+          "name": "Data",
+          "description": "Extra service data."
+        },
+        "reminder": {
+          "name": "Reminder",
+          "description": "Instead of an action: a message sent to people."
+        },
+        "to": {
+          "name": "Remind",
+          "description": "Who gets the reminder."
+        },
+        "kind": {
+          "name": "Repeat",
+          "description": "Once, daily, on chosen weekdays, or relative to the sun."
+        },
+        "time": {
+          "name": "Time",
+          "description": "Local time for once, daily and weekly."
+        },
+        "date": {
+          "name": "Date",
+          "description": "For once."
+        },
+        "days": {
+          "name": "Weekdays",
+          "description": "For weekly (and optionally sun)."
+        },
+        "event": {
+          "name": "Sun event",
+          "description": "For sun."
+        },
+        "offset": {
+          "name": "Offset",
+          "description": "Minutes before (negative) or after the sun event."
+        },
+        "skip_when_away": {
+          "name": "Skip when nobody is home",
+          "description": "Do not run while everyone is away."
+        }
+      }
+    },
+    "plan_remove": {
+      "name": "Remove from the plan",
+      "description": "Removes a plan entry. People who are not administrators may remove only their own.",
+      "fields": {
+        "entry_id": {
+          "name": "Entry ID",
+          "description": "The entry to remove."
+        }
+      }
+    },
+    "plan_skip": {
+      "name": "Skip a day",
+      "description": "Skips one day of a repeating plan entry.",
+      "fields": {
+        "entry_id": {
+          "name": "Entry ID",
+          "description": "The entry."
+        },
+        "date": {
+          "name": "Date",
+          "description": "The day to skip."
+        }
+      }
+    },
+    "presence_add": {
+      "name": "Add a presence exception",
+      "description": "A trip, guests, working from home or sickness, for one person or the household.",
+      "fields": {
+        "kind": {
+          "name": "Kind",
+          "description": "What kind of exception."
+        },
+        "person": {
+          "name": "Person",
+          "description": "Empty: the whole household."
+        },
+        "start": {
+          "name": "Start",
+          "description": "When it starts."
+        },
+        "end": {
+          "name": "End",
+          "description": "When it ends."
+        },
+        "note": {
+          "name": "Note",
+          "description": "Optional."
+        }
+      }
+    },
+    "presence_remove": {
+      "name": "Remove a presence exception",
+      "description": "Removes a presence exception.",
+      "fields": {
+        "exception_id": {
+          "name": "Exception ID",
+          "description": "The exception to remove."
+        }
+      }
     }
   }
 }

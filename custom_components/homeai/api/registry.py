@@ -2,4 +2,4 @@
 
 from __future__ import annotations
 
-MODULES: list[str] = ["ws_settings", "ws_situations"]
+MODULES: list[str] = ["ws_settings", "ws_situations", "ws_actions"]

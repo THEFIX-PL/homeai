@@ -44,7 +44,7 @@ class Triage:
         return None
 
     async def process(self, event: str, s: Situation) -> None:
-        if event in ("opened", "updated"):
+        if event in ("opened", "updated", "escalated"):
             s.assessment = self.assess(s)
 
     def assess(self, s: Situation) -> dict[str, Any]:
@@ -84,7 +84,7 @@ class Triage:
 
         need = p.need
         fallback = need
-        if s.repair.get("status") in ("waiting", "trying") and severity < 4:
+        if s.repair.get("status") in ("waiting", "trying", "verifying") and severity < 4:
             need = Need.NOBODY
             reasons.append("repairing")
         return {

@@ -79,8 +79,14 @@ class SignalHub:
         self._system_due: datetime | None = None
 
     def add_detector(self, detector: Detector) -> None:
-        """Adapters add their detectors here before `async_setup`."""
+        """Adapters add their detectors here; they are watched and evaluated right away."""
+        if any(d.key == detector.key for d in self.detectors):
+            return
         self.detectors.append(detector)
+        if self._unsubs:  # already running
+            self._rebuild_watch()
+            self._pending.add(detector.key)
+            self._schedule_quick()
 
     async def async_setup(self) -> None:
         self._rebuild_watch()

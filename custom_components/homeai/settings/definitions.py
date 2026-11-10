@@ -161,6 +161,7 @@ def _detectors() -> list[Setting]:
         "lights_away",
         "window_heating",
         "external",
+        "bridges",
     ):
         out.append(
             Setting(
@@ -318,7 +319,103 @@ def _notify() -> list[Setting]:
     return out
 
 
-SECTIONS = [_general, _world, _presence, _privacy, _detectors, _situations, _triage, _notify]
+LEVELS = ("never", "observe", "propose", "act_tell", "act")
+RISK_OVERRIDES = ("auto", "R0", "R1", "R2", "R3", "R4", "R5", "R6")
+
+
+def _policy() -> list[Setting]:
+    s = "policy"
+    out = [
+        Setting("policy.autonomy_r1", T.SELECT, "act_tell", s, options=LEVELS, confirm="change"),
+        Setting("policy.autonomy_r2", T.SELECT, "propose", s, options=LEVELS, confirm="change"),
+        Setting("policy.autonomy_r3", T.SELECT, "act", s, options=LEVELS, confirm="change"),
+        Setting(
+            "policy.autonomy_r4", T.SELECT, "propose", s, options=("never", "observe", "propose"), confirm="change"
+        ),
+        Setting("policy.person_r2", T.SELECT, "act", s, options=("act", "confirm")),
+        Setting("policy.observation_days", T.INT, 14, s, min=0, max=90, unit="d", confirm="lower"),
+        Setting("policy.protective_actions", T.BOOL, True, s, confirm="disable"),
+        Setting("policy.repairs_per_day", T.INT, 10, s, min=1, max=100, advanced=True),
+        Setting("policy.approval_minutes", T.INT, 120, s, min=5, max=10080, unit="min"),
+        Setting(
+            "policy.risk_override",
+            T.SELECT,
+            "auto",
+            s,
+            scopes=THING,
+            options=RISK_OVERRIDES,
+            advanced=True,
+            confirm="change",
+        ),
+    ]
+    return out
+
+
+def _executor() -> list[Setting]:
+    s = "executor"
+    return [
+        Setting("executor.timeout", T.DURATION, 30, s, min=5, max=300, unit="s", advanced=True),
+        Setting("executor.verify_seconds", T.DURATION, 10, s, min=0, max=120, unit="s", advanced=True),
+        Setting("executor.undo", T.BOOL, True, s),
+        Setting("executor.undo_keep", T.INT, 20, s, min=1, max=100, advanced=True),
+        Setting("executor.block_cloud_offline", T.BOOL, True, s, advanced=True),
+        Setting("executor.local_url", T.STRING, "", s, max=200, advanced=True),
+    ]
+
+
+def _repair() -> list[Setting]:
+    s = "repair"
+    return [
+        Setting("repair.enabled", T.BOOL, True, s, confirm="disable"),
+        Setting("repair.quick_actions", T.BOOL, True, s),
+        Setting("repair.protective_enabled", T.BOOL, True, s, confirm="disable"),
+        Setting("repair.max_attempts", T.INT, 2, s, min=1, max=5),
+        Setting("repair.backoff_minutes", T.INT, 10, s, min=1, max=240, unit="min", advanced=True),
+        Setting("repair.verify_minutes", T.INT, 5, s, min=1, max=120, unit="min", advanced=True),
+        Setting("repair.reload_wait", T.INT, 2, s, min=0, max=120, unit="min", advanced=True),
+        Setting("repair.retry_wait", T.INT, 10, s, min=0, max=240, unit="min", advanced=True),
+        Setting("repair.outage_wait", T.INT, 5, s, min=0, max=240, unit="min", advanced=True),
+        Setting("repair.backup_wait", T.INT, 30, s, min=0, max=1440, unit="min", advanced=True),
+        Setting("repair.action_wait", T.INT, 0, s, min=0, max=240, unit="min", advanced=True),
+    ]
+
+
+def _adapters() -> list[Setting]:
+    s = "adapters"
+    return [
+        Setting("adapters.auto_bridges", T.BOOL, True, s),
+        Setting("adapters.bridge_entities", T.ENTITIES, [], s, selector="entity"),
+        Setting("adapters.bridge_minutes", T.INT, 2, s, scopes=THING, min=0, max=120, unit="min"),
+        _sev("adapters.bridge_severity", 3, s, THING),
+        Setting("adapters.bridge_reload", T.BOOL, True, s),
+        Setting("adapters.zigbee2mqtt_addon", T.STRING, "", s, max=100, advanced=True),
+    ]
+
+
+def _schedule() -> list[Setting]:
+    s = "schedule"
+    return [
+        Setting("schedule.catch_up_minutes", T.INT, 10, s, min=0, max=240, unit="min"),
+        Setting("schedule.event_minutes", T.INT, 15, s, min=1, max=240, unit="min", advanced=True),
+        Setting("schedule.presence_keep_days", T.INT, 30, s, min=1, max=365, unit="d", advanced=True),
+    ]
+
+
+SECTIONS = [
+    _general,
+    _world,
+    _presence,
+    _privacy,
+    _detectors,
+    _situations,
+    _triage,
+    _notify,
+    _policy,
+    _executor,
+    _repair,
+    _adapters,
+    _schedule,
+]
 
 
 def build_registry() -> SettingsRegistry:

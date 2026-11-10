@@ -1,20 +1,48 @@
 {
+  "actions": {
+    "describe": "{service}: {targets}"
+  },
   "common": {
     "and": "i"
   },
   "journal": {
     "acknowledged": "{who}: wiem — {title}",
+    "action_blocked": "Zablokowane: {what} ({reason})",
+    "action_denied": "Niedozwolone: {what} ({reason})",
+    "action_done": "Zrobione: {what}",
+    "action_failed": "Nie udało się: {what} ({reason})",
+    "action_observed": "Zrobiłbym: {what}",
+    "action_undone": "Cofnięto: {what}",
+    "action_unverified": "Zrobione, bez potwierdzenia: {what}",
+    "approval_denied": "{who} odmowa: {what}",
+    "approval_expired": "Prośba wygasła: {what}",
+    "approval_granted": "{who} zgoda: {what}",
+    "approval_requested": "Prośba o zgodę: {what}",
     "digest_sent": "Wysłano podsumowanie",
     "notified": "Powiadomiono: {who} — {title}",
+    "plan_removed": "Usunięto z planu: {title}",
+    "plan_saved": "Plan: {title}",
+    "plan_skipped": "Pominięto (nikogo w domu): {title}",
+    "presence_saved": "Obecność: {what}",
+    "reminded": "Wysłano przypomnienie: {title}",
+    "repair_blocked": "Naprawa niemożliwa: {title} ({reason})",
+    "repair_failed": "Nie udało się naprawić: {title}",
+    "repair_started": "Próba naprawy ({playbook}): {title}",
+    "repair_succeeded": "Naprawione: {title}",
     "setting_changed": "Zmiana ustawienia: {key}",
     "situation_opened": "Sprawa: {title}",
     "situation_resolved": "Ustąpiło: {title}"
   },
   "notify": {
     "action_ack": "Wiem",
+    "action_approve": "Zgoda",
+    "action_deny": "Odmowa",
     "action_handle": "Zajmę się",
     "action_snooze": "Wycisz",
+    "approval_message": "{what}. Dlaczego: {reason}",
+    "approval_title": "HomeAI prosi o zgodę",
     "digest_title": "Podsumowanie HomeAI",
+    "reminder_title": "Przypomnienie",
     "repair_failed": "HomeAI próbował to naprawić, bez skutku.",
     "resolved_title": "Ustąpiło",
     "who_admin": "Potrzebny administrator.",
@@ -35,6 +63,48 @@
       "home": "Osoby w domu",
       "home_or_all": "Osoby w domu, a gdy nikogo — wszyscy",
       "none": "Nikt"
+    },
+    "policy.autonomy_r1": {
+      "act": "Działaj",
+      "act_tell": "Działaj i powiedz",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Zaproponuj i zapytaj"
+    },
+    "policy.autonomy_r2": {
+      "act": "Działaj",
+      "act_tell": "Działaj i powiedz",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Zaproponuj i zapytaj"
+    },
+    "policy.autonomy_r3": {
+      "act": "Działaj",
+      "act_tell": "Działaj i powiedz",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Zaproponuj i zapytaj"
+    },
+    "policy.autonomy_r4": {
+      "act": "Działaj",
+      "act_tell": "Działaj i powiedz",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Zaproponuj i zapytaj"
+    },
+    "policy.person_r2": {
+      "act": "Wykonaj",
+      "confirm": "Poproś o potwierdzenie"
+    },
+    "policy.risk_override": {
+      "R0": "R0 odczyt",
+      "R1": "R1 komfort",
+      "R2": "R2 urządzenia",
+      "R3": "R3 system",
+      "R4": "R4 konfiguracja",
+      "R5": "R5 bezpieczeństwo",
+      "R6": "R6 destrukcyjne",
+      "auto": "Automatycznie"
     },
     "presence.role": {
       "admin": "Administrator",
@@ -59,10 +129,25 @@
       "selected": "Wybrane pomieszczenia"
     }
   },
+  "presence": {
+    "away": "Poza domem",
+    "guests": "Goście",
+    "home_office": "Praca z domu",
+    "sick": "Choroba",
+    "vacation": "Wyjazd"
+  },
   "sections": {
+    "adapters": {
+      "description": "Wiedza o hubach, mostkach i Zigbee2MQTT.",
+      "label": "Huby i mostki"
+    },
     "detectors": {
       "description": "Co HomeAI obserwuje i jakie ma progi.",
       "label": "Wykrywanie"
+    },
+    "executor": {
+      "description": "Jak akcje są wykonywane, sprawdzane i cofane.",
+      "label": "Akcje"
     },
     "general": {
       "description": "Język, pory dnia, dziennik i panel.",
@@ -72,6 +157,10 @@
       "description": "Kto, jak i kiedy się dowiaduje.",
       "label": "Powiadomienia"
     },
+    "policy": {
+      "description": "Co HomeAI może samo, co wymaga zgody, a co nigdy się nie dzieje.",
+      "label": "Polityka"
+    },
     "presence": {
       "description": "Role, tryb domu i skąd HomeAI wie, kto śpi.",
       "label": "Domownicy i sen"
@@ -79,6 +168,14 @@
     "privacy": {
       "description": "Co może trafić do AI w chmurze.",
       "label": "Prywatność"
+    },
+    "repair": {
+      "description": "Jak HomeAI naprawia, zanim kogoś zaniepokoi.",
+      "label": "Samonaprawa"
+    },
+    "schedule": {
+      "description": "Plan domu i wyjątki obecności.",
+      "label": "Plan"
     },
     "situations": {
       "description": "Kiedy sprawy się otwierają i zamykają.",
@@ -94,6 +191,30 @@
     }
   },
   "settings": {
+    "adapters.auto_bridges": {
+      "description": "Traktuj czujniki łączności urządzeń, przez które łączą się inne, oraz mostek Zigbee2MQTT jako huby.",
+      "label": "Wykrywaj huby"
+    },
+    "adapters.bridge_entities": {
+      "description": "Dodatkowe encje wyłączone albo offline, gdy hub nie działa.",
+      "label": "Czujniki hubów"
+    },
+    "adapters.bridge_minutes": {
+      "description": "Jak długo hub musi być offline, zanim to się liczy.",
+      "label": "Hub offline przez"
+    },
+    "adapters.bridge_reload": {
+      "description": "Naprawiaj hub offline przez przeładowanie jego integracji.",
+      "label": "Przeładuj integrację huba"
+    },
+    "adapters.bridge_severity": {
+      "description": "Waga 0–4 huba offline.",
+      "label": "Hub offline: waga"
+    },
+    "adapters.zigbee2mqtt_addon": {
+      "description": "Identyfikator dodatku Zigbee2MQTT (np. 45df7312_zigbee2mqtt) do restartu, gdy mostek jest offline. Puste: przeładowanie.",
+      "label": "Dodatek Zigbee2MQTT"
+    },
     "detectors.availability.enabled": {
       "description": "Obserwuj urządzenia, których wszystkie encje są niedostępne.",
       "label": "Urządzenia bez łączności: obserwuj"
@@ -137,6 +258,10 @@
     "detectors.battery.threshold": {
       "description": "Zgłaszaj baterie na tym poziomie lub niżej.",
       "label": "Próg baterii"
+    },
+    "detectors.bridges.enabled": {
+      "description": "Obserwuj huby i mostki (Zigbee2MQTT, huby, przez które łączą się inne urządzenia) i łącz urządzenia za nimi w jedną sprawę.",
+      "label": "Huby i mostki: obserwuj"
     },
     "detectors.consumables.enabled": {
       "description": "Obserwuj filtry, szczotki i inne części do wymiany.",
@@ -414,6 +539,30 @@
       "description": "Waga 0–4 dla: okno otwarte przy grzaniu (0 tylko dziennik, 4 krytyczne).",
       "label": "Okno otwarte przy grzaniu: waga"
     },
+    "executor.block_cloud_offline": {
+      "description": "Gdy nie ma internetu, odmawiaj akcji na urządzeniach chmurowych zamiast czekać, aż się nie udadzą.",
+      "label": "Urządzenia chmurowe bez internetu"
+    },
+    "executor.local_url": {
+      "description": "Adres, pod którym HomeAI łączy się z tym Home Assistantem przy zmianach konfiguracji. Puste: localhost na porcie HTTP.",
+      "label": "Adres lokalny"
+    },
+    "executor.timeout": {
+      "description": "Jak długo może trwać jedno wywołanie usługi.",
+      "label": "Limit czasu akcji"
+    },
+    "executor.undo": {
+      "description": "Zapisuj stan komfortu i urządzeń przed akcją, żeby dało się ją cofnąć.",
+      "label": "Cofanie"
+    },
+    "executor.undo_keep": {
+      "description": "Ile ostatnich akcji można cofnąć.",
+      "label": "Historia cofania"
+    },
+    "executor.verify_seconds": {
+      "description": "Jak długo czekać na oczekiwany stan po akcji.",
+      "label": "Sprawdzaj wynik przez"
+    },
     "general.assistant_name": {
       "description": "Jak HomeAI przedstawia się w wiadomościach i rozmowach.",
       "label": "Nazwa asystenta"
@@ -542,6 +691,46 @@
       "description": "Odtwarzacze do powiadomień głosowych.",
       "label": "Głośniki"
     },
+    "policy.approval_minutes": {
+      "description": "Jak długo prośba o zgodę czeka na odpowiedź.",
+      "label": "Prośba o zgodę wygasa po"
+    },
+    "policy.autonomy_r1": {
+      "description": "Co HomeAI może samo zrobić ze światłami, scenami, multimediami i komunikatami.",
+      "label": "Akcje komfortu (R1)"
+    },
+    "policy.autonomy_r2": {
+      "description": "Co HomeAI może samo zrobić z AGD, roletami, ogrzewaniem i klimatyzacją.",
+      "label": "Akcje urządzeń (R2)"
+    },
+    "policy.autonomy_r3": {
+      "description": "Przeładowanie integracji, restart dodatków i ponowienie kopii, tylko z playbooków napraw.",
+      "label": "Naprawy systemu (R3)"
+    },
+    "policy.autonomy_r4": {
+      "description": "Automatyzacje, skrypty, sceny, pomocnicy i pulpity. Nigdy bez zgody administratora.",
+      "label": "Konfiguracja (R4)"
+    },
+    "policy.observation_days": {
+      "description": "Dni po instalacji, przez które autonomia komfortu i urządzeń tylko obserwuje.",
+      "label": "Okres obserwacji"
+    },
+    "policy.person_r2": {
+      "description": "Gdy domownik prosi o akcję urządzenia (R2): wykonaj albo najpierw poproś o potwierdzenie.",
+      "label": "Prośby domowników o urządzenia"
+    },
+    "policy.protective_actions": {
+      "description": "Pozwól na akcje w bezpieczną stronę na encjach z etykietą „HomeAI: akcja ochronna” (np. zamknij zawór przy zalaniu), nawet dla urządzeń bezpieczeństwa.",
+      "label": "Akcje ochronne"
+    },
+    "policy.repairs_per_day": {
+      "description": "Najwięcej automatycznych napraw systemu (R3) na dzień; więcej wymaga administratora.",
+      "label": "Naprawy systemu dziennie"
+    },
+    "policy.risk_override": {
+      "description": "Nadpisz klasę ryzyka akcji na tej encji, urządzeniu, obszarze albo piętrze.",
+      "label": "Klasa ryzyka"
+    },
     "presence.bed_entities": {
       "description": "Czujniki zajętości łóżka osoby.",
       "label": "Czujniki łóżka"
@@ -613,6 +802,62 @@
     "privacy.never_send_entities": {
       "description": "Encje, których dane nigdy nie opuszczają domu.",
       "label": "Nigdy nie wysyłaj tych encji"
+    },
+    "repair.action_wait": {
+      "description": "Minuty przed wykonaniem proponowanej akcji.",
+      "label": "Proponowana akcja: czekaj"
+    },
+    "repair.backoff_minutes": {
+      "description": "Minuty między próbami (mnożone przez numer próby).",
+      "label": "Przerwa między próbami"
+    },
+    "repair.backup_wait": {
+      "description": "Minuty przed ponowieniem nieudanej kopii.",
+      "label": "Kopia: czekaj przed ponowieniem"
+    },
+    "repair.enabled": {
+      "description": "Próbuj playbooków napraw, zanim powiadomisz ludzi.",
+      "label": "Samonaprawa"
+    },
+    "repair.max_attempts": {
+      "description": "Ile razy próbować playbooka, zanim powiadomisz ludzi.",
+      "label": "Próby"
+    },
+    "repair.outage_wait": {
+      "description": "Minuty przed przeładowaniem integracji, której wszystkie urządzenia zamilkły.",
+      "label": "Urządzenia jednej integracji milczą: czekaj"
+    },
+    "repair.protective_enabled": {
+      "description": "Przy zalaniu, gazie, dymie albo czadzie wykonaj od razu akcje ochronne (ludzie dostają powiadomienie równocześnie).",
+      "label": "Akcje ochronne przy alarmach"
+    },
+    "repair.quick_actions": {
+      "description": "Wykonuj akcje proponowane przez detektory (np. zgaś światła w pustym domu), w granicach polityki.",
+      "label": "Proponowane akcje"
+    },
+    "repair.reload_wait": {
+      "description": "Minuty przed przeładowaniem integracji, która nie wstała.",
+      "label": "Przeładowanie: najpierw czekaj"
+    },
+    "repair.retry_wait": {
+      "description": "Minuty na samodzielne wstanie integracji, która ponawia start, zanim zostanie przeładowana.",
+      "label": "Integracja ponawia: czekaj"
+    },
+    "repair.verify_minutes": {
+      "description": "Po próbie, jak długo czekać, aż sprawa ustąpi.",
+      "label": "Czekaj na efekt"
+    },
+    "schedule.catch_up_minutes": {
+      "description": "Wykonaj wpisy planu pominięte, gdy Home Assistant nie działał, jeśli spóźnienie jest najwyżej takie.",
+      "label": "Nadrabiaj pominięte wpisy"
+    },
+    "schedule.event_minutes": {
+      "description": "Jak długo wpisy planu wyglądają w kalendarzu.",
+      "label": "Długość wpisu w kalendarzu"
+    },
+    "schedule.presence_keep_days": {
+      "description": "Ile dni przechowywać wyjątki obecności po ich końcu.",
+      "label": "Przechowuj minione wyjątki"
     },
     "situations.close_after": {
       "description": "Jak długo sprawa musi ustąpić, zanim zostanie zamknięta.",
@@ -724,6 +969,10 @@
       "description": "{where} · {level}",
       "title": "Wymień baterię: {name}",
       "title_many": "Wymień {count} baterie"
+    },
+    "bridge_offline": {
+      "description": "{name} jest offline; urządzenia połączone przez niego nie odpowiadają.",
+      "title": "Hub offline: {name}"
     },
     "carbon_monoxide": {
       "description": "{name} wykrył tlenek węgla.",

@@ -10,6 +10,7 @@ from collections.abc import Awaitable, Callable
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, Any
 
+from homeassistant.auth.const import GROUP_ID_ADMIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EVENT_HOMEASSISTANT_STARTED
 from homeassistant.core import CoreState, Event, HomeAssistant, callback
@@ -17,7 +18,7 @@ from homeassistant.helpers.event import async_call_later, async_track_time_inter
 from homeassistant.util import dt as dt_util
 
 from . import i18n
-from .const import LOGGER
+from .const import CONF_INSTALLED_AT, CONF_SYSTEM_USER, LOGGER, NAME
 from .journal import Journal
 from .settings import SettingError, SettingsManager, build_registry
 from .world import Presence, WorldModel
@@ -40,6 +41,9 @@ class HomeAIRuntime:
         self.presence = Presence(hass, self.world, self.settings)
         self.started_at = dt_util.utcnow()
         self.ready = False  # True after the startup grace period: integrations had time to come up
+        self.system_user_id: str | None = None  # the "HomeAI" system user: autonomy acts in its context
+        self.installed_at: str | None = None
+        self.subentry_snapshot: dict[str, Any] | None = None
         self._tick_handlers: list[TickHandler] = []
         self._unsubs: list[Callable[[], None]] = []
         self._stoppers: list[Callable[[], Awaitable[None]]] = []
@@ -50,6 +54,7 @@ class HomeAIRuntime:
     async def async_setup(self) -> None:
         await i18n.async_preload(self.hass)
         await self.settings.async_load()
+        await self._ensure_identity()
         self._apply_initial_settings()
         await self.journal.async_load()
         await self.world.async_start()
@@ -70,6 +75,19 @@ class HomeAIRuntime:
                 continue
             self.modules[name] = module
             self._stoppers.append(module.async_unload)
+
+    async def _ensure_identity(self) -> None:
+        """Create the HomeAI system user (once) and remember when HomeAI was installed."""
+        data = dict(self.entry.data)
+        user = await self.hass.auth.async_get_user(data[CONF_SYSTEM_USER]) if data.get(CONF_SYSTEM_USER) else None
+        if user is None:
+            user = await self.hass.auth.async_create_system_user(NAME, group_ids=[GROUP_ID_ADMIN])
+            data[CONF_SYSTEM_USER] = user.id
+        data.setdefault(CONF_INSTALLED_AT, dt_util.utcnow().isoformat(timespec="seconds"))
+        if data != self.entry.data:
+            self.hass.config_entries.async_update_entry(self.entry, data=data)
+        self.system_user_id = user.id
+        self.installed_at = data[CONF_INSTALLED_AT]
 
     def _apply_initial_settings(self) -> None:
         """Values chosen in the setup wizard are written into the settings store once."""

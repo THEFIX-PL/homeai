@@ -1,20 +1,48 @@
 {
+  "actions": {
+    "describe": "{service}: {targets}"
+  },
   "common": {
     "and": "and"
   },
   "journal": {
     "acknowledged": "{who} acknowledged: {title}",
+    "action_blocked": "Blocked: {what} ({reason})",
+    "action_denied": "Not allowed: {what} ({reason})",
+    "action_done": "Done: {what}",
+    "action_failed": "Failed: {what} ({reason})",
+    "action_observed": "Would have done: {what}",
+    "action_undone": "Undone: {what}",
+    "action_unverified": "Done, not confirmed: {what}",
+    "approval_denied": "{who} refused: {what}",
+    "approval_expired": "Approval expired: {what}",
+    "approval_granted": "{who} approved: {what}",
+    "approval_requested": "Asked for approval: {what}",
     "digest_sent": "Summary sent",
     "notified": "Notified {who}: {title}",
+    "plan_removed": "Removed from plan: {title}",
+    "plan_saved": "Plan: {title}",
+    "plan_skipped": "Skipped (nobody home): {title}",
+    "presence_saved": "Presence: {what}",
+    "reminded": "Reminder sent: {title}",
+    "repair_blocked": "Repair not possible: {title} ({reason})",
+    "repair_failed": "Could not fix: {title}",
+    "repair_started": "Trying to fix ({playbook}): {title}",
+    "repair_succeeded": "Fixed: {title}",
     "setting_changed": "Setting changed: {key}",
     "situation_opened": "Situation: {title}",
     "situation_resolved": "Resolved: {title}"
   },
   "notify": {
     "action_ack": "Got it",
+    "action_approve": "Approve",
+    "action_deny": "Deny",
     "action_handle": "I'll handle it",
     "action_snooze": "Snooze",
+    "approval_message": "{what}. Why: {reason}",
+    "approval_title": "HomeAI asks for approval",
     "digest_title": "HomeAI summary",
+    "reminder_title": "Reminder",
     "repair_failed": "HomeAI tried to fix it, without success.",
     "resolved_title": "Resolved",
     "who_admin": "An administrator needs to look at it.",
@@ -35,6 +63,48 @@
       "home": "People at home",
       "home_or_all": "People at home, else everyone",
       "none": "Nobody"
+    },
+    "policy.autonomy_r1": {
+      "act": "Act",
+      "act_tell": "Act and tell",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
+    "policy.autonomy_r2": {
+      "act": "Act",
+      "act_tell": "Act and tell",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
+    "policy.autonomy_r3": {
+      "act": "Act",
+      "act_tell": "Act and tell",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
+    "policy.autonomy_r4": {
+      "act": "Act",
+      "act_tell": "Act and tell",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
+    "policy.person_r2": {
+      "act": "Do it",
+      "confirm": "Ask to confirm"
+    },
+    "policy.risk_override": {
+      "R0": "R0 read",
+      "R1": "R1 comfort",
+      "R2": "R2 devices",
+      "R3": "R3 system",
+      "R4": "R4 configuration",
+      "R5": "R5 security",
+      "R6": "R6 destructive",
+      "auto": "Automatic"
     },
     "presence.role": {
       "admin": "Administrator",
@@ -59,10 +129,25 @@
       "selected": "Selected areas"
     }
   },
+  "presence": {
+    "away": "Away",
+    "guests": "Guests",
+    "home_office": "Working from home",
+    "sick": "Sick",
+    "vacation": "Vacation"
+  },
   "sections": {
+    "adapters": {
+      "description": "Knowledge about hubs, bridges and Zigbee2MQTT.",
+      "label": "Hubs and bridges"
+    },
     "detectors": {
       "description": "What HomeAI watches and its limits.",
       "label": "Detection"
+    },
+    "executor": {
+      "description": "How actions are run, checked and undone.",
+      "label": "Actions"
     },
     "general": {
       "description": "Language, parts of the day, journal and panel.",
@@ -72,6 +157,10 @@
       "description": "Who hears what, how and when.",
       "label": "Notifications"
     },
+    "policy": {
+      "description": "What HomeAI may do on its own, what needs a yes, and what never happens.",
+      "label": "Policy"
+    },
     "presence": {
       "description": "Roles, house mode and how HomeAI knows who sleeps.",
       "label": "People and sleep"
@@ -79,6 +168,14 @@
     "privacy": {
       "description": "What may be sent to cloud AI.",
       "label": "Privacy"
+    },
+    "repair": {
+      "description": "How HomeAI fixes things before bothering anyone.",
+      "label": "Self-repair"
+    },
+    "schedule": {
+      "description": "The home's plan and presence exceptions.",
+      "label": "Plan"
     },
     "situations": {
       "description": "When situations open and close.",
@@ -94,6 +191,30 @@
     }
   },
   "settings": {
+    "adapters.auto_bridges": {
+      "description": "Treat connectivity sensors of devices that others connect through, and the Zigbee2MQTT bridge, as hubs.",
+      "label": "Find hubs automatically"
+    },
+    "adapters.bridge_entities": {
+      "description": "Extra entities that are off or offline when a hub is down.",
+      "label": "Hub sensors"
+    },
+    "adapters.bridge_minutes": {
+      "description": "How long a hub must be offline before it counts.",
+      "label": "Hub offline for"
+    },
+    "adapters.bridge_reload": {
+      "description": "Repair a hub that is offline by reloading its integration.",
+      "label": "Reload hub integration"
+    },
+    "adapters.bridge_severity": {
+      "description": "Severity 0–4 of a hub that is offline.",
+      "label": "Hub offline: severity"
+    },
+    "adapters.zigbee2mqtt_addon": {
+      "description": "Slug of the Zigbee2MQTT add-on (e.g. 45df7312_zigbee2mqtt) to restart when the bridge is offline. Empty: reload instead.",
+      "label": "Zigbee2MQTT add-on"
+    },
     "detectors.availability.enabled": {
       "description": "Watch devices whose entities are all unavailable.",
       "label": "Unresponsive devices: watch"
@@ -137,6 +258,10 @@
     "detectors.battery.threshold": {
       "description": "Report batteries at or below this level.",
       "label": "Battery threshold"
+    },
+    "detectors.bridges.enabled": {
+      "description": "Watch hubs and bridges (Zigbee2MQTT, hubs other devices connect through) and fold the devices behind them into one situation.",
+      "label": "Hubs and bridges: watch"
     },
     "detectors.consumables.enabled": {
       "description": "Watch filters, brushes and other parts that need replacing.",
@@ -414,6 +539,30 @@
       "description": "Severity 0–4 of window open while heating (0 journal only, 4 critical).",
       "label": "Window open while heating: severity"
     },
+    "executor.block_cloud_offline": {
+      "description": "While the internet is down, refuse actions on cloud devices instead of waiting for them to fail.",
+      "label": "Cloud devices offline"
+    },
+    "executor.local_url": {
+      "description": "Address HomeAI uses to reach this Home Assistant for configuration changes. Empty: localhost on the HTTP port.",
+      "label": "Local address"
+    },
+    "executor.timeout": {
+      "description": "How long one service call may take.",
+      "label": "Action timeout"
+    },
+    "executor.undo": {
+      "description": "Snapshot comfort and device states before acting so actions can be undone.",
+      "label": "Undo"
+    },
+    "executor.undo_keep": {
+      "description": "How many recent actions can be undone.",
+      "label": "Undo history"
+    },
+    "executor.verify_seconds": {
+      "description": "How long to wait for the expected state after an action.",
+      "label": "Check result for"
+    },
     "general.assistant_name": {
       "description": "How HomeAI calls itself in messages and conversations.",
       "label": "Assistant name"
@@ -542,6 +691,46 @@
       "description": "Media players used for spoken notifications.",
       "label": "Speakers"
     },
+    "policy.approval_minutes": {
+      "description": "How long a request for approval waits for an answer.",
+      "label": "Approval expires after"
+    },
+    "policy.autonomy_r1": {
+      "description": "What HomeAI may do on its own with lights, scenes, media and messages.",
+      "label": "Comfort actions (R1)"
+    },
+    "policy.autonomy_r2": {
+      "description": "What HomeAI may do on its own with appliances, covers, heating and cooling.",
+      "label": "Device actions (R2)"
+    },
+    "policy.autonomy_r3": {
+      "description": "Reloading integrations, restarting add-ons and retrying backups, only from repair playbooks.",
+      "label": "System repairs (R3)"
+    },
+    "policy.autonomy_r4": {
+      "description": "Automations, scripts, scenes, helpers and dashboards. Never done without an administrator's yes.",
+      "label": "Configuration (R4)"
+    },
+    "policy.observation_days": {
+      "description": "Days after installation during which comfort and device autonomy only observes.",
+      "label": "Observation period"
+    },
+    "policy.person_r2": {
+      "description": "When a resident asks for a device action (R2): do it, or ask them to confirm first.",
+      "label": "Residents' device requests"
+    },
+    "policy.protective_actions": {
+      "description": "Allow safe-direction actions on entities labelled “HomeAI: protective action” (e.g. close the water valve on a leak), even for security devices.",
+      "label": "Protective actions"
+    },
+    "policy.repairs_per_day": {
+      "description": "Most automatic system repairs (R3) per day; more need an administrator.",
+      "label": "System repairs per day"
+    },
+    "policy.risk_override": {
+      "description": "Override the risk class of actions on this entity, device, area or floor.",
+      "label": "Risk class"
+    },
     "presence.bed_entities": {
       "description": "Bed occupancy sensors of the person.",
       "label": "Bed sensors"
@@ -613,6 +802,62 @@
     "privacy.never_send_entities": {
       "description": "Entities whose data never leaves your home.",
       "label": "Never send these entities"
+    },
+    "repair.action_wait": {
+      "description": "Minutes before running a suggested action.",
+      "label": "Suggested action: wait"
+    },
+    "repair.backoff_minutes": {
+      "description": "Minutes between attempts (multiplied by the attempt number).",
+      "label": "Pause between attempts"
+    },
+    "repair.backup_wait": {
+      "description": "Minutes before retrying a failed backup.",
+      "label": "Backup: wait before retrying"
+    },
+    "repair.enabled": {
+      "description": "Try repair playbooks before telling people.",
+      "label": "Self-repair"
+    },
+    "repair.max_attempts": {
+      "description": "How many times a playbook is tried before people are told.",
+      "label": "Attempts"
+    },
+    "repair.outage_wait": {
+      "description": "Minutes before reloading an integration whose devices all went silent.",
+      "label": "Devices of one integration down: wait"
+    },
+    "repair.protective_enabled": {
+      "description": "On a leak, gas, smoke or carbon monoxide alarm run protective actions right away (people are notified at the same time).",
+      "label": "Protective actions on safety alarms"
+    },
+    "repair.quick_actions": {
+      "description": "Run actions that detectors suggest (e.g. turn off lights in an empty home), within the policy.",
+      "label": "Suggested actions"
+    },
+    "repair.reload_wait": {
+      "description": "Minutes before reloading a failed integration.",
+      "label": "Reload: wait first"
+    },
+    "repair.retry_wait": {
+      "description": "Minutes to let an integration that retries on its own come up before reloading it.",
+      "label": "Retrying integration: wait"
+    },
+    "repair.verify_minutes": {
+      "description": "After an attempt, how long to wait for the situation to clear.",
+      "label": "Wait for the effect"
+    },
+    "schedule.catch_up_minutes": {
+      "description": "Run plan entries missed while Home Assistant was down if they are at most this late.",
+      "label": "Catch up missed entries"
+    },
+    "schedule.event_minutes": {
+      "description": "How long plan entries look in the calendar.",
+      "label": "Plan event length"
+    },
+    "schedule.presence_keep_days": {
+      "description": "Days to keep presence exceptions after they end.",
+      "label": "Keep past exceptions"
     },
     "situations.close_after": {
       "description": "How long a situation must be gone before it is closed.",
@@ -724,6 +969,10 @@
       "description": "{where} · {level}",
       "title": "Replace battery: {name}",
       "title_many": "Replace {count} batteries"
+    },
+    "bridge_offline": {
+      "description": "{name} is offline; devices connected through it do not respond.",
+      "title": "Hub offline: {name}"
     },
     "carbon_monoxide": {
       "description": "{name} detected carbon monoxide.",

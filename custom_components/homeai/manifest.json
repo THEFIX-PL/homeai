@@ -12,6 +12,7 @@
     "panel_custom",
     "persistent_notification",
     "recorder",
+    "scene",
     "tts"
   ],
   "codeowners": [

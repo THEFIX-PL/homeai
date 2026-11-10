@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, time, timedelta
+from typing import Any
 
 from homeassistant.core import HomeAssistant
 from homeassistant.util import dt as dt_util
@@ -54,6 +55,7 @@ class Presence:
         self.settings = settings
         # AI inference per person: (asleep, confidence, valid_until)
         self._ai_sleep: dict[str, tuple[bool, float, datetime]] = {}
+        self.exceptions: Any = None  # PresenceExceptions, set by the schedule stage
 
     def role(self, person_id: str) -> str:
         return str(self.settings.get("presence.role", Target(person_id=person_id)))
@@ -98,7 +100,13 @@ class Presence:
 
     def vacation(self) -> bool:
         mode = self.house_mode()
-        return bool(mode and mode in self.settings.get("presence.vacation_states"))
+        if mode and mode in self.settings.get("presence.vacation_states"):
+            return True
+        return bool(self.exceptions is not None and self.exceptions.household_away())
+
+    def expected_away(self, person_id: str, at: datetime | None = None) -> bool:
+        """A presence exception (trip, vacation) says this person is away."""
+        return bool(self.exceptions is not None and self.exceptions.person_away(person_id, at))
 
     def set_ai_sleep(self, person_id: str, asleep: bool, confidence: float, minutes: int = 60) -> None:
         self._ai_sleep[person_id] = (asleep, confidence, dt_util.utcnow() + timedelta(minutes=minutes))

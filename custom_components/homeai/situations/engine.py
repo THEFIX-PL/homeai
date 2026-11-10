@@ -289,6 +289,13 @@ class SituationEngine:
         self.save()
         return s
 
+    async def escalate(self, s: Situation, reason: str) -> None:
+        """A repair failed or needs a person: run the pipeline again so triage and notifications react."""
+        s.log("escalated", reason=reason)
+        s.updated_at = dt_util.utcnow()
+        await self.emit("escalated", s)
+        self.save()
+
     async def dismiss(self, situation_id: str, who: str) -> Situation | None:
         """“Not a problem”: mutes its signals for `situations.dismiss_days` and teaches calibration."""
         s = self.situations.get(situation_id)

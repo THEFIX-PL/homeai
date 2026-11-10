@@ -94,6 +94,51 @@
         "admin": "Administrator",
         "service": "Fachowiec"
       }
+    },
+    "plan_to": {
+      "options": {
+        "all": "Wszyscy",
+        "home": "Osoby w domu",
+        "home_or_all": "Osoby w domu, a gdy nikogo — wszyscy",
+        "admins": "Administratorzy"
+      }
+    },
+    "plan_kind": {
+      "options": {
+        "once": "Raz",
+        "daily": "Codziennie",
+        "weekly": "Wybrane dni",
+        "sun": "Wschód albo zachód słońca"
+      }
+    },
+    "weekday": {
+      "options": {
+        "0": "Poniedziałek",
+        "1": "Wtorek",
+        "2": "Środa",
+        "3": "Czwartek",
+        "4": "Piątek",
+        "5": "Sobota",
+        "6": "Niedziela"
+      }
+    },
+    "sun_event": {
+      "options": {
+        "sunrise": "Wschód słońca",
+        "sunset": "Zachód słońca",
+        "dawn": "Świt",
+        "dusk": "Zmierzch",
+        "solar_noon": "Górowanie słońca"
+      }
+    },
+    "presence_kind": {
+      "options": {
+        "away": "Poza domem",
+        "vacation": "Wyjazd",
+        "guests": "Goście",
+        "home_office": "Praca z domu",
+        "sick": "Choroba"
+      }
     }
   },
   "exceptions": {
@@ -102,6 +147,18 @@
     },
     "bad_signal": {
       "message": "Sygnał jest nieprawidłowy. Sprawdź ID, tytuł i wagę."
+    },
+    "person_required": {
+      "message": "Zgodę albo odmowę może wydać tylko osoba, nie automatyzacja."
+    },
+    "approval_unavailable": {
+      "message": "Ta prośba już nie czeka albo nie możesz o niej decydować."
+    },
+    "plan_invalid": {
+      "message": "Wpis planu nie został zapisany: {reason}."
+    },
+    "presence_invalid": {
+      "message": "Wyjątek obecności nie został zapisany: {reason}."
     }
   },
   "entity": {
@@ -158,6 +215,14 @@
     "switch": {
       "notifications_paused": {
         "name": "Wstrzymaj powiadomienia"
+      }
+    },
+    "calendar": {
+      "plan": {
+        "name": "Plan"
+      },
+      "presence": {
+        "name": "Obecność"
       }
     }
   },
@@ -261,6 +326,154 @@
     "send_digest": {
       "name": "Wyślij podsumowanie",
       "description": "Wysyła teraz podsumowanie otwartych spraw."
+    },
+    "approve": {
+      "name": "Zgoda",
+      "description": "Zatwierdza akcję, o którą pytało HomeAI. Domownicy zatwierdzają akcje komfortu i urządzeń, administratorzy wszystko inne.",
+      "fields": {
+        "approval_id": {
+          "name": "ID prośby",
+          "description": "Prośba do zatwierdzenia."
+        }
+      }
+    },
+    "deny": {
+      "name": "Odmowa",
+      "description": "Odrzuca akcję, o którą pytało HomeAI.",
+      "fields": {
+        "approval_id": {
+          "name": "ID prośby",
+          "description": "Prośba do odrzucenia."
+        }
+      }
+    },
+    "undo": {
+      "name": "Cofnij",
+      "description": "Przywraca stany sprzed akcji komfortu albo urządzeń.",
+      "fields": {
+        "action_id": {
+          "name": "ID akcji",
+          "description": "Akcja do cofnięcia."
+        }
+      }
+    },
+    "plan_add": {
+      "name": "Dodaj do planu",
+      "description": "Dodaje akcję albo przypomnienie do planu domu. Osoby bez uprawnień administratora planują tylko proste akcje urządzeń.",
+      "fields": {
+        "title": {
+          "name": "Tytuł",
+          "description": "Widoczny w kalendarzu."
+        },
+        "service": {
+          "name": "Akcja",
+          "description": "Usługa do wykonania, np. light.turn_on."
+        },
+        "entity_id": {
+          "name": "Encje",
+          "description": "Cele akcji."
+        },
+        "data": {
+          "name": "Dane",
+          "description": "Dodatkowe dane usługi."
+        },
+        "reminder": {
+          "name": "Przypomnienie",
+          "description": "Zamiast akcji: wiadomość do ludzi."
+        },
+        "to": {
+          "name": "Przypomnij",
+          "description": "Kto dostaje przypomnienie."
+        },
+        "kind": {
+          "name": "Powtarzanie",
+          "description": "Raz, codziennie, w wybrane dni albo względem słońca."
+        },
+        "time": {
+          "name": "Godzina",
+          "description": "Czas lokalny dla: raz, codziennie, w wybrane dni."
+        },
+        "date": {
+          "name": "Data",
+          "description": "Dla: raz."
+        },
+        "days": {
+          "name": "Dni tygodnia",
+          "description": "Dla: w wybrane dni (i opcjonalnie słońce)."
+        },
+        "event": {
+          "name": "Zdarzenie słońca",
+          "description": "Dla: słońce."
+        },
+        "offset": {
+          "name": "Przesunięcie",
+          "description": "Minuty przed (ujemne) albo po zdarzeniu słońca."
+        },
+        "skip_when_away": {
+          "name": "Pomiń, gdy nikogo nie ma",
+          "description": "Nie wykonuj, gdy wszyscy są poza domem."
+        }
+      }
+    },
+    "plan_remove": {
+      "name": "Usuń z planu",
+      "description": "Usuwa wpis planu. Osoby bez uprawnień administratora usuwają tylko własne.",
+      "fields": {
+        "entry_id": {
+          "name": "ID wpisu",
+          "description": "Wpis do usunięcia."
+        }
+      }
+    },
+    "plan_skip": {
+      "name": "Pomiń dzień",
+      "description": "Pomija jeden dzień powtarzanego wpisu planu.",
+      "fields": {
+        "entry_id": {
+          "name": "ID wpisu",
+          "description": "Wpis."
+        },
+        "date": {
+          "name": "Data",
+          "description": "Dzień do pominięcia."
+        }
+      }
+    },
+    "presence_add": {
+      "name": "Dodaj wyjątek obecności",
+      "description": "Wyjazd, goście, praca z domu albo choroba, dla jednej osoby albo całego domu.",
+      "fields": {
+        "kind": {
+          "name": "Rodzaj",
+          "description": "Jaki to wyjątek."
+        },
+        "person": {
+          "name": "Osoba",
+          "description": "Puste: cały dom."
+        },
+        "start": {
+          "name": "Początek",
+          "description": "Kiedy się zaczyna."
+        },
+        "end": {
+          "name": "Koniec",
+          "description": "Kiedy się kończy."
+        },
+        "note": {
+          "name": "Notatka",
+          "description": "Opcjonalna."
+        }
+      }
+    },
+    "presence_remove": {
+      "name": "Usuń wyjątek obecności",
+      "description": "Usuwa wyjątek obecności.",
+      "fields": {
+        "exception_id": {
+          "name": "ID wyjątku",
+          "description": "Wyjątek do usunięcia."
+        }
+      }
     }
   }
 }

@@ -20,6 +20,30 @@
     },
     "send_digest": {
       "service": "mdi:text-box-outline"
+    },
+    "approve": {
+      "service": "mdi:check-decagram-outline"
+    },
+    "deny": {
+      "service": "mdi:close-octagon-outline"
+    },
+    "undo": {
+      "service": "mdi:undo"
+    },
+    "plan_add": {
+      "service": "mdi:calendar-plus"
+    },
+    "plan_remove": {
+      "service": "mdi:calendar-remove"
+    },
+    "plan_skip": {
+      "service": "mdi:calendar-arrow-right"
+    },
+    "presence_add": {
+      "service": "mdi:account-clock"
+    },
+    "presence_remove": {
+      "service": "mdi:account-cancel-outline"
     }
   },
   "entity": {
@@ -50,6 +74,14 @@
         "state": {
           "on": "mdi:bell-off-outline"
         }
+      }
+    },
+    "calendar": {
+      "plan": {
+        "default": "mdi:calendar-clock"
+      },
+      "presence": {
+        "default": "mdi:calendar-account"
       }
     }
   }

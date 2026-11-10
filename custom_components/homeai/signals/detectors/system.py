@@ -42,6 +42,8 @@ def device_tags(ctx: DetectionContext, device_id: str) -> frozenset[str]:
             tags.add("zigbee")
         if domain == "matter":
             tags.add("matter")
+    if device.via_device_id:
+        tags.add(f"via:{device.via_device_id}")  # explained by its hub being offline
     entry = ctx.hass.config_entries.async_get_entry(device.config_entry_id) if device.config_entry_id else None
     if entry is not None:
         try:

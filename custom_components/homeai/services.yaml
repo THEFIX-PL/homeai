@@ -82,3 +82,129 @@ dismiss:
       selector:
         text:
 send_digest:
+approve:
+  fields:
+    approval_id:
+      required: true
+      selector:
+        text:
+deny:
+  fields:
+    approval_id:
+      required: true
+      selector:
+        text:
+undo:
+  fields:
+    action_id:
+      required: true
+      selector:
+        text:
+plan_add:
+  fields:
+    title:
+      selector:
+        text:
+    service:
+      example: light.turn_on
+      selector:
+        text:
+    entity_id:
+      selector:
+        entity:
+          multiple: true
+    data:
+      selector:
+        object:
+    reminder:
+      selector:
+        text:
+          multiline: true
+    to:
+      default: home_or_all
+      selector:
+        select:
+          translation_key: plan_to
+          options: [all, home, home_or_all, admins]
+    kind:
+      required: true
+      default: daily
+      selector:
+        select:
+          translation_key: plan_kind
+          options: [once, daily, weekly, sun]
+    time:
+      example: "07:30"
+      selector:
+        time:
+    date:
+      selector:
+        date:
+    days:
+      selector:
+        select:
+          multiple: true
+          translation_key: weekday
+          options: ["0", "1", "2", "3", "4", "5", "6"]
+    event:
+      selector:
+        select:
+          translation_key: sun_event
+          options: [sunrise, sunset, dawn, dusk, solar_noon]
+    offset:
+      selector:
+        number:
+          min: -720
+          max: 720
+          unit_of_measurement: min
+          mode: box
+    skip_when_away:
+      default: false
+      selector:
+        boolean:
+plan_remove:
+  fields:
+    entry_id:
+      required: true
+      selector:
+        text:
+plan_skip:
+  fields:
+    entry_id:
+      required: true
+      selector:
+        text:
+    date:
+      required: true
+      selector:
+        date:
+presence_add:
+  fields:
+    kind:
+      required: true
+      default: vacation
+      selector:
+        select:
+          translation_key: presence_kind
+          options: [away, vacation, guests, home_office, sick]
+    person:
+      selector:
+        entity:
+          domain: person
+    start:
+      required: true
+      selector:
+        datetime:
+    end:
+      required: true
+      selector:
+        datetime:
+    note:
+      selector:
+        text:
+presence_remove:
+  fields:
+    exception_id:
+      required: true
+      selector:
+        text:
