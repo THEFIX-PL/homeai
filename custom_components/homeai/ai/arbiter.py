@@ -20,7 +20,7 @@ from ..situations.model import Phase, Situation
 from .context import entity_lines, home_card, moment_card
 from .missions.triage import situation_text, validate
 from .privacy import Privacy, clean
-from .prompts import ARBITER, ARBITER_SCHEMA
+from .prompts import ARBITER_SCHEMA, system_prompt
 from .providers.base import AIRequest
 
 STORAGE_KEY = f"{DOMAIN}.dossiers"
@@ -124,7 +124,7 @@ class Arbiter:
             LOGGER.debug("Arbiter daily limit reached")
             return None
         request = AIRequest(
-            system=ARBITER,
+            system=system_prompt(self.rt, "arbiter"),
             messages=[{"role": "user", "content": dossier}],
             schema=ARBITER_SCHEMA,
             max_tokens=32000,

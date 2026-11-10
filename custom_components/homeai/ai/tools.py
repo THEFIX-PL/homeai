@@ -229,6 +229,28 @@ async def add_to_plan(ctx: ToolContext, args: dict[str, Any]) -> Any:
     return {"entry_id": entry["id"], "title": entry["title"]}
 
 
+async def watch(ctx: ToolContext, args: dict[str, Any]) -> Any:
+    """“Tell me when …”: only for a person in a conversation; the message goes to that person alone."""
+    from ..schedule.commitments import CommitmentError
+
+    commitments = ctx.rt.module("commitments")
+    if ctx.actor != "person" or commitments is None:
+        return {"error": "not_allowed"}
+    try:
+        item = commitments.add(
+            ctx.user_id,
+            str(args.get("entity_id") or ""),
+            str(args.get("condition") or ""),
+            args.get("value"),
+            str(args.get("message") or ""),
+            args.get("hours"),
+        )
+    except CommitmentError as err:
+        return {"error": str(err)}
+    ctx.actions.append({"what": commitments.describe(item), "status": "done"})
+    return {"watch_id": item["id"], "expires": item["expires"]}
+
+
 async def handle_situation(ctx: ToolContext, args: dict[str, Any]) -> Any:
     engine = ctx.rt.module("situations")
     sid, action = str(args.get("situation_id") or ""), args.get("action")
@@ -362,6 +384,23 @@ TOOLS: dict[str, Tool] = {
             changes=True,
         ),
         Tool(
+            "watch",
+            "Tell the speaker when an entity meets a condition (“tell me when the washing machine is done”): "
+            "condition is state, not_state, above, below or changes; value for all but changes; message is what "
+            "to say then; hours until it expires.",
+            _obj(
+                {
+                    "entity_id": STR,
+                    "condition": {"type": "string", "enum": ["state", "not_state", "above", "below", "changes"]},
+                    "value": STR,
+                    "message": STR,
+                    "hours": {"type": "number"},
+                },
+                ["entity_id", "condition"],
+            ),
+            watch,
+        ),
+        Tool(
             "handle_situation",
             "Acknowledge, take, snooze or (for people) dismiss a situation.",
             _obj(
@@ -402,6 +441,9 @@ SETS = {
     "investigate": (*READ_TOOLS, "call_service"),
     "chat": tuple(TOOLS),
 }
+SETS["chat_read"] = (*READ_TOOLS, "remember", "watch")
+SETS["chat_act"] = tuple(name for name in SETS["chat"] if name != "edit_config")
+SETS["chat_act_config"] = SETS["chat"]
 
 
 async def run_tool(ctx: ToolContext, name: str, args: dict[str, Any]) -> tuple[str, bool]:

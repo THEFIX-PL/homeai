@@ -97,7 +97,7 @@ class Situation:
         p = self.primary
         if p is None:
             return ""
-        if p.kind == "external":
+        if p.kind in ("external", "custom"):
             return str(p.data.get("title", ""))
         same = [s for s in self.signals.values() if s.kind == p.kind]
         if len(same) > 1 and i18n.has(lang, f"signals|{p.kind}|title_many"):
@@ -111,13 +111,12 @@ class Situation:
         p = self.primary
         if p is None:
             return ""
-        if p.kind == "external":
+        if p.kind in ("external", "custom"):
             return str(p.data.get("description", ""))
-        return (
-            i18n.text(lang, f"signals|{p.kind}|description", **_data(p))
-            if i18n.has(lang, f"signals|{p.kind}|description")
-            else ""
-        )
+        key = f"signals|{p.kind}|description"
+        if (variant := p.data.get("variant")) and i18n.has(lang, f"{key}_{variant}"):
+            key = f"{key}_{variant}"  # e.g. no backup has ever succeeded
+        return i18n.text(lang, key, **_data(p)) if i18n.has(lang, key) else ""
 
     # ——— Serialisation ———
     def as_dict(self, lang: str | None = None) -> dict[str, Any]:

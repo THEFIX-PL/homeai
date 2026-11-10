@@ -52,6 +52,8 @@ SIMPLE_SERVICES = frozenset(
     }
 )
 MAX_ENTRIES = 500
+EXTERNAL_ATTRIBUTE = "homeai_plan"
+MAX_EXTERNAL = 50  # per entity
 
 
 class PlanError(ValueError):
@@ -104,7 +106,11 @@ class Scheduler:
             raise PlanError("not_found")
         if existing and not admin and existing.get("author") != user_id:
             raise PlanError("not_author")
-        if existing is None and len(self.entries) >= MAX_ENTRIES:
+        if not admin:
+            self._may_add(user_id)
+        if existing is None and len(self.entries) >= min(
+            MAX_ENTRIES, int(self.rt.settings.get("schedule.max_entries"))
+        ):
             raise PlanError("too_many")
         title = str(raw.get("title") or "").strip()[:200]
         try:
@@ -116,7 +122,7 @@ class Scheduler:
             "title": title,
             "when": when,
             "enabled": bool(raw.get("enabled", True)),
-            "skip_when_away": bool(raw.get("skip_when_away", False)),
+            "skip_when_away": bool(raw.get("skip_when_away", self.rt.settings.get("schedule.default_skip_when_away"))),
             "skip_dates": sorted({d for d in raw.get("skip_dates", []) if isinstance(d, str)})[-100:],
             "author": existing["author"] if existing else user_id,
             "author_name": existing["author_name"] if existing else (user.name if user else "HomeAI"),
@@ -160,6 +166,17 @@ class Scheduler:
         self._changed()
         return entry
 
+    def _may_add(self, user_id: str | None) -> None:
+        """`schedule.who_may_add`: everyone, residents (administrators and members, not guests) or administrators."""
+        who = str(self.rt.settings.get("schedule.who_may_add"))
+        if who == "everyone":
+            return
+        if who == "admins":
+            raise PlanError("admin_required")
+        person = next((p for p in self.rt.world.persons.values() if user_id and p.user_id == user_id), None)
+        if person is None or self.rt.presence.role(person.entity_id) not in ("admin", "member"):
+            raise PlanError("not_allowed")
+
     async def remove(self, entry_id: str, user_id: str | None) -> bool:
         entry = self.entries.get(entry_id)
         if entry is None:
@@ -193,6 +210,44 @@ class Scheduler:
                 if dt_util.as_local(t).date().isoformat() not in entry.get("skip_dates", []):
                     out.append((t, entry))
         return sorted(out, key=lambda x: x[0])
+
+    def external(self, start: datetime, end: datetime) -> list[tuple[datetime, dict[str, Any]]]:
+        """Plans other integrations publish in a `homeai_plan` attribute: a list of {start, title, end?}.
+        Shown with the plan (calendar, panel, next change) but never run by HomeAI; their owner runs them."""
+        if not self.rt.settings.get("schedule.external_plans"):
+            return []
+        out = []
+        for state in self.hass.states.async_all():
+            items = state.attributes.get(EXTERNAL_ATTRIBUTE)
+            if not isinstance(items, list):
+                continue
+            for i, item in enumerate(items[:MAX_EXTERNAL]):
+                if not isinstance(item, dict) or not item.get("title"):
+                    continue
+                at = dt_util.parse_datetime(str(item.get("start") or item.get("at") or ""))
+                if at is None:
+                    continue
+                at = dt_util.as_utc(at if at.tzinfo else at.replace(tzinfo=dt_util.get_default_time_zone()))
+                if not start <= at < end:
+                    continue
+                ends = dt_util.parse_datetime(str(item.get("end") or ""))
+                out.append(
+                    (
+                        at,
+                        {
+                            "id": f"external:{state.entity_id}:{i}",
+                            "title": str(item["title"])[:200],
+                            "source": state.entity_id,
+                            "end": dt_util.as_utc(ends).isoformat() if ends else None,
+                            "external": True,
+                        },
+                    )
+                )
+        return sorted(out, key=lambda x: x[0])
+
+    def all_occurrences(self, start: datetime, end: datetime) -> list[tuple[datetime, dict[str, Any]]]:
+        """HomeAI's own entries and what other integrations plan, for showing (not for running)."""
+        return sorted([*self.occurrences(start, end), *self.external(start, end)], key=lambda x: x[0])
 
     def next_due(self, after: datetime) -> datetime | None:
         times = [
@@ -233,7 +288,7 @@ class Scheduler:
     async def run(self, entry: dict[str, Any], at: datetime | None = None) -> str:
         at = at or dt_util.utcnow()
         entry["last_run"] = at.isoformat(timespec="seconds")
-        if entry.get("skip_when_away") and self.rt.presence.everyone_away():
+        if entry.get("skip_when_away") and (self.rt.presence.everyone_away() or self.rt.presence.vacation()):
             entry["last_result"] = "skipped_away"
             self.rt.journal.add(
                 "schedule", self.rt.text("journal|plan_skipped", title=entry["title"]), result="skipped"

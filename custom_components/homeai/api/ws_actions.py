@@ -12,7 +12,7 @@ import voluptuous as vol
 
 from ..policy import ActionRequest
 from ..schedule.scheduler import PlanError
-from .websocket import TYPE, command
+from .websocket import TYPE, command, user_name
 
 Conn = websocket_api.ActiveConnection
 
@@ -57,7 +57,7 @@ async def ws_execute(hass: HomeAssistant, connection: Conn, msg: dict[str, Any],
             user_id=connection.user.id,
             confirmed=msg["confirmed"],
             dry_run=msg["dry_run"],
-            reason="panel",
+            reason=rt.text("actions|requested_by", who=user_name(hass, connection)),
         )
     )
     connection.send_result(msg["id"], result.as_dict())
@@ -114,8 +114,14 @@ def ws_plan(hass: HomeAssistant, connection: Conn, msg: dict[str, Any], rt: Any)
         return
     now = dt_util.utcnow()
     occurrences = [
-        {"at": t.isoformat(timespec="seconds"), "entry_id": e["id"], "title": e["title"]}
-        for t, e in scheduler.occurrences(now, now + timedelta(days=msg["days"]))
+        {
+            "at": t.isoformat(timespec="seconds"),
+            "entry_id": e["id"],
+            "title": e["title"],
+            "external": bool(e.get("external")),
+            "source": e.get("source"),
+        }
+        for t, e in scheduler.all_occurrences(now, now + timedelta(days=msg["days"]))
     ]
     connection.send_result(msg["id"], {"entries": list(scheduler.entries.values()), "occurrences": occurrences})
 
@@ -171,3 +177,19 @@ def ws_presence_save(hass: HomeAssistant, connection: Conn, msg: dict[str, Any],
 def ws_presence_delete(hass: HomeAssistant, connection: Conn, msg: dict[str, Any], rt: Any) -> None:
     if (module := _module(rt, connection, msg, "presence_exceptions")) is not None:
         connection.send_result(msg["id"], {"removed": module.remove(msg["exception_id"])})
+
+
+# ——— Commitments (“tell me when …”) ———
+@command({TYPE: "homeai/watches/list"})
+def ws_watches(hass: HomeAssistant, connection: Conn, msg: dict[str, Any], rt: Any) -> None:
+    if (module := _module(rt, connection, msg, "commitments")) is None:
+        return
+    items = module.of_user(connection.user.id, admin=connection.user.is_admin)
+    connection.send_result(msg["id"], {"items": [{**i, "what": module.describe(i)} for i in items]})
+
+
+@command({TYPE: "homeai/watches/delete", vol.Required("watch_id"): str})
+def ws_watch_delete(hass: HomeAssistant, connection: Conn, msg: dict[str, Any], rt: Any) -> None:
+    if (module := _module(rt, connection, msg, "commitments")) is not None:
+        removed = module.remove(msg["watch_id"], connection.user.id, admin=connection.user.is_admin)
+        connection.send_result(msg["id"], {"removed": removed})

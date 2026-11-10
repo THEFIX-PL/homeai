@@ -169,6 +169,25 @@
         "standard": "Standardowe",
         "full": "Pełne"
       }
+    },
+    "mission": {
+      "options": {
+        "triage": "Ocena (P1)",
+        "investigate": "Badanie (P2)",
+        "arbitrate": "Arbitraż (P3)",
+        "digest": "Podsumowanie",
+        "review": "Przegląd tygodniowy",
+        "learn": "Nocne uczenie"
+      }
+    },
+    "watch_condition": {
+      "options": {
+        "state": "Staje się",
+        "not_state": "Przestaje być",
+        "above": "Przekracza",
+        "below": "Spada poniżej",
+        "changes": "Zmienia się"
+      }
     }
   },
   "exceptions": {
@@ -189,6 +208,15 @@
     },
     "presence_invalid": {
       "message": "Wyjątek obecności nie został zapisany: {reason}."
+    },
+    "admin_required": {
+      "message": "To może zrobić tylko administrator."
+    },
+    "situation_unknown": {
+      "message": "Nie ma takiej otwartej sprawy."
+    },
+    "watch_invalid": {
+      "message": "HomeAI nie może tego pilnować: {reason}."
     }
   },
   "entity": {
@@ -206,10 +234,13 @@
       },
       "ai_cost_month": {
         "name": "Koszt AI w tym miesiącu"
+      },
+      "next_plan_change": {
+        "name": "Następna zmiana planu"
       }
     },
     "binary_sensor": {
-      "attention": {
+      "attention_needed": {
         "name": "Potrzebna uwaga",
         "state_attributes": {
           "highest_severity": {
@@ -251,6 +282,12 @@
     "switch": {
       "notifications_paused": {
         "name": "Wstrzymaj powiadomienia"
+      },
+      "ai": {
+        "name": "AI"
+      },
+      "vacation": {
+        "name": "Tryb urlopu"
       }
     },
     "calendar": {
@@ -264,6 +301,22 @@
     "conversation": {
       "assistant": {
         "name": "Asystent"
+      }
+    },
+    "select": {
+      "autonomy": {
+        "name": "Samodzielność",
+        "state": {
+          "observe": "Tylko obserwuj",
+          "cautious": "Ostrożnie",
+          "balanced": "Zrównoważenie",
+          "bold": "Śmiało"
+        }
+      }
+    },
+    "number": {
+      "ai_budget_monthly": {
+        "name": "Budżet AI na miesiąc"
       }
     }
   },
@@ -515,6 +568,60 @@
           "description": "Wyjątek do usunięcia."
         }
       }
+    },
+    "ask": {
+      "name": "Zapytaj HomeAI",
+      "description": "Pyta HomeAI na koncie wywołującego i zwraca odpowiedź. Akcje przechodzą przez politykę HomeAI.",
+      "fields": {
+        "text": {
+          "name": "Pytanie",
+          "description": "O co zapytać albo poprosić."
+        },
+        "conversation_id": {
+          "name": "Rozmowa",
+          "description": "Trzyma wątek między wywołaniami; puste: jeden wątek na wywołującego."
+        }
+      }
+    },
+    "run_mission": {
+      "name": "Uruchom misję",
+      "description": "Uruchamia teraz misję HomeAI: ocenę, badanie albo arbitraż sprawy, podsumowanie, przegląd tygodniowy albo nocne uczenie. Tylko administratorzy i automatyzacje.",
+      "fields": {
+        "mission": {
+          "name": "Misja",
+          "description": "Co uruchomić."
+        },
+        "situation_id": {
+          "name": "ID sprawy",
+          "description": "Dla oceny, badania i arbitrażu."
+        }
+      }
+    },
+    "watch": {
+      "name": "Powiedz mi, kiedy",
+      "description": "Mówi raz, gdy encja spełni warunek, potem przestaje pilnować. Działa na twoim koncie.",
+      "fields": {
+        "entity_id": {
+          "name": "Encja",
+          "description": "Czego pilnować."
+        },
+        "condition": {
+          "name": "Warunek",
+          "description": "Kiedy powiedzieć."
+        },
+        "value": {
+          "name": "Wartość",
+          "description": "Stan albo liczba do porównania (niepotrzebne przy każdej zmianie)."
+        },
+        "message": {
+          "name": "Wiadomość",
+          "description": "Co powiedzieć; puste: HomeAI opisze, co się stało."
+        },
+        "hours": {
+          "name": "Przez",
+          "description": "Jak długo pilnować; najwyżej tyle, ile w ustawieniu HomeAI."
+        }
+      }
     }
   },
   "config_subentries": {
@@ -544,7 +651,10 @@
             "privacy": "Wysyłane dane",
             "priority": "Priorytet",
             "price_input": "Cena wejścia",
-            "price_output": "Cena wyjścia"
+            "price_output": "Cena wyjścia",
+            "max_tokens": "Najdłuższa odpowiedź",
+            "timeout": "Limit czasu",
+            "budget_daily": "Budżet dzienny"
           },
           "data_description": {
             "base_url": "Punkt zgodny z OpenAI, np. {example_url}",
@@ -552,7 +662,10 @@
             "fallbacks": "Gdy model odmówi, serwer ponowi na odpowiednim modelu.",
             "privacy": "Domyślnie: ustawienie prywatności HomeAI.",
             "priority": "Niższy jest próbowany pierwszy.",
-            "price_input": "Dolary za milion tokenów; puste: znana cena (lokalnie: za darmo)."
+            "price_input": "Dolary za milion tokenów; puste: znana cena (lokalnie: za darmo).",
+            "max_tokens": "Puste: tyle, ile potrzebuje zadanie.",
+            "timeout": "Puste: ustawienie limitu czasu AI w HomeAI.",
+            "budget_daily": "Gdy to połączenie go wyda, próbowane jest następne z tego poziomu. Puste: tylko budżety HomeAI."
           }
         }
       },
@@ -564,6 +677,20 @@
         "cannot_connect": "Nie można połączyć się z dostawcą.",
         "unknown_model": "Dostawca nie zna tego modelu."
       }
+    }
+  },
+  "issues": {
+    "no_residents": {
+      "title": "HomeAI nie zna domowników",
+      "description": "Żadna osoba nie ma roli administratora ani domownika, więc nikt nie dostaje powiadomień, a obecność jest nieznana. Ustaw role w panelu HomeAI (Ustawienia → Obecność) albo dodaj osoby w Home Assistancie."
+    },
+    "no_phones": {
+      "title": "HomeAI nie ma jak powiadomić",
+      "description": "Żaden domownik nie ma telefonu z aplikacją Home Assistant ani celu powiadomień. Zainstaluj aplikację albo dodaj cele powiadomień osób w panelu HomeAI."
+    },
+    "no_areas": {
+      "title": "HomeAI nie zna pokoi",
+      "description": "W Home Assistancie nie ma obszarów. Dzięki nim HomeAI mówi, gdzie coś się dzieje, łączy powiązane problemy i kieruje akcje; dodaj je w Ustawienia → Obszary."
     }
   }
 }

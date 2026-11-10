@@ -30,6 +30,12 @@ TIERS = ("p1", "p2", "p3")
 PROVIDERS = ("anthropic", "openai_compatible")
 EFFORTS = ("low", "medium", "high", "xhigh", "max")
 PRIVACY = ("default", "minimal", "standard", "full")
+# Optional limits per connection: (field, min, max, step, unit). Empty: the HomeAI settings apply.
+LIMITS = (
+    ("max_tokens", 256, 64000, 256, "tokens"),
+    ("timeout", 10, 3600, 5, "s"),
+    ("budget_daily", 0.01, 1000, 0.01, "$"),
+)
 
 
 def _select(key: str, options: tuple[str, ...] | list[str], *, custom: bool = False) -> SelectSelector:
@@ -68,6 +74,10 @@ def details_schema(provider: str, tier: str, current: dict[str, Any]) -> vol.Sch
     for key in ("price_input", "price_output"):
         fields[vol.Optional(key, description={"suggested_value": current.get(key)})] = NumberSelector(
             NumberSelectorConfig(min=0, max=1000, step=0.01, mode=NumberSelectorMode.BOX, unit_of_measurement="$/Mtok")
+        )
+    for key, low, high, step, unit in LIMITS:
+        fields[vol.Optional(key, description={"suggested_value": current.get(key)})] = NumberSelector(
+            NumberSelectorConfig(min=low, max=high, step=step, mode=NumberSelectorMode.BOX, unit_of_measurement=unit)
         )
     return vol.Schema(fields)
 

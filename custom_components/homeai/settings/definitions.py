@@ -6,6 +6,7 @@ label and description in `i18n/`; defaults are valid. Modules read values throug
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from .registry import Scope, Setting, SettingError, SettingsRegistry, SettingType as T
@@ -64,6 +65,35 @@ def validate_severity_map(value: Any) -> dict[str, int]:
     return out
 
 
+def _custom_rules(value: Any) -> list[dict[str, Any]]:
+    from ..signals.detectors.custom import validate_rules
+
+    return validate_rules(value)
+
+
+_RISK_VALUE = re.compile(r"^[Rr][0-6]$")
+_SERVICE_KEY = re.compile(r"^[a-z0-9_]+(\.[a-z0-9_]+)?$")
+_LABEL_KEY = re.compile(r"^[a-z0-9_]{1,64}$")
+
+
+def _risk_table(pattern: re.Pattern[str], what: str) -> Any:
+    def validate(value: Any) -> dict[str, str]:
+        if not isinstance(value, dict):
+            raise SettingError(f"{what}: expected an object")
+        if len(value) > 200:
+            raise SettingError(f"{what}: at most 200 entries")
+        out: dict[str, str] = {}
+        for key, risk in value.items():
+            if not isinstance(key, str) or not pattern.match(key):
+                raise SettingError(f"{what}: bad key {key!r}")
+            if not isinstance(risk, str) or not _RISK_VALUE.match(risk):
+                raise SettingError(f"{what}: {key} must be R0 to R6")
+            out[key] = risk.upper()
+        return out
+
+    return validate
+
+
 def _sev(key: str, default: int, section: str, scopes: frozenset = G, advanced: bool = True) -> Setting:
     return Setting(key, T.INT, default, section, scopes=scopes, min=0, max=4, advanced=advanced)
 
@@ -107,6 +137,7 @@ def _presence() -> list[Setting]:
     return [
         Setting("presence.role", T.SELECT, "member", s, scopes=PERSON, options=ROLES),
         Setting("presence.home_mode_entity", T.ENTITY, "", s, selector="entity"),
+        Setting("presence.vacation_mode", T.BOOL, False, s, admin_only=False),
         Setting("presence.vacation_states", T.STRINGS, ["vacation", "away"], s, advanced=True),
         Setting(
             "presence.sleep_sources",
@@ -142,6 +173,7 @@ def _detectors() -> list[Setting]:
     s = "detectors"
     out = [
         Setting("detectors.system_refresh", T.DURATION, 300, s, min=60, max=3600, unit="s", advanced=True),
+        Setting("detectors.custom", T.JSON, [], s, validator=_custom_rules),
     ]
     for key in (
         "safety",
@@ -154,6 +186,7 @@ def _detectors() -> list[Setting]:
         "log",
         "battery",
         "consumables",
+        "watering",
         "problems",
         "stale",
         "environment",
@@ -162,6 +195,7 @@ def _detectors() -> list[Setting]:
         "window_heating",
         "external",
         "bridges",
+        "custom",
     ):
         out.append(
             Setting(
@@ -205,11 +239,14 @@ def _detectors() -> list[Setting]:
         Setting("detectors.consumables.percent", T.INT, 10, s, scopes=THING, min=0, max=100, unit="%"),
         Setting("detectors.consumables.used_up_entities", T.ENTITIES, [], s, selector="entity", advanced=True),
         _sev("detectors.consumables.severity", 0, s, THING),
+        Setting("detectors.watering.min", T.INT, 20, s, scopes=THING, min=1, max=90, unit="%"),
+        _sev("detectors.watering.severity", 1, s, THING),
         _sev("detectors.problems.severity", 1, s, THING),
         _sev("detectors.problems.plant_severity", 1, s, THING),
         Setting("detectors.stale.hours", T.INT, 6, s, scopes=THING, min=0, max=720, unit="h"),
         _sev("detectors.stale.severity", 0, s, THING),
         Setting("detectors.environment.minutes", T.INT, 20, s, scopes=THING, min=0, max=1440, unit="min"),
+        Setting("detectors.environment.appliance_words", T.STRINGS, list(APPLIANCE_WORDS), s, max=60, advanced=True),
         Setting("detectors.divergence.degrees", T.FLOAT, 2.5, s, scopes=PLACE, min=0.5, max=20, unit="°"),
         _sev("detectors.divergence.severity", 0, s),
         Setting("detectors.lights_away.minutes", T.INT, 10, s, scopes=THING, min=0, max=720, unit="min"),
@@ -303,6 +340,8 @@ def _notify() -> list[Setting]:
         Setting("notify.digest_times", T.STRINGS, ["08:00", "20:00"], s, max=6),
         Setting("notify.digest_to", T.SELECT, "home_or_all", s, options=LADDER_TO),
         Setting("notify.digest_max_items", T.INT, 10, s, min=1, max=50),
+        Setting("notify.template_title", T.TEXT, "", s, max=1000, advanced=True),
+        Setting("notify.template_message", T.TEXT, "", s, max=4000, advanced=True),
     ]
     for sev in (4, 3, 2, 1, 0):
         out.append(
@@ -320,12 +359,38 @@ def _notify() -> list[Setting]:
 
 
 LEVELS = ("never", "observe", "propose", "act_tell", "act")
+SLIDER = ("observe", "cautious", "balanced", "bold")
+# Words in a sensor's or device's name that mark it as inside an appliance, not measuring the room (en, pl).
+APPLIANCE_WORDS = (
+    "fridge",
+    "freezer",
+    "refrigerator",
+    "oven",
+    "sauna",
+    "aquarium",
+    "terrarium",
+    "pool",
+    "boiler",
+    "lodówk",
+    "zamraż",
+    "chłodziar",
+    "piekarn",
+    "akwari",
+    "terrari",
+    "basen",
+    "bojler",
+    "kocioł",
+    "kotł",
+)
+PLAYBOOK_KEYS = ("reload_entry", "wait_then_reload", "reload_after_outage", "retry_backup", "restart_addon", "action")
 RISK_OVERRIDES = ("auto", "R0", "R1", "R2", "R3", "R4", "R5", "R6")
+MATRIX_ACTORS = ("homeai", "ai", "repair", "schedule")
 
 
 def _policy() -> list[Setting]:
     s = "policy"
     out = [
+        Setting("policy.slider", T.SELECT, "balanced", s, options=SLIDER, confirm="change"),
         Setting("policy.autonomy_r1", T.SELECT, "act_tell", s, options=LEVELS, confirm="change"),
         Setting("policy.autonomy_r2", T.SELECT, "propose", s, options=LEVELS, confirm="change"),
         Setting("policy.autonomy_r3", T.SELECT, "act", s, options=LEVELS, confirm="change"),
@@ -347,7 +412,40 @@ def _policy() -> list[Setting]:
             advanced=True,
             confirm="change",
         ),
+        Setting(
+            "policy.risk_by_service",
+            T.JSON,
+            {},
+            s,
+            advanced=True,
+            confirm="change",
+            validator=_risk_table(_SERVICE_KEY, "policy.risk_by_service"),
+        ),
+        Setting(
+            "policy.risk_by_label",
+            T.JSON,
+            {},
+            s,
+            advanced=True,
+            confirm="change",
+            validator=_risk_table(_LABEL_KEY, "policy.risk_by_label"),
+        ),
     ]
+    # Actor × class: a level for one actor overrides the class level for it alone ("inherit" keeps the class's).
+    for actor in MATRIX_ACTORS:
+        for n in (1, 2, 3, 4):
+            options = ("inherit", *LEVELS) if n < 4 else ("inherit", "never", "observe", "propose")
+            out.append(
+                Setting(
+                    f"policy.actor_{actor}_r{n}",
+                    T.SELECT,
+                    "inherit",
+                    s,
+                    options=options,
+                    advanced=True,
+                    confirm="change",
+                )
+            )
     return out
 
 
@@ -377,6 +475,8 @@ def _repair() -> list[Setting]:
         Setting("repair.outage_wait", T.INT, 5, s, min=0, max=240, unit="min", advanced=True),
         Setting("repair.backup_wait", T.INT, 30, s, min=0, max=1440, unit="min", advanced=True),
         Setting("repair.action_wait", T.INT, 0, s, min=0, max=240, unit="min", advanced=True),
+        Setting("repair.playbooks", T.MULTISELECT, list(PLAYBOOK_KEYS), s, options=PLAYBOOK_KEYS, confirm="disable"),
+        Setting("repair.never_reload", T.STRINGS, [], s, max=100),
     ]
 
 
@@ -398,6 +498,12 @@ def _schedule() -> list[Setting]:
         Setting("schedule.catch_up_minutes", T.INT, 10, s, min=0, max=240, unit="min"),
         Setting("schedule.event_minutes", T.INT, 15, s, min=1, max=240, unit="min", advanced=True),
         Setting("schedule.presence_keep_days", T.INT, 30, s, min=1, max=365, unit="d", advanced=True),
+        Setting("schedule.who_may_add", T.SELECT, "everyone", s, options=("everyone", "residents", "admins")),
+        Setting("schedule.default_skip_when_away", T.BOOL, False, s),
+        Setting("schedule.max_entries", T.INT, 500, s, min=10, max=500, advanced=True),
+        Setting("schedule.watch_hours", T.INT, 24, s, min=1, max=168, unit="h"),
+        Setting("schedule.watch_max", T.INT, 20, s, min=1, max=100, advanced=True),
+        Setting("schedule.external_plans", T.BOOL, True, s),
     ]
 
 
@@ -415,6 +521,14 @@ def _ai() -> list[Setting]:
         Setting("ai.chat_tier", T.SELECT, "p1", s, options=("p1", "p2")),
         Setting("ai.chat_max_steps", T.INT, 6, s, min=1, max=20, advanced=True),
         Setting("ai.chat_turns", T.INT, 10, s, min=1, max=50, advanced=True),
+        Setting("ai.chat_who", T.SELECT, "everyone", s, options=("everyone", "residents", "admins")),
+        Setting("ai.chat_can", T.SELECT, "act_config", s, options=("read", "act", "act_config"), confirm="change"),
+        Setting("ai.chat_length", T.SELECT, "short", s, options=("short", "normal", "detailed")),
+        Setting("ai.chat_shared_threads", T.BOOL, False, s, advanced=True),
+        *(
+            Setting(f"ai.prompt_{mission}", T.TEXT, "", s, max=8000, advanced=True)
+            for mission in ("triage", "investigate", "chat", "arbiter", "digest")
+        ),
         Setting("ai.budget_mode", T.SELECT, "block", s, options=("warn", "block"), confirm="change"),
         Setting("ai.budget_daily", T.FLOAT, 1.0, s, min=0, max=1000, step=0.1, unit="$"),
         Setting("ai.budget_monthly", T.FLOAT, 10.0, s, min=0, max=10000, step=1, unit="$"),

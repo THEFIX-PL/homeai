@@ -25,6 +25,9 @@ class TierConfig:
     priority: int = 1
     price_input: float | None = None
     price_output: float | None = None
+    max_tokens: int | None = None  # cap on the answer length for this connection
+    timeout: float | None = None  # seconds; replaces the tier's timeout setting
+    budget_daily: float | None = None  # dollars per day for this connection; then the next one is tried
     title: str = ""
 
     @classmethod
@@ -44,6 +47,9 @@ class TierConfig:
             priority=int(data.get("priority") or 1),
             price_input=data.get("price_input"),
             price_output=data.get("price_output"),
+            max_tokens=int(data["max_tokens"]) if data.get("max_tokens") else None,
+            timeout=float(data["timeout"]) if data.get("timeout") else None,
+            budget_daily=float(data["budget_daily"]) if data.get("budget_daily") else None,
             title=title,
         )
 

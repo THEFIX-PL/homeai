@@ -7,7 +7,7 @@ from typing import Final
 
 DOMAIN: Final = "homeai"
 NAME: Final = "HomeAI"
-VERSION: Final = "1.0.0"
+VERSION: Final = "1.1.0"
 LOGGER = logging.getLogger(__package__)
 
 # Bus events other automations can react to

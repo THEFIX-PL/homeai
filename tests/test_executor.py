@@ -80,7 +80,7 @@ async def test_observing_does_nothing(hass: HomeAssistant) -> None:
     rt = await setup_homeai(hass)  # 14 days of observation by default
     result = await rt.module("executor").execute(ActionRequest("light", "turn_on", entity_ids=["light.ceiling"]))
     assert result.status == "observed" and not calls
-    assert "light.turn_on" in rt.journal.recent(1)[0]["text"]
+    assert rt.journal.recent(1)[0]["text"] == "Would have done: Turn on the light: Ceiling lamp"
 
 
 async def test_undo_restores_previous_state(hass: HomeAssistant) -> None:
@@ -112,7 +112,7 @@ async def test_ask_creates_approval_and_approve_runs_it(hass: HomeAssistant, has
     assert result.status == "pending_approval"
     approvals = rt.module("approvals")
     [item] = approvals.pending()
-    assert item["approver"] == "residents" and "switch.turn_off" in item["what"]
+    assert item["approver"] == "residents" and item["what"] == "Turn off: Coffee plug"
     request_push = [c for c in calls_phone if c.data.get("data", {}).get("tag", "").startswith("homeai_approval_")]
     assert (
         request_push and request_push[0].data["data"]["actions"][0]["action"] == f"HOMEAI_APPROVAL_APPROVE_{item['id']}"
@@ -219,3 +219,17 @@ async def test_logbook_entry_names_homeai(hass: HomeAssistant) -> None:
     await hass.async_block_till_done()
     assert entries and entries[0].data["name"] == "HomeAI" and entries[0].data["entity_id"] == "light.ceiling"
     assert entries[0].context.user_id == rt.system_user_id
+
+
+async def test_plain_descriptions(hass: HomeAssistant) -> None:
+    home = standard_home(hass)
+    home.entity("climate.living", "heat", area="Living room", attrs={"friendly_name": "Thermostat"})
+    rt = await setup_homeai(hass, {"general.language": "pl"})
+    executor = rt.module("executor")
+    request = ActionRequest("climate", "set_temperature", {"temperature": 24}, entity_ids=["climate.living"])
+    assert executor.describe(request) == "Ustaw Thermostat na 24 °C"
+    assert executor.describe(ActionRequest("switch", "turn_off", entity_ids=["switch.coffee"])) == "Wyłącz: Coffee plug"
+    assert executor.describe(ActionRequest("climate", "set_temperature", {}, entity_ids=["climate.living"])) == (
+        "climate.set_temperature: Thermostat"  # a value is missing: the plain service name
+    )
+    assert executor.describe(ActionRequest("vacuum", "start", entity_ids=[])) == "vacuum.start: —"

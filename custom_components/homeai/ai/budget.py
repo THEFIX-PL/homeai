@@ -60,8 +60,24 @@ class Ledger:
     def calls_today(self) -> int:
         return int(self.days.get(self._today(), {}).get("calls", 0))
 
-    def record(self, tier: str, model: str, cost: float, input_tokens: int, output_tokens: int, purpose: str) -> None:
+    def source_today(self, source: str) -> float:
+        """Spent today through one connection (a tier subentry)."""
+        return float(self.days.get(self._today(), {}).get("sources", {}).get(source, 0.0))
+
+    def record(
+        self,
+        tier: str,
+        model: str,
+        cost: float,
+        input_tokens: int,
+        output_tokens: int,
+        purpose: str,
+        source: str | None = None,
+    ) -> None:
         day = self.days.setdefault(self._today(), {"cost": 0.0, "calls": 0, "input": 0, "output": 0, "tiers": {}})
+        if source:
+            sources = day.setdefault("sources", {})
+            sources[source] = round(sources.get(source, 0.0) + cost, 6)
         day["cost"] = round(day["cost"] + cost, 6)
         day["calls"] += 1
         day["input"] += input_tokens

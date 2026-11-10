@@ -32,7 +32,6 @@ def runtime_for_service(hass: HomeAssistant) -> Any:
 
 @callback
 def async_register_services(hass: HomeAssistant) -> None:
-    from . import service_actions, service_handlers  # noqa: F401 - handlers register themselves
 
     for svc in SERVICES:
 

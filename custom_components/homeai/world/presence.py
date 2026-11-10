@@ -99,6 +99,8 @@ class Presence:
         return state.state if state else None
 
     def vacation(self) -> bool:
+        if self.settings.get("presence.vacation_mode"):
+            return True
         mode = self.house_mode()
         if mode and mode in self.settings.get("presence.vacation_states"):
             return True

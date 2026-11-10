@@ -7,12 +7,15 @@ from typing import Any
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.exceptions import Unauthorized
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .entity import HomeAIEntity
+from .entity import HomeAIEntity, check_admin
 
-SWITCHES = {"notifications_paused": "notify.paused"}
+SWITCHES = {
+    "notifications_paused": "notify.paused",
+    "ai": "ai.enabled",
+    "vacation": "presence.vacation_mode",
+}
 
 
 async def async_setup_entry(
@@ -49,16 +52,8 @@ class SettingSwitch(HomeAIEntity, SwitchEntity):
         return bool(self.rt.settings.get(self._setting))
 
     async def _set(self, value: bool) -> None:
-        user_id = self._context.user_id if self._context else None
-        is_admin = True
-        name = None
-        if user_id:
-            user = await self.hass.auth.async_get_user(user_id)
-            is_admin = bool(user and user.is_admin)
-            name = user.name if user else None
-        if self.rt.settings.registry[self._setting].admin_only and not is_admin:
-            raise Unauthorized
-        self.rt.settings.set(self._setting, value, user=name, confirmed=True, is_admin=is_admin)
+        name, admin = await check_admin(self, self.rt, self._setting)
+        self.rt.settings.set(self._setting, value, user=name, confirmed=True, is_admin=admin)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         await self._set(True)

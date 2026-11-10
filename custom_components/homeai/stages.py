@@ -64,6 +64,12 @@ def _scheduler(rt: Any) -> Any:
     return Scheduler(rt)
 
 
+def _commitments(rt: Any) -> Any:
+    from .schedule.commitments import Commitments
+
+    return Commitments(rt)
+
+
 def _ai(rt: Any) -> Any:
     from .ai.module import AIModule
 
@@ -88,6 +94,12 @@ def _learning(rt: Any) -> Any:
     return Learning(rt)
 
 
+def _checks(rt: Any) -> Any:
+    from .checks import SetupChecks
+
+    return SetupChecks(rt)
+
+
 def _triage(rt: Any) -> Any:
     from .triage.engine import Triage
 
@@ -99,6 +111,28 @@ def _notify(rt: Any) -> Any:
 
     return NotificationRouter(rt)
 
+
+# Modules the stages import, loaded in an executor thread before setup so the event loop never imports.
+STAGE_MODULES: tuple[str, ...] = (
+    "signals.hub",
+    "situations.engine",
+    "policy",
+    "actions.executor",
+    "actions.approvals",
+    "repair.runner",
+    "adapters.bridges",
+    "schedule.presence",
+    "schedule.scheduler",
+    "schedule.commitments",
+    "ai.module",
+    "ai.arbiter",
+    "memory.store",
+    "learning.module",
+    "checks",
+    "triage.engine",
+    "notify.router",
+    "panel",
+)
 
 STAGES: list[tuple[str, Callable[[Any], Any]]] = [
     ("signals", _signals),
@@ -112,8 +146,10 @@ STAGES: list[tuple[str, Callable[[Any], Any]]] = [
     ("adapters", _adapters),
     ("presence_exceptions", _presence_exceptions),
     ("scheduler", _scheduler),
+    ("commitments", _commitments),
     ("ai", _ai),
     ("arbiter", _arbiter),
     ("memory", _memory),
     ("learning", _learning),
+    ("checks", _checks),
 ]

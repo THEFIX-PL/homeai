@@ -31,6 +31,13 @@ energy, comfort, maintenance, info), severity, entities, data for texts, who is 
 re-evaluated one second after a watched entity changes and on every tick (default one minute). Every
 threshold is a setting, most of them per entity, device, area or floor.
 
+Custom detectors are rules you write in the panel's **Rules** tab: entities (listed, or by label, area or
+domain), a condition (state is or is not a value, above or below a number, unavailable), how many minutes it
+must hold, when the rule applies (always, at night, while everyone is away or while someone is home) and
+whether each entity opens its own signal or only all of them together. Each rule sets the severity, category,
+who is needed and the advice shown to people. The rule editor previews which entities it covers and which of
+them meet the condition right now.
+
 ## Situations
 
 Signals with the same root form one situation. A signal that suppresses tags (internet down → `cloud`, a hub

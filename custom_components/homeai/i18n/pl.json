@@ -1,12 +1,37 @@
 {
   "actions": {
-    "describe": "{service}: {targets}"
+    "describe": "{service}: {targets}",
+    "requested_by": "Prosi: {who}",
+    "services": {
+      "backup.create_automatic": "Zrób kopię zapasową",
+      "climate.set_hvac_mode": "{targets}: tryb {hvac_mode}",
+      "climate.set_temperature": "Ustaw {targets} na {temperature} °C",
+      "cover.close_cover": "Zamknij: {targets}",
+      "cover.open_cover": "Otwórz: {targets}",
+      "cover.set_cover_position": "Ustaw {targets} na {position}%",
+      "hassio.addon_restart": "Uruchom ponownie dodatek: {addon}",
+      "homeassistant.reload_config_entry": "Przeładuj integrację: {entry}",
+      "light.turn_off": "Wyłącz światło: {targets}",
+      "light.turn_on": "Włącz światło: {targets}",
+      "lock.lock": "Zamknij zamek: {targets}",
+      "lock.unlock": "Otwórz zamek: {targets}",
+      "media_player.media_pause": "Wstrzymaj: {targets}",
+      "media_player.media_stop": "Zatrzymaj: {targets}",
+      "scene.turn_on": "Scena: {targets}",
+      "script.turn_on": "Uruchom skrypt: {targets}",
+      "toggle": "Przełącz: {targets}",
+      "turn_off": "Wyłącz: {targets}",
+      "turn_on": "Włącz: {targets}",
+      "valve.close_valve": "Zamknij zawór: {targets}",
+      "valve.open_valve": "Otwórz zawór: {targets}"
+    }
   },
   "ai": {
     "all_quiet": "W domu wszystko w porządku. Nic nie wymaga uwagi.",
     "arbiter_name": "Arbiter HomeAI",
     "budget_over": "Budżet AI na ten {period} się skończył ({spent} z {limit}).",
     "budget_warn": "AI zużyło {spent} z budżetu {limit} na ten {period}.",
+    "chat_not_allowed": "Przepraszam, mogę rozmawiać tylko z osobami, którym ten dom na to pozwala.",
     "decision_approve": "zatwierdzone",
     "decision_escalate_human": "musi zdecydować człowiek",
     "decision_reject": "odrzucone",
@@ -48,7 +73,9 @@
     "repair_succeeded": "Naprawione: {title}",
     "setting_changed": "Zmiana ustawienia: {key}",
     "situation_opened": "Sprawa: {title}",
-    "situation_resolved": "Ustąpiło: {title}"
+    "situation_resolved": "Ustąpiło: {title}",
+    "watch_added": "Pilnuję: {what}",
+    "watch_met": "Powiedziano, jak obiecano: {what}"
   },
   "learning": {
     "habit_title": "{what}: {action} o {time} w {days}",
@@ -93,9 +120,24 @@
       "block": "Wstrzymaj AI",
       "warn": "Tylko ostrzegaj"
     },
+    "ai.chat_can": {
+      "read": "Tylko czytać",
+      "act": "Działać",
+      "act_config": "Działać i zmieniać konfigurację"
+    },
+    "ai.chat_length": {
+      "short": "Krótkie",
+      "normal": "Zwykłe",
+      "detailed": "Szczegółowe"
+    },
     "ai.chat_tier": {
       "p1": "P1 — codzienny mózg",
       "p2": "P2 — badanie"
+    },
+    "ai.chat_who": {
+      "everyone": "Wszyscy",
+      "residents": "Domownicy",
+      "admins": "Administratorzy"
     },
     "general.language": {
       "auto": "Auto",
@@ -118,6 +160,126 @@
       "home": "Osoby w domu",
       "home_or_all": "Osoby w domu, a gdy nikogo — wszyscy",
       "none": "Nikt"
+    },
+    "policy.actor_ai_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_ai_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_ai_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_ai_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
+    },
+    "policy.actor_homeai_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_homeai_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_homeai_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_homeai_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
+    },
+    "policy.actor_repair_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_repair_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_repair_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_repair_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
+    },
+    "policy.actor_schedule_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_schedule_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_schedule_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_schedule_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
     },
     "policy.autonomy_r1": {
       "act": "Działaj",
@@ -161,6 +323,12 @@
       "R6": "R6 destrukcyjne",
       "auto": "Automatycznie"
     },
+    "policy.slider": {
+      "balanced": "Zrównoważenie",
+      "bold": "Śmiało",
+      "cautious": "Ostrożnie",
+      "observe": "Tylko obserwuj"
+    },
     "presence.role": {
       "admin": "Administrator",
       "guest": "Gość",
@@ -178,6 +346,19 @@
       "minimal": "Minimalny",
       "standard": "Standardowy"
     },
+    "repair.playbooks": {
+      "reload_entry": "Przeładuj integrację",
+      "wait_then_reload": "Poczekaj na ponowienie integracji, potem przeładuj",
+      "reload_after_outage": "Przeładuj po powrocie internetu",
+      "retry_backup": "Ponów nieudaną kopię",
+      "restart_addon": "Uruchom ponownie dodatek",
+      "action": "Sugerowane szybkie akcje"
+    },
+    "schedule.who_may_add": {
+      "everyone": "Wszyscy",
+      "residents": "Domownicy",
+      "admins": "Administratorzy"
+    },
     "world.scope": {
       "all": "Wszystkie encje",
       "exposed": "Udostępnione asystentom",
@@ -190,6 +371,15 @@
     "home_office": "Praca z domu",
     "sick": "Choroba",
     "vacation": "Wyjazd"
+  },
+  "schedule": {
+    "watch_above": "{name} przekracza {value}",
+    "watch_below": "{name} spada poniżej {value}",
+    "watch_changes": "{name} się zmienia",
+    "watch_done": "Zgodnie z prośbą: {what}.",
+    "watch_not_state": "{name} przestaje być {value}",
+    "watch_state": "{name} staje się {value}",
+    "watch_title": "HomeAI"
   },
   "sections": {
     "adapters": {
@@ -326,9 +516,21 @@
       "description": "Ostrzegaj, gdy zużyto taką część budżetu.",
       "label": "Ostrzegaj przy"
     },
+    "ai.chat_can": {
+      "description": "Tylko czytać, działać w granicach polityki albo także zmieniać konfigurację Home Assistanta (nadal tylko administratorzy, z potwierdzeniem).",
+      "label": "Co mogą rozmowy"
+    },
+    "ai.chat_length": {
+      "description": "Jak długie są odpowiedzi HomeAI w rozmowach.",
+      "label": "Długość odpowiedzi"
+    },
     "ai.chat_max_steps": {
       "description": "Najwięcej wywołań narzędzi w jednej odpowiedzi.",
       "label": "Kroki rozmowy"
+    },
+    "ai.chat_shared_threads": {
+      "description": "Osoby mówiące w tej samej rozmowie (np. przy jednym satelicie głosowym) kontynuują jeden wątek. Akcje nadal wykonują się na koncie każdej z nich.",
+      "label": "Wspólne rozmowy"
     },
     "ai.chat_tier": {
       "description": "Który poziom rozmawia z ludźmi (drugi, gdy tego brakuje).",
@@ -337,6 +539,10 @@
     "ai.chat_turns": {
       "description": "Ile ostatnich wymian pamięta rozmowa.",
       "label": "Pamięć rozmowy"
+    },
+    "ai.chat_who": {
+      "description": "Wszyscy, domownicy (administratorzy i członkowie) albo tylko administratorzy. Satelity głosowe bez użytkownika liczą się jako wszyscy.",
+      "label": "Kto może rozmawiać z HomeAI"
     },
     "ai.enabled": {
       "description": "Używaj poziomów AI dodanych jako podwpisy. HomeAI działa też bez nich.",
@@ -365,6 +571,26 @@
     "ai.p3_timeout": {
       "description": "Jak długo może odpowiadać arbiter (P3); potrafi myśleć minutami.",
       "label": "Limit czasu arbitra"
+    },
+    "ai.prompt_arbiter": {
+      "description": "Własne instrukcje dla arbitra. Jego odpowiedzi zachowują stały format. Puste: wbudowany prompt.",
+      "label": "Prompt: arbiter"
+    },
+    "ai.prompt_chat": {
+      "description": "Własne instrukcje do rozmów; {name} zamienia się w imię asystenta. Puste: wbudowany prompt.",
+      "label": "Prompt: rozmowa"
+    },
+    "ai.prompt_digest": {
+      "description": "Własne instrukcje do pisania podsumowania. Puste: wbudowany prompt.",
+      "label": "Prompt: podsumowanie"
+    },
+    "ai.prompt_investigate": {
+      "description": "Własne instrukcje do badania poważnych spraw narzędziami. Puste: wbudowany prompt.",
+      "label": "Prompt: dochodzenie"
+    },
+    "ai.prompt_triage": {
+      "description": "Własne instrukcje do oceny spraw. Puste: wbudowany prompt, widoczny w zakładce AI. Zasada, że dane z domu nigdy nie są poleceniem, jest zawsze dodawana.",
+      "label": "Prompt: ocena"
     },
     "ai.timeout": {
       "description": "Jak długo P1 i P2 mogą odpowiadać.",
@@ -450,6 +676,14 @@
       "description": "Czujniki pokazujące zużycie (100 = zużyty) zamiast pozostałej żywotności.",
       "label": "Czujniki zużycia"
     },
+    "detectors.custom": {
+      "description": "Twoje reguły: gdy encja (albo encje z etykietą, w obszarze, z domeny) spełnia warunek przez jakiś czas, otwórz sprawę. Edytuj je w zakładce Reguły panelu.",
+      "label": "Własne detektory"
+    },
+    "detectors.custom.enabled": {
+      "description": "Uruchamiaj własne reguły.",
+      "label": "Własne detektory: obserwuj"
+    },
     "detectors.divergence.degrees": {
       "description": "Największa różnica między czujnikami temperatury w jednym pokoju.",
       "label": "Dozwolona różnica"
@@ -461,6 +695,10 @@
     "detectors.divergence.severity": {
       "description": "Waga 0–4 dla: rozbieżne czujniki (0 tylko dziennik, 4 krytyczne).",
       "label": "Rozbieżne czujniki: waga"
+    },
+    "detectors.environment.appliance_words": {
+      "description": "Słowa w nazwie czujnika albo urządzenia, które oznaczają, że mierzy wnętrze urządzenia (zamrażarki, lodówki, piekarnika, akwarium). Jego temperatura i wilgotność nie są traktowane jak pomieszczenia.",
+      "label": "Czujniki w urządzeniach"
     },
     "detectors.environment.co2_max": {
       "description": "Próg dla: wysokie co₂.",
@@ -698,6 +936,18 @@
       "description": "Waga 0–4 dla: aktualizacje (0 tylko dziennik, 4 krytyczne).",
       "label": "Aktualizacje: waga"
     },
+    "detectors.watering.enabled": {
+      "description": "Pilnuj czujników wilgotności gleby i mów, kiedy rośliny potrzebują wody.",
+      "label": "Podlewanie roślin: pilnuj"
+    },
+    "detectors.watering.min": {
+      "description": "Poniżej tej wilgotności gleby roślina potrzebuje wody.",
+      "label": "Próg wilgotności gleby"
+    },
+    "detectors.watering.severity": {
+      "description": "Waga 0–4 rośliny, która potrzebuje wody (0 tylko dziennik, 4 krytyczna).",
+      "label": "Podlewanie roślin: waga"
+    },
     "detectors.window_heating.enabled": {
       "description": "Obserwuj okno otwarte w ogrzewanym pokoju.",
       "label": "Okno otwarte przy grzaniu: obserwuj"
@@ -926,6 +1176,14 @@
       "description": "Encje albo usługi notify tej osoby, oprócz wykrytych telefonów.",
       "label": "Dodatkowe cele powiadomień"
     },
+    "notify.template_message": {
+      "description": "Własna treść w składni szablonów Home Assistanta, z tymi samymi zmiennymi co tytuł. Puste albo z błędem: wbudowana treść.",
+      "label": "Szablon treści powiadomienia"
+    },
+    "notify.template_title": {
+      "description": "Własny tytuł w składni szablonów Home Assistanta, np. {{ title }} ({{ severity }}). Zmienne: title, message, description, severity, category, kind, who, who_text, repair_failed, situation_id, entities. Puste albo z błędem: wbudowany tytuł.",
+      "label": "Szablon tytułu powiadomienia"
+    },
     "notify.tts_entity": {
       "description": "Encja syntezy mowy do powiadomień głosowych.",
       "label": "Silnik mowy"
@@ -933,6 +1191,70 @@
     "notify.tts_players": {
       "description": "Odtwarzacze do powiadomień głosowych.",
       "label": "Głośniki"
+    },
+    "policy.actor_ai_r1": {
+      "description": "Poziom dla: AI, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: komfort (R1)"
+    },
+    "policy.actor_ai_r2": {
+      "description": "Poziom dla: AI, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: urządzenia (R2)"
+    },
+    "policy.actor_ai_r3": {
+      "description": "Poziom dla: AI, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: system (R3)"
+    },
+    "policy.actor_ai_r4": {
+      "description": "Poziom dla: AI, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: konfiguracja (R4)"
+    },
+    "policy.actor_homeai_r1": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: komfort (R1)"
+    },
+    "policy.actor_homeai_r2": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: urządzenia (R2)"
+    },
+    "policy.actor_homeai_r3": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: system (R3)"
+    },
+    "policy.actor_homeai_r4": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: konfiguracja (R4)"
+    },
+    "policy.actor_repair_r1": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: komfort (R1)"
+    },
+    "policy.actor_repair_r2": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: urządzenia (R2)"
+    },
+    "policy.actor_repair_r3": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: system (R3)"
+    },
+    "policy.actor_repair_r4": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: konfiguracja (R4)"
+    },
+    "policy.actor_schedule_r1": {
+      "description": "Poziom dla: Plan, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: komfort (R1)"
+    },
+    "policy.actor_schedule_r2": {
+      "description": "Poziom dla: Plan, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: urządzenia (R2)"
+    },
+    "policy.actor_schedule_r3": {
+      "description": "Poziom dla: Plan, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: system (R3)"
+    },
+    "policy.actor_schedule_r4": {
+      "description": "Poziom dla: Plan, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: konfiguracja (R4)"
     },
     "policy.approval_minutes": {
       "description": "Jak długo prośba o zgodę czeka na odpowiedź.",
@@ -970,9 +1292,21 @@
       "description": "Najwięcej automatycznych napraw systemu (R3) na dzień; więcej wymaga administratora.",
       "label": "Naprawy systemu dziennie"
     },
+    "policy.risk_by_label": {
+      "description": "Klasa dla wszystkiego z etykietą, według id etykiety, np. {\"kids_room\": \"R4\"}. Przy kilku etykietach wygrywa najwyższa klasa; nadpisanie dla encji, urządzenia, obszaru lub piętra ma pierwszeństwo.",
+      "label": "Klasa ryzyka według etykiety"
+    },
+    "policy.risk_by_service": {
+      "description": "Własna klasa dla całej domeny albo jednej akcji, np. {\"switch\": \"R3\", \"script.turn_on\": \"R4\"}. Wygrywa najbardziej szczegółowy klucz.",
+      "label": "Klasa ryzyka według akcji"
+    },
     "policy.risk_override": {
       "description": "Nadpisz klasę ryzyka akcji na tej encji, urządzeniu, obszarze albo piętrze.",
       "label": "Klasa ryzyka"
+    },
+    "policy.slider": {
+      "description": "Jedno ustawienie nad całą polityką: tylko obserwuj, ostrożnie (proponuj akcje komfortu i urządzeń, naprawy działają), zrównoważenie (poziomy poniżej) albo śmiało (działaj przy komforcie i urządzeniach). „Nigdy” zostaje „nigdy”; konfiguracja nigdy nie jest automatyczna.",
+      "label": "Samodzielność"
     },
     "presence.bed_entities": {
       "description": "Czujniki zajętości łóżka osoby.",
@@ -1013,6 +1347,10 @@
     "presence.sleep_sources": {
       "description": "Skąd HomeAI wie, że ktoś śpi, w kolejności zaufania: pomocnik, czujniki, wniosek AI, godziny nocy.",
       "label": "Źródła snu"
+    },
+    "presence.vacation_mode": {
+      "description": "Domownicy wyjechali: sprawy bezpieczeństwa mają wyższą wagę, a plan pomija wpisy wymagające kogoś w domu.",
+      "label": "Tryb urlopu"
     },
     "presence.vacation_states": {
       "description": "Stany pomocnika trybu domu oznaczające dłuższą nieobecność.",
@@ -1066,9 +1404,17 @@
       "description": "Ile razy próbować playbooka, zanim powiadomisz ludzi.",
       "label": "Próby"
     },
+    "repair.never_reload": {
+      "description": "Integracje, których HomeAI nigdy nie przeładowuje, według domeny (zha, mqtt) albo id wpisu. Ich awarie od razu trafiają do ludzi.",
+      "label": "Nigdy nie przeładowuj"
+    },
     "repair.outage_wait": {
       "description": "Minuty przed przeładowaniem integracji, której wszystkie urządzenia zamilkły.",
       "label": "Urządzenia jednej integracji milczą: czekaj"
+    },
+    "repair.playbooks": {
+      "description": "Które naprawy HomeAI może spróbować samo, zanim kogoś powiadomi.",
+      "label": "Używane scenariusze napraw"
     },
     "repair.protective_enabled": {
       "description": "Przy zalaniu, gazie, dymie albo czadzie wykonaj od razu akcje ochronne (ludzie dostają powiadomienie równocześnie).",
@@ -1094,13 +1440,37 @@
       "description": "Wykonaj wpisy planu pominięte, gdy Home Assistant nie działał, jeśli spóźnienie jest najwyżej takie.",
       "label": "Nadrabiaj pominięte wpisy"
     },
+    "schedule.default_skip_when_away": {
+      "description": "Nowe wpisy planu pomijają wykonanie, gdy nikogo nie ma w domu albo trwa urlop, chyba że wpis mówi inaczej.",
+      "label": "Nowe wpisy pomijają, gdy nikogo nie ma"
+    },
     "schedule.event_minutes": {
       "description": "Jak długo wpisy planu wyglądają w kalendarzu.",
       "label": "Długość wpisu w kalendarzu"
     },
+    "schedule.external_plans": {
+      "description": "Pokazuj w kalendarzu planu i w panelu to, co planują inne integracje (atrybut homeai_plan na ich encjach). HomeAI nigdy ich nie wykonuje.",
+      "label": "Plany z innych integracji"
+    },
+    "schedule.max_entries": {
+      "description": "Najwięcej wpisów, jakie może mieć plan.",
+      "label": "Rozmiar planu"
+    },
     "schedule.presence_keep_days": {
       "description": "Ile dni przechowywać wyjątki obecności po ich końcu.",
       "label": "Przechowuj minione wyjątki"
+    },
+    "schedule.watch_hours": {
+      "description": "Jak długo HomeAI pilnuje prośby „powiedz mi, kiedy”, zanim zrezygnuje.",
+      "label": "„Powiedz mi, kiedy”: najdłużej"
+    },
+    "schedule.watch_max": {
+      "description": "Najwięcej próśb „powiedz mi, kiedy”, jakie jedna osoba może mieć naraz.",
+      "label": "„Powiedz mi, kiedy”: na osobę"
+    },
+    "schedule.who_may_add": {
+      "description": "Wszyscy, domownicy (administratorzy i członkowie, bez gości) albo tylko administratorzy. Administratorzy mogą zawsze.",
+      "label": "Kto może dodawać do planu"
     },
     "situations.close_after": {
       "description": "Jak długo sprawa musi ustąpić, zanim zostanie zamknięta.",
@@ -1206,16 +1576,18 @@
     },
     "backup_failed": {
       "description": "{reason} Ostatnia udana: {last_ok}.",
+      "description_never": "{reason} Żadna kopia jeszcze się nie udała.",
       "title": "Kopia się nie udała"
     },
     "backup_stale": {
       "description": "Ostatnia udana automatyczna kopia: {last_ok}.",
+      "description_never": "Nie ma jeszcze żadnej udanej automatycznej kopii.",
       "title": "Brak świeżej kopii"
     },
     "battery_low": {
       "description": "{where} · {level}",
       "title": "Wymień baterię: {name}",
-      "title_many": "Wymień {count} baterie"
+      "title_many": "Wymień {count} {count:plural:baterię|baterie|baterii}"
     },
     "bridge_offline": {
       "description": "{name} jest offline; urządzenia połączone przez niego nie odpowiadają.",
@@ -1237,7 +1609,7 @@
     "device_unavailable": {
       "description": "{where} · od {since}.",
       "title": "Nie odpowiada: {name}",
-      "title_many": "{count} urządzeń nie odpowiada"
+      "title_many": "{count} {count:plural:urządzenie nie odpowiada|urządzenia nie odpowiadają|urządzeń nie odpowiada}"
     },
     "garage_away": {
       "description": "{where}",
@@ -1301,22 +1673,27 @@
     },
     "log_errors": {
       "description": "{message}",
-      "title": "{count} błędów w logu"
+      "title": "{count} {count:plural:błąd|błędy|błędów} w logu"
     },
     "opening_away": {
       "description": "{where}",
       "title": "Otwarte, a nikogo nie ma: {name}",
-      "title_many": "{count} rzeczy otwartych, a nikogo nie ma"
+      "title_many": "{count} {count:plural:rzecz otwarta|rzeczy otwarte|rzeczy otwartych}, a nikogo nie ma"
     },
     "opening_night": {
       "description": "{where}",
       "title": "Otwarte w nocy: {name}",
-      "title_many": "{count} rzeczy otwartych w nocy"
+      "title_many": "{count} {count:plural:rzecz otwarta|rzeczy otwarte|rzeczy otwartych} w nocy"
+    },
+    "plant_dry": {
+      "title": "Podlej roślinę: {name}",
+      "title_many": "{count} {count:plural:roślina potrzebuje|rośliny potrzebują|roślin potrzebuje} wody",
+      "description": "Wilgotność gleby {level} · {where}"
     },
     "plant_problem": {
       "description": "{problem} · {where}",
       "title": "Roślina wymaga uwagi: {name}",
-      "title_many": "{count} roślin wymaga uwagi"
+      "title_many": "{count} {count:plural:roślina wymaga|rośliny wymagają|roślin wymaga} uwagi"
     },
     "pm25_high": {
       "description": "{name}: {value} {unit}.",
@@ -1328,7 +1705,7 @@
     },
     "repairs_issues": {
       "description": "Zgłasza: {domains}.",
-      "title": "{count} zgłoszeń w Naprawach"
+      "title": "{count} {count:plural:zgłoszenie|zgłoszenia|zgłoszeń} w Naprawach"
     },
     "safety": {
       "description": "{name} zgłasza zagrożenie.",
@@ -1345,7 +1722,7 @@
     "stale_sensor": {
       "description": "{where} · ostatni raport {since}.",
       "title": "Czujnik milczy: {name}",
-      "title_many": "{count} czujników milczy"
+      "title_many": "{count} {count:plural:czujnik milczy|czujniki milczą|czujników milczy}"
     },
     "tamper": {
       "description": "Ktoś może majstrować przy urządzeniu.",
@@ -1361,7 +1738,7 @@
     },
     "updates": {
       "description": "{names}",
-      "title": "{count} aktualizacji do zainstalowania"
+      "title": "{count} {count:plural:aktualizacja|aktualizacje|aktualizacji} do zainstalowania"
     },
     "window_heating": {
       "description": "{name}",
@@ -1370,5 +1747,17 @@
   },
   "situation": {
     "and_more": "{title} i {count} więcej"
+  },
+  "states": {
+    "closed": "zamknięte",
+    "home": "w domu",
+    "idle": "bezczynne",
+    "locked": "zamknięte na klucz",
+    "not_home": "poza domem",
+    "off": "wyłączone",
+    "on": "włączone",
+    "open": "otwarte",
+    "running": "pracuje",
+    "unlocked": "otwarte"
   }
 }

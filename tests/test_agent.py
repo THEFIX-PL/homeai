@@ -154,7 +154,7 @@ async def test_conversation_entity(hass: HomeAssistant, hass_admin_user) -> None
     rt = await setup_homeai(hass, subentries=[tier()])
     install(rt, "p1", FakeProvider([{"text": "All good at home."}]))
     result = await conversation.async_converse(
-        hass, "How is the house?", None, Context(user_id=hass_admin_user.id), agent_id="conversation.homeai_assistant"
+        hass, "How is the house?", None, Context(user_id=hass_admin_user.id), agent_id="conversation.homeai"
     )
     assert result.response.speech["plain"]["speech"] == "All good at home."
 
@@ -163,9 +163,7 @@ async def test_conversation_without_ai_summarises(hass: HomeAssistant) -> None:
     assert await async_setup_component(hass, "homeassistant", {})
     standard_home(hass)
     await setup_homeai(hass)
-    result = await conversation.async_converse(
-        hass, "Status?", None, Context(), agent_id="conversation.homeai_assistant"
-    )
+    result = await conversation.async_converse(hass, "Status?", None, Context(), agent_id="conversation.homeai")
     assert result.response.speech["plain"]["speech"] == "Everything is fine at home. Nothing needs attention."
 
 

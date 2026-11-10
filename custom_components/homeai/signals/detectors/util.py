@@ -72,3 +72,16 @@ def excluded_personal(ctx: DetectionContext, entity_id: str) -> bool:
 def critical(ctx: DetectionContext, entity_id: str) -> bool:
     info = ctx.world.entity(entity_id)
     return bool(info and ctx.world.label("label_critical") in info.labels)
+
+
+def appliance(ctx: DetectionContext, entity_id: str) -> bool:
+    """A sensor inside an appliance (freezer, fridge, oven, aquarium…): its readings say nothing about the room.
+    Matched by words (`detectors.environment.appliance_words`) in the entity's or its device's name."""
+    words = [w.lower() for w in ctx.settings.get("detectors.environment.appliance_words") if w]
+    if not words:
+        return False
+    info = ctx.world.entity(entity_id)
+    text = " ".join(
+        [entity_id, ctx.world.display_name(entity_id), ctx.world.device_name(info.device_id) if info else ""]
+    ).lower()
+    return any(w in text for w in words)

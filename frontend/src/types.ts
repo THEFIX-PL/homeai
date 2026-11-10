@@ -14,6 +14,9 @@ export interface HomeAssistant {
   language: string;
   user: HassUser;
   states: Record<string, HassEntity>;
+  areas?: Record<string, { area_id: string; name: string; floor_id?: string | null }>;
+  floors?: Record<string, { floor_id: string; name: string }>;
+  devices?: Record<string, { id: string; name: string | null; name_by_user: string | null; area_id: string | null }>;
   callWS<T>(msg: Record<string, unknown>): Promise<T>;
   callService(domain: string, service: string, data?: Record<string, unknown>): Promise<unknown>;
   connection: {
@@ -87,4 +90,16 @@ export interface Approval {
   expires: string;
   status: string;
   decided_by: string | null;
+}
+
+export interface WorldSummary {
+  floors: { id: string; name: string }[];
+  areas: { id: string; name: string; floor_id: string | null }[];
+  persons: { id: string; name: string; role: string; home: boolean }[];
+}
+
+export interface ChatMessage {
+  role: "user" | "assistant";
+  text: string;
+  ts?: string;
 }

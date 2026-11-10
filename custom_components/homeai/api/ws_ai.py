@@ -76,3 +76,25 @@ async def ws_arbitrate(
 def ws_dossiers(hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any], rt: Any) -> None:
     arbiter = rt.module("arbiter")
     connection.send_result(msg["id"], {"dossiers": list(reversed(arbiter.dossiers)) if arbiter else []})
+
+
+@command({TYPE: "homeai/ai/prompts"}, admin=True)
+def ws_prompts(hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any], rt: Any) -> None:
+    """Each mission's built-in prompt next to the administrator's own (empty: the built-in one is used)."""
+    from ..ai.prompts import PROMPT_MISSIONS, defaults
+
+    built_in = defaults()
+    connection.send_result(
+        msg["id"],
+        {
+            "prompts": [
+                {
+                    "mission": mission,
+                    "key": f"ai.prompt_{mission}",
+                    "default": built_in[mission],
+                    "custom": rt.settings.get(f"ai.prompt_{mission}"),
+                }
+                for mission in PROMPT_MISSIONS
+            ]
+        },
+    )

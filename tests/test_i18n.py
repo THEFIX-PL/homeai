@@ -98,3 +98,13 @@ def test_settings_doc_is_current() -> None:
         check=False,
     )
     assert result.returncode == 0, result.stdout
+
+
+def test_plural_forms() -> None:
+    forms = {n: i18n.text("pl", "signals|repairs_issues|title", count=n) for n in (1, 2, 5, 12, 22, 25)}
+    assert forms[1] == "1 zgłoszenie w Naprawach" and forms[2] == "2 zgłoszenia w Naprawach"
+    assert forms[5] == "5 zgłoszeń w Naprawach" and forms[12] == "12 zgłoszeń w Naprawach"
+    assert forms[22] == "22 zgłoszenia w Naprawach" and forms[25] == "25 zgłoszeń w Naprawach"
+    assert i18n.text("en", "signals|repairs_issues|title", count=1) == "1 issue in Repairs"
+    assert i18n.text("en", "signals|repairs_issues|title", count=3) == "3 issues in Repairs"
+    assert i18n.plural("pl", "x", ["a", "b", "c"]) == "c"

@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "./define";
 import { t } from "./i18n";
 import { shared } from "./styles";
 import type { HomeAssistant } from "./types";
@@ -10,11 +11,14 @@ import "./views/journal";
 import "./views/settings";
 import "./views/ai";
 import "./views/learning";
+import "./views/rules";
+import "./views/chat";
+import "./views/presence";
 
-const TABS = ["situations", "approvals", "plan", "learning", "journal", "settings", "ai"] as const;
+const TABS = ["situations", "approvals", "chat", "plan", "presence", "learning", "rules", "journal", "settings", "ai"] as const;
 type Tab = (typeof TABS)[number];
 
-@customElement("homeai-panel")
+@element("homeai-panel")
 export class HomeAIPanel extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @property({ type: Boolean }) narrow = false;
@@ -47,6 +51,9 @@ export class HomeAIPanel extends LitElement {
       case "settings": return html`<homeai-settings .hass=${this.hass}></homeai-settings>`;
       case "ai": return html`<homeai-ai .hass=${this.hass}></homeai-ai>`;
       case "learning": return html`<homeai-learning .hass=${this.hass}></homeai-learning>`;
+      case "rules": return html`<homeai-rules .hass=${this.hass}></homeai-rules>`;
+      case "chat": return html`<homeai-chat .hass=${this.hass}></homeai-chat>`;
+      case "presence": return html`<homeai-presence .hass=${this.hass}></homeai-presence>`;
       default: return html`<homeai-situations .hass=${this.hass}></homeai-situations>`;
     }
   }

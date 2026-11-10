@@ -1,8 +1,10 @@
 """Risk classes and how a service call is classified.
 
 R0 read · R1 reversible comfort · R2 devices · R3 system · R4 configuration · R5 security · R6 destructive.
-The class comes from the domain and service, the entity's device class, then the administrator's override
-(`policy.risk_override` for an entity, device, area or floor). The highest class among the targets wins.
+The class comes from the domain and service (or the administrator's `policy.risk_by_service` for a domain or a
+`domain.service`), the entity's device class, the administrator's class for a label (`policy.risk_by_label`,
+the highest among the entity's labels), then the override for an entity, device, area or floor
+(`policy.risk_override`). The highest class among the targets wins.
 """
 
 from __future__ import annotations
@@ -183,24 +185,38 @@ def classify(
     settings: SettingsManager | None = None,
 ) -> Risk:
     """The risk of calling `domain.service` on these entities."""
-    base = base_risk(domain, service)
+    by_service = dict(settings.get("policy.risk_by_service") or {}) if settings is not None else {}
+    by_label = dict(settings.get("policy.risk_by_label") or {}) if settings is not None else {}
+    base = _configured(domain, service, by_service)
     if not entity_ids:
         return base
     risks = []
     for entity_id in entity_ids:
         e_domain = entity_id.split(".", 1)[0]
-        risk = base_risk(e_domain, service) if domain == "homeassistant" and service in _GENERIC else base
+        risk = _configured(e_domain, service, by_service) if domain == "homeassistant" and service in _GENERIC else base
         info = world.entity(entity_id) if world is not None else None
         if e_domain == "cover" and info is not None and info.device_class in SECURITY_COVER_CLASSES:
             risk = max(risk, Risk.R5)
         if e_domain == "switch" and world is not None and _is_lock_like(world, entity_id):
             risk = max(risk, Risk.R5)
+        if info is not None and by_label:
+            labelled = [r for label in info.labels if (r := Risk.parse(by_label.get(label))) is not None]
+            if labelled:
+                risk = max(labelled)
         if settings is not None and world is not None:
             override = Risk.parse(settings.get("policy.risk_override", world.target(entity_id)))
             if override is not None:
                 risk = override
         risks.append(risk)
     return max(risks)
+
+
+def _configured(domain: str, service: str, by_service: dict[str, str]) -> Risk:
+    """The built-in class, unless the administrator set one for this `domain.service` or the whole domain."""
+    for key in (f"{domain}.{service}", domain):
+        if (risk := Risk.parse(by_service.get(key))) is not None:
+            return risk
+    return base_risk(domain, service)
 
 
 _GENERIC = frozenset({"turn_on", "turn_off", "toggle"})

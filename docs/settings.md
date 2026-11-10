@@ -51,6 +51,7 @@ Roles, house mode and how HomeAI knows who sleeps.
 |---|---|---|---|---|---|
 | **Role** — Administrators approve risky actions and configuration changes; members receive notifications; guests and ignored people are not residents. | `presence.role` | `member` | Administrator (`admin`), Member (`member`), Guest (`guest`), Ignore (`ignore`) | home, person |  |
 | **House mode helper** — Optional helper (for example input_select) describing the house mode, such as home, away or vacation. | `presence.home_mode_entity` | `` |  | home |  |
+| **Vacation mode** — The household is away: security matters are raised and the plan skips entries that need someone at home. | `presence.vacation_mode` | false |  | home |  |
 | **Vacation states** — States of the house mode helper that mean a longer absence. | `presence.vacation_states` | ["vacation", "away"] |  | home | advanced |
 | **Sleep sources** — Where HomeAI learns that someone sleeps, in order of trust: helper, sensors, AI inference, night hours. | `presence.sleep_sources` | ["helper", "sensors", "ai", "hours"] | Helper (`helper`), Sensors (`sensors`), AI inference (`ai`), Night hours (`hours`) | home |  |
 | **Sleep helper** — Switch or helper that says a person is asleep. | `presence.sleep_helper` | `` |  | home, person |  |
@@ -82,6 +83,7 @@ What HomeAI watches and its limits.
 | Setting | Key | Default | Range / options | Scope | Notes |
 |---|---|---|---|---|---|
 | **System data refresh** — How often backups, the log and automation traces are read. | `detectors.system_refresh` | 300 | 60–3600 s | home | advanced |
+| **Custom detectors** — Your own rules: when an entity (or entities with a label, in an area, of a domain) meets a condition for a while, open a situation. Edit them in the panel's Rules tab. | `detectors.custom` | see panel |  | home |  |
 | **Safety sensors: watch** — Watch leak, smoke, gas, carbon monoxide and tamper sensors. | `detectors.safety.enabled` | true |  | home | confirm (disable) |
 | **Security: watch** — Watch doors, windows, gates and locks left open while nobody is home or everyone sleeps. | `detectors.security.enabled` | true |  | home | confirm (disable) |
 | **Internet connection: watch** — Watch the home's internet connection. | `detectors.internet.enabled` | true |  | home |  |
@@ -92,6 +94,7 @@ What HomeAI watches and its limits.
 | **Log and automations: watch** — Watch errors in Home Assistant's log and automations that failed. | `detectors.log.enabled` | true |  | home |  |
 | **Batteries: watch** — Watch low batteries. | `detectors.battery.enabled` | true |  | home |  |
 | **Consumables: watch** — Watch filters, brushes and other parts that need replacing. | `detectors.consumables.enabled` | true |  | home |  |
+| **Plant watering: watch** — Watch soil moisture sensors and say when plants need water. | `detectors.watering.enabled` | true |  | home |  |
 | **Devices reporting problems: watch** — Watch problem sensors and plants that need attention. | `detectors.problems.enabled` | true |  | home |  |
 | **Silent sensors: watch** — Watch sensors that stopped reporting. | `detectors.stale.enabled` | true |  | home |  |
 | **Indoor environment: watch** — Watch temperature, humidity, CO₂ and PM2.5 limits. | `detectors.environment.enabled` | true |  | home |  |
@@ -100,6 +103,7 @@ What HomeAI watches and its limits.
 | **Window open while heating: watch** — Watch a window open in a room that is being heated. | `detectors.window_heating.enabled` | true |  | home |  |
 | **Signals from other integrations: watch** — Watch signals reported by automations and integrations. | `detectors.external.enabled` | true |  | home |  |
 | **Hubs and bridges: watch** — Watch hubs and bridges (Zigbee2MQTT, hubs other devices connect through) and fold the devices behind them into one situation. | `detectors.bridges.enabled` | true |  | home |  |
+| **Custom detectors: watch** — Run your own rules. | `detectors.custom.enabled` | true |  | home |  |
 | **Water leak: severity** — Severity 0–4 of water leak (0 journal only, 4 critical). | `detectors.safety.severity_leak` | 4 | 0–4 | area, device, entity, floor, home | advanced |
 | **Smoke: severity** — Severity 0–4 of smoke (0 journal only, 4 critical). | `detectors.safety.severity_smoke` | 4 | 0–4 | area, device, entity, floor, home | advanced |
 | **Gas: severity** — Severity 0–4 of gas (0 journal only, 4 critical). | `detectors.safety.severity_gas` | 4 | 0–4 | area, device, entity, floor, home | advanced |
@@ -132,11 +136,14 @@ What HomeAI watches and its limits.
 | **Consumable threshold** — Report consumables with this much life left or less. | `detectors.consumables.percent` | 10 | 0–100 % | area, device, entity, floor, home |  |
 | **Sensors showing usage** — Consumable sensors that show how much is used (100 = worn out) instead of what is left. | `detectors.consumables.used_up_entities` | [] |  | home | advanced |
 | **Consumable: severity** — Severity 0–4 of consumable (0 journal only, 4 critical). | `detectors.consumables.severity` | 0 | 0–4 | area, device, entity, floor, home | advanced |
+| **Soil moisture limit** — Below this soil moisture a plant needs water. | `detectors.watering.min` | 20 | 1–90 % | area, device, entity, floor, home |  |
+| **Plant watering: severity** — Severity 0–4 of a plant that needs water (0 journal only, 4 critical). | `detectors.watering.severity` | 1 | 0–4 | area, device, entity, floor, home | advanced |
 | **Device problem: severity** — Severity 0–4 of device problem (0 journal only, 4 critical). | `detectors.problems.severity` | 1 | 0–4 | area, device, entity, floor, home | advanced |
 | **Plant problem: severity** — Severity 0–4 of plant problem (0 journal only, 4 critical). | `detectors.problems.plant_severity` | 1 | 0–4 | area, device, entity, floor, home | advanced |
 | **Silent after** — Hours without a report from a measuring sensor. 0 turns this off. | `detectors.stale.hours` | 6 | 0–720 h | area, device, entity, floor, home |  |
 | **Silent sensor: severity** — Severity 0–4 of silent sensor (0 journal only, 4 critical). | `detectors.stale.severity` | 0 | 0–4 | area, device, entity, floor, home | advanced |
 | **Beyond limit for** — How long a value must stay beyond its limit. | `detectors.environment.minutes` | 20 | 0–1440 min | area, device, entity, floor, home |  |
+| **Appliance sensors** — Words in a sensor's or device's name that mark it as inside an appliance (freezer, fridge, oven, aquarium). Their temperature and humidity are not treated as the room's. | `detectors.environment.appliance_words` | see panel | –60 | home | advanced |
 | **Allowed difference** — Maximum difference between temperature sensors in one room. | `detectors.divergence.degrees` | 2.5 | 0.5–20 ° | area, floor, home |  |
 | **Disagreeing sensors: severity** — Severity 0–4 of disagreeing sensors (0 journal only, 4 critical). | `detectors.divergence.severity` | 0 | 0–4 | home | advanced |
 | **Lights on for** — How long lights must be on while everyone is away. | `detectors.lights_away.minutes` | 10 | 0–720 min | area, device, entity, floor, home |  |
@@ -210,6 +217,8 @@ Who hears what, how and when.
 | **Summary times** — Times (HH:MM) of the summary. | `notify.digest_times` | ["08:00", "20:00"] | –6 | home |  |
 | **Summary recipients** — Who receives the summary. | `notify.digest_to` | `home_or_all` | Nobody (`none`), Everyone (`all`), People at home (`home`), People at home, else everyone (`home_or_all`), Administrators (`admins`), People awake at home (`awake_home`) | home |  |
 | **Summary items** — Most situations listed in a summary. | `notify.digest_max_items` | 10 | 1–50 | home |  |
+| **Notification title template** — Your own title in Home Assistant template syntax, e.g. {{ title }} ({{ severity }}). Variables: title, message, description, severity, category, kind, who, who_text, repair_failed, situation_id, entities. Empty or failing: the built-in title. | `notify.template_title` | `` | up to 1000 characters | home | advanced |
+| **Notification text template** — Your own text in Home Assistant template syntax, with the same variables as the title. Empty or failing: the built-in text. | `notify.template_message` | `` | up to 4000 characters | home | advanced |
 | **Escalation: severity 4** — Steps for critical situations: after minutes, to whom, channels, repeat, critical. | `notify.ladder_4` | see panel |  | home | confirm (change) |
 | **Escalation: severity 3** — Steps for urgent situations: after minutes, to whom, channels, repeat, critical. | `notify.ladder_3` | see panel |  | home | confirm (change) |
 | **Escalation: severity 2** — Steps for attention situations: after minutes, to whom, channels, repeat, critical. | `notify.ladder_2` | see panel |  | home |  |
@@ -222,6 +231,7 @@ What HomeAI may do on its own, what needs a yes, and what never happens.
 
 | Setting | Key | Default | Range / options | Scope | Notes |
 |---|---|---|---|---|---|
+| **Autonomy** — One setting over the whole policy: only observe, cautious (propose comfort and device actions, repairs still run), balanced (the levels below) or bold (act on comfort and devices). Never stays never; configuration is never automatic. | `policy.slider` | `balanced` | Only observe (`observe`), Cautious (`cautious`), Balanced (`balanced`), Bold (`bold`) | home | confirm (change) |
 | **Comfort actions (R1)** — What HomeAI may do on its own with lights, scenes, media and messages. | `policy.autonomy_r1` | `act_tell` | Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | confirm (change) |
 | **Device actions (R2)** — What HomeAI may do on its own with appliances, covers, heating and cooling. | `policy.autonomy_r2` | `propose` | Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | confirm (change) |
 | **System repairs (R3)** — Reloading integrations, restarting add-ons and retrying backups, only from repair playbooks. | `policy.autonomy_r3` | `act` | Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | confirm (change) |
@@ -232,6 +242,24 @@ What HomeAI may do on its own, what needs a yes, and what never happens.
 | **System repairs per day** — Most automatic system repairs (R3) per day; more need an administrator. | `policy.repairs_per_day` | 10 | 1–100 | home | advanced |
 | **Approval expires after** — How long a request for approval waits for an answer. | `policy.approval_minutes` | 120 | 5–10080 min | home |  |
 | **Risk class** — Override the risk class of actions on this entity, device, area or floor. | `policy.risk_override` | `auto` | Automatic (`auto`), R0 read (`R0`), R1 comfort (`R1`), R2 devices (`R2`), R3 system (`R3`), R4 configuration (`R4`), R5 security (`R5`), R6 destructive (`R6`) | area, device, entity, floor, home | advanced, confirm (change) |
+| **Risk class by action** — Your own class for a whole domain or one action, e.g. {"switch": "R3", "script.turn_on": "R4"}. The most specific key wins. | `policy.risk_by_service` | see panel |  | home | advanced, confirm (change) |
+| **Risk class by label** — A class for everything with a label, by label id, e.g. {"kids_room": "R4"}. With several labels the highest class wins; an entity, device, area or floor override still comes first. | `policy.risk_by_label` | see panel |  | home | advanced, confirm (change) |
+| **HomeAI's own rules: comfort (R1)** — Level for HomeAI's own rules with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_homeai_r1` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **HomeAI's own rules: devices (R2)** — Level for HomeAI's own rules with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_homeai_r2` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **HomeAI's own rules: system (R3)** — Level for HomeAI's own rules with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_homeai_r3` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **HomeAI's own rules: configuration (R4)** — Level for HomeAI's own rules with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_homeai_r4` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`) | home | advanced, confirm (change) |
+| **AI: comfort (R1)** — Level for AI with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_ai_r1` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **AI: devices (R2)** — Level for AI with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_ai_r2` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **AI: system (R3)** — Level for AI with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_ai_r3` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **AI: configuration (R4)** — Level for AI with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_ai_r4` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`) | home | advanced, confirm (change) |
+| **Repairs: comfort (R1)** — Level for Repairs with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_repair_r1` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **Repairs: devices (R2)** — Level for Repairs with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_repair_r2` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **Repairs: system (R3)** — Level for Repairs with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_repair_r3` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **Repairs: configuration (R4)** — Level for Repairs with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_repair_r4` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`) | home | advanced, confirm (change) |
+| **The plan: comfort (R1)** — Level for The plan with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_schedule_r1` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **The plan: devices (R2)** — Level for The plan with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_schedule_r2` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **The plan: system (R3)** — Level for The plan with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_schedule_r3` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | advanced, confirm (change) |
+| **The plan: configuration (R4)** — Level for The plan with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies. | `policy.actor_schedule_r4` | `inherit` | As the class (`inherit`), Never (`never`), Only observe (`observe`), Propose and ask (`propose`) | home | advanced, confirm (change) |
 
 ## Actions
 
@@ -263,6 +291,8 @@ How HomeAI fixes things before bothering anyone.
 | **Devices of one integration down: wait** — Minutes before reloading an integration whose devices all went silent. | `repair.outage_wait` | 5 | 0–240 min | home | advanced |
 | **Backup: wait before retrying** — Minutes before retrying a failed backup. | `repair.backup_wait` | 30 | 0–1440 min | home | advanced |
 | **Suggested action: wait** — Minutes before running a suggested action. | `repair.action_wait` | 0 | 0–240 min | home | advanced |
+| **Repair playbooks in use** — Which repairs HomeAI may try on its own before telling anyone. | `repair.playbooks` | see panel | Reload an integration (`reload_entry`), Wait for an integration to retry, then reload (`wait_then_reload`), Reload after the internet returns (`reload_after_outage`), Retry a failed backup (`retry_backup`), Restart an add-on (`restart_addon`), Suggested quick actions (`action`) | home | confirm (disable) |
+| **Never reload** — Integrations HomeAI never reloads, by domain (zha, mqtt) or config entry id. Their failures go straight to people. | `repair.never_reload` | [] | –100 | home |  |
 
 ## Hubs and bridges
 
@@ -286,6 +316,12 @@ The home's plan and presence exceptions.
 | **Catch up missed entries** — Run plan entries missed while Home Assistant was down if they are at most this late. | `schedule.catch_up_minutes` | 10 | 0–240 min | home |  |
 | **Plan event length** — How long plan entries look in the calendar. | `schedule.event_minutes` | 15 | 1–240 min | home | advanced |
 | **Keep past exceptions** — Days to keep presence exceptions after they end. | `schedule.presence_keep_days` | 30 | 1–365 d | home | advanced |
+| **Who may add to the plan** — Everyone, residents (administrators and members, not guests) or only administrators. Administrators may always. | `schedule.who_may_add` | `everyone` | Everyone (`everyone`), Residents (`residents`), Administrators (`admins`) | home |  |
+| **New entries skip when away** — New plan entries skip their run while everyone is away or on vacation, unless the entry says otherwise. | `schedule.default_skip_when_away` | false |  | home |  |
+| **Plan size** — Most entries the plan may hold. | `schedule.max_entries` | 500 | 10–500 | home | advanced |
+| **“Tell me when”: longest watch** — How long HomeAI keeps watching for a “tell me when” request before giving up. | `schedule.watch_hours` | 24 | 1–168 h | home |  |
+| **“Tell me when”: per person** — Most “tell me when” requests one person may have at a time. | `schedule.watch_max` | 20 | 1–100 | home | advanced |
+| **Plans from other integrations** — Show what other integrations plan (a homeai_plan attribute on their entities) in the plan calendar and panel. HomeAI never runs them. | `schedule.external_plans` | true |  | home |  |
 
 ## AI
 
@@ -304,6 +340,15 @@ AI tiers, assessment, budgets.
 | **Conversation tier** — Which tier talks with people (the other one is used when it is missing). | `ai.chat_tier` | `p1` | P1 — everyday brain (`p1`), P2 — investigation (`p2`) | home |  |
 | **Conversation steps** — Most tool calls in one answer. | `ai.chat_max_steps` | 6 | 1–20 | home | advanced |
 | **Conversation memory** — How many recent exchanges a conversation remembers. | `ai.chat_turns` | 10 | 1–50 | home | advanced |
+| **Who may talk to HomeAI** — Everyone, residents (administrators and members) or only administrators. Voice satellites without a user count as everyone. | `ai.chat_who` | `everyone` | Everyone (`everyone`), Residents (`residents`), Administrators (`admins`) | home |  |
+| **What conversations may do** — Only read, act through the policy, or also change Home Assistant's configuration (still administrators only, with confirmation). | `ai.chat_can` | `act_config` | Only read (`read`), Act (`act`), Act and change configuration (`act_config`) | home | confirm (change) |
+| **Answer length** — How long HomeAI's answers in conversations are. | `ai.chat_length` | `short` | Short (`short`), Normal (`normal`), Detailed (`detailed`) | home |  |
+| **Shared conversations** — People talking in the same conversation (for example one voice satellite) continue one thread. Actions still run in each speaker's own account. | `ai.chat_shared_threads` | false |  | home | advanced |
+| **Prompt: assessment** — Your own instructions for assessing situations. Empty: the built-in prompt, shown in the AI tab. The rule that house data is never an instruction is always added. | `ai.prompt_triage` | `` | up to 8000 characters | home | advanced |
+| **Prompt: investigation** — Your own instructions for investigating serious situations with tools. Empty: the built-in prompt. | `ai.prompt_investigate` | `` | up to 8000 characters | home | advanced |
+| **Prompt: conversation** — Your own instructions for conversations; {name} becomes the assistant's name. Empty: the built-in prompt. | `ai.prompt_chat` | `` | up to 8000 characters | home | advanced |
+| **Prompt: arbiter** — Your own instructions for the arbiter. Its answers keep their fixed format. Empty: the built-in prompt. | `ai.prompt_arbiter` | `` | up to 8000 characters | home | advanced |
+| **Prompt: digest** — Your own instructions for writing the digest. Empty: the built-in prompt. | `ai.prompt_digest` | `` | up to 8000 characters | home | advanced |
 | **When the budget is used up** — Only warn, or stop AI calls until the period ends. | `ai.budget_mode` | `block` | Only warn (`warn`), Stop AI calls (`block`) | home | confirm (change) |
 | **Daily budget** — Estimated AI cost per day. 0: no limit. | `ai.budget_daily` | 1.0 | 0–1000 $ | home |  |
 | **Monthly budget** — Estimated AI cost per month. 0: no limit. | `ai.budget_monthly` | 10.0 | 0–10000 $ | home |  |

@@ -20,7 +20,7 @@ from .budget import Ledger
 from .missions.investigate import investigate
 from .missions.triage import needs_triage, run_triage
 from .privacy import Privacy
-from .prompts import DIGEST
+from .prompts import system_prompt
 from .providers.base import AIError, AIRequest, AIResponse, Provider
 from .tiers import TierConfig, build_provider
 
@@ -112,10 +112,16 @@ class AIModule:
         if not self._rate_ok(tier):
             LOGGER.debug("AI hourly limit reached for %s", tier)
             return None
-        request.timeout = float(self.rt.settings.get(TIER_TIMEOUT.get(tier, "ai.timeout")))
+        timeout = float(self.rt.settings.get(TIER_TIMEOUT.get(tier, "ai.timeout")))
+        wanted_tokens = request.max_tokens
         for cfg in self.tiers.get(tier, []):
             if only is not None and cfg.subentry_id != only:
                 continue  # a tool loop stays with the provider that started it
+            if cfg.budget_daily is not None and self.ledger.source_today(cfg.subentry_id) >= cfg.budget_daily:
+                self.status[cfg.subentry_id] = "budget"
+                continue  # this connection spent its own daily budget; the next one may answer
+            request.timeout = cfg.timeout or timeout
+            request.max_tokens = min(wanted_tokens, cfg.max_tokens) if cfg.max_tokens else wanted_tokens
             if request.effort is None and cfg.effort:
                 request.effort = cfg.effort
             try:
@@ -133,7 +139,13 @@ class AIModule:
             self.status[cfg.subentry_id] = "ok"
             response.source = cfg.subentry_id
             self.ledger.record(
-                tier, response.model, response.cost, response.input_tokens, response.output_tokens, request.purpose
+                tier,
+                response.model,
+                response.cost,
+                response.input_tokens,
+                response.output_tokens,
+                request.purpose,
+                source=cfg.subentry_id,
             )
             if self.rt.settings.get("privacy.log_prompts"):
                 self.last_prompts[tier] = {
@@ -231,7 +243,7 @@ class AIModule:
         from .privacy import clean
 
         request = AIRequest(
-            system=DIGEST,
+            system=system_prompt(self.rt, "digest"),
             messages=[
                 {
                     "role": "user",

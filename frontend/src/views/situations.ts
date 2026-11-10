@@ -1,10 +1,11 @@
 import { LitElement, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
+import { element } from "../define";
 import { t, when } from "../i18n";
 import { shared } from "../styles";
 import type { HomeAssistant, Situation } from "../types";
 
-@customElement("homeai-situations")
+@element("homeai-situations")
 export class HomeAISituations extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private open: Situation[] = [];

@@ -11,6 +11,7 @@ from homeassistant.helpers import issue_registry as ir
 from homeassistant.loader import async_get_loaded_integration
 from homeassistant.util import dt as dt_util
 
+from ...const import DOMAIN
 from ...world import Role
 from ..base import Category, DetectionContext, Detector, Need, Signal
 from .util import UNAVAILABLE, clock, critical, name, state, where
@@ -175,7 +176,11 @@ class IntegrationsDetector(Detector):
                 )
             )
         if ctx.settings.get("detectors.integrations.repairs"):
-            issues = [i for i in ir.async_get(ctx.hass).issues.values() if i.active and i.dismissed_version is None]
+            issues = [
+                i
+                for i in ir.async_get(ctx.hass).issues.values()
+                if i.active and i.dismissed_version is None and i.domain != DOMAIN  # HomeAI's own setup hints
+            ]
             if issues:
                 domains = sorted({i.domain for i in issues})
                 out.append(
@@ -230,7 +235,11 @@ class BackupDetector(Detector):
                     category=Category.SYSTEM,
                     severity=int(ctx.settings.get("detectors.backups.severity")),
                     since=event_time,
-                    data={"reason": str(event.attributes.get("failed_reason") or ""), "last_ok": clock(last_ok)},
+                    data={
+                        "reason": str(event.attributes.get("failed_reason") or ""),
+                        "last_ok": clock(last_ok),
+                        **({} if last_ok else {"variant": "never"}),
+                    },
                     need=Need.ADMIN,
                     root="backup",
                     repair=repair,
@@ -247,7 +256,7 @@ class BackupDetector(Detector):
                     kind="backup_stale",
                     category=Category.SYSTEM,
                     severity=int(ctx.settings.get("detectors.backups.severity")),
-                    data={"last_ok": clock(last_ok)},
+                    data={"last_ok": clock(last_ok), **({} if last_ok else {"variant": "never"})},
                     need=Need.ADMIN,
                     root="backup",
                     repair=repair,

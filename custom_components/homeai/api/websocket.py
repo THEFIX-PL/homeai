@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from functools import wraps
-import importlib
 from typing import Any
 
 from homeassistant.components import websocket_api
@@ -69,10 +68,7 @@ def command(schema: dict[Any, Any], *, admin: bool = False, is_async: bool = Fal
 
 @callback
 def async_register(hass: HomeAssistant) -> None:
-    from .registry import MODULES
-
-    for module in MODULES:  # each module registers its commands on import
-        importlib.import_module(f".{module}", __package__)
+    """Register every command; `api.registry` (imported in an executor at startup) has loaded their modules."""
     for cmd in COMMANDS:
         websocket_api.async_register_command(hass, cmd)
 

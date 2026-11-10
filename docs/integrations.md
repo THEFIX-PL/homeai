@@ -27,9 +27,31 @@ The same lifecycle is available as `event.homeai_situation` and `event.homeai_no
 ## Calendars
 
 - `calendar.homeai_plan`: the home's plan. Create an event to add a reminder; delete an occurrence to skip it.
+  It also shows what other integrations plan (below).
 - `calendar.homeai_presence`: trips, guests, working from home, sickness. Create events from any calendar UI;
   the title picks the kind (“Vacation Anna”, “Goście”). Heating or other integrations can read it with a
   calendar trigger.
+
+## Publish your plans
+
+**Entity attribute** `homeai_plan`: any entity may expose a list of `{start, title, end?}` (ISO times; up to 50).
+HomeAI shows these in `calendar.homeai_plan` and in the panel's plan next to its own entries, so people see
+everything the house will do in one place. HomeAI never runs them; your integration does. Setting *Plans from
+other integrations* turns this off.
+
+```yaml
+homeai_plan:
+  - start: "2026-11-12T22:00:00+01:00"
+    end: "2026-11-13T00:30:00+01:00"
+    title: "Dishwasher: eco program"
+```
+
+## “Tell me when”
+
+**Service** `homeai.watch`: `entity_id`, `condition` (state, not_state, above, below, changes), `value`,
+`message`, `hours`. HomeAI tells the calling person once when the entity meets the condition, then stops. People
+can ask the same in a conversation (“tell me when the washing machine is done”); the panel's plan lists what is
+being watched.
 
 ## Blueprints
 

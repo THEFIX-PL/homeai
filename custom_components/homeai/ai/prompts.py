@@ -112,3 +112,24 @@ ARBITER_SCHEMA = {
     "required": ["decision", "severity", "who", "confidence", "reason", "conditions"],
     "additionalProperties": False,
 }
+
+
+PROMPT_MISSIONS = ("triage", "investigate", "chat", "arbiter", "digest")
+LENGTHS = {
+    "short": "Keep answers to one or two sentences unless the person asks for more.",
+    "normal": "Answer in a short paragraph at most.",
+    "detailed": "Answer fully, with the details that matter, in plain sentences.",
+}
+
+
+def defaults() -> dict[str, str]:
+    return {"triage": TRIAGE, "investigate": INVESTIGATE, "chat": CHAT, "arbiter": ARBITER, "digest": DIGEST}
+
+
+def system_prompt(rt: object, mission: str) -> str:
+    """The built-in prompt, or the administrator's own (`ai.prompt_<mission>`). The data rule always stays and
+    structured answers are still enforced by their schemas, so a custom prompt cannot widen what AI may do."""
+    custom = str(rt.settings.get(f"ai.prompt_{mission}") or "").strip()  # type: ignore[attr-defined]
+    if not custom:
+        return defaults()[mission]
+    return custom if DATA_RULE in custom else f"{custom}\n\n{DATA_RULE}"

@@ -71,8 +71,20 @@ class PlanCalendar(_Calendar):
     def _events(self, start: datetime, end: datetime) -> list[CalendarEvent]:
         minutes = int(self.rt.settings.get("schedule.event_minutes"))
         out = []
-        for t, entry in self.rt.module("scheduler").occurrences(start, end):
+        for t, entry in self.rt.module("scheduler").all_occurrences(start, end):
             local = dt_util.as_local(t)
+            if entry.get("external"):
+                ends = dt_util.parse_datetime(entry["end"]) if entry.get("end") else None
+                out.append(
+                    CalendarEvent(
+                        start=local,
+                        end=dt_util.as_local(ends) if ends and ends > t else local + timedelta(minutes=minutes),
+                        summary=entry["title"],
+                        description=entry["source"],
+                        uid=entry["id"],
+                    )
+                )
+                continue
             out.append(
                 CalendarEvent(
                     start=local,

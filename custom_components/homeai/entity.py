@@ -21,6 +21,20 @@ def device_info() -> DeviceInfo:
     )
 
 
+async def check_admin(entity: Entity, rt: Any, setting: str) -> tuple[str | None, bool]:
+    """(user name, is admin) of the caller; raises Unauthorized when a non-administrator changes an admin setting."""
+    from homeassistant.exceptions import Unauthorized
+
+    user_id = entity._context.user_id if entity._context else None
+    if not user_id:
+        return None, True  # automations and scripts (created by administrators)
+    user = await entity.hass.auth.async_get_user(user_id)
+    admin = bool(user and user.is_admin)
+    if rt.settings.registry[setting].admin_only and not admin:
+        raise Unauthorized(context=entity._context, entity_id=entity.entity_id)
+    return (user.name if user else None), admin
+
+
 class HomeAIEntity(Entity):
     _attr_has_entity_name = True
     _attr_should_poll = False

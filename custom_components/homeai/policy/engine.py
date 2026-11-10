@@ -9,6 +9,8 @@ Actors:
   R5 and R6 are never autonomous, except protective actions on entities the administrator labelled.
   Repairs may only run R3 actions from playbooks, within the daily limit. Schedule entries run up to the
   class their author approved. During the first `policy.observation_days` R1–R2 autonomy only observes.
+  The actor × class matrix (`policy.actor_<actor>_r<n>`) gives one actor its own level for a class, e.g. AI
+  only proposes device actions while HomeAI's own rules act on them; schedule entries then follow that level.
 """
 
 from __future__ import annotations
@@ -23,6 +25,7 @@ from homeassistant.util import dt as dt_util
 from .risk import Risk, classify, is_protective
 
 ACTORS = ("person", "homeai", "ai", "repair", "schedule")
+MATRIX_ACTORS = ("homeai", "ai", "repair", "schedule")  # actors with their own row in the actor × class matrix
 LEVELS = ("never", "observe", "propose", "act_tell", "act")
 
 
@@ -102,12 +105,20 @@ class Policy:
             return False
         return (now or dt_util.utcnow()) < installed + timedelta(days=days)
 
-    def level(self, risk: Risk) -> str:
+    def level(self, risk: Risk, actor: str | None = None) -> str:
+        """The level for a class, or for one actor when the actor × class matrix sets one; then the slider."""
         if risk == Risk.R0:
             return "act"
         if risk >= Risk.R5:
             return "never"
-        return str(self.rt.settings.get(f"policy.autonomy_r{int(risk)}"))
+        level = self.actor_level(risk, actor) or str(self.rt.settings.get(f"policy.autonomy_r{int(risk)}"))
+        return slide(level, risk, str(self.rt.settings.get("policy.slider")))
+
+    def actor_level(self, risk: Risk, actor: str | None) -> str | None:
+        if actor not in MATRIX_ACTORS or not Risk.R1 <= risk <= Risk.R4:
+            return None
+        value = str(self.rt.settings.get(f"policy.actor_{actor}_r{int(risk)}"))
+        return None if value == "inherit" else value
 
     # ——— Decision ———
     async def decide(self, request: ActionRequest, now: datetime | None = None) -> Decision:
@@ -156,20 +167,26 @@ class Policy:
             return Decision(Verdict.DENY, risk, "never_autonomous")
         if request.actor == "schedule":
             approved = Risk.parse(request.approved_risk)
-            if approved is not None and risk <= approved:
+            if approved is None or risk > approved:
+                return Decision(Verdict.ASK, risk, "schedule_above_approved", approver=_approver(risk))
+            if self.actor_level(risk, "schedule") is None:
                 return Decision(Verdict.ALLOW, risk, "schedule")
-            return Decision(Verdict.ASK, risk, "schedule_above_approved", approver=_approver(risk))
+            return self._by_level(self.level(risk, "schedule"), risk)
         if risk == Risk.R3:
             if request.actor != "repair" or not request.playbook:
                 return Decision(Verdict.ASK, risk, "system_needs_playbook", approver="admins")
             if not self._repair_budget(now):
                 return Decision(Verdict.ASK, risk, "repair_limit", approver="admins")
-        level = self.level(risk)
+        level = self.level(risk, request.actor)
         if risk in (Risk.R1, Risk.R2) and self.observing(now) and level in ("act", "act_tell"):
             level = "observe"
         learning = self.rt.module("learning")
         if level in ("act", "act_tell") and learning is not None and learning.restricted(request):
             level = "propose"  # people undid this too often
+        return self._by_level(level, risk)
+
+    @staticmethod
+    def _by_level(level: str, risk: Risk) -> Decision:
         if level == "never":
             return Decision(Verdict.DENY, risk, "level_never")
         if level == "observe":
@@ -190,6 +207,23 @@ class Policy:
 
     def diagnostics(self) -> dict[str, Any]:
         return {"observing": self.observing(), "repairs_today": self._repairs_today}
+
+
+def slide(level: str, risk: Risk, slider: str) -> str:
+    """The autonomy slider over the per-class levels: observe caps everything at observing, cautious at proposing
+    (system repairs still run), balanced keeps the levels, bold acts on comfort and devices. Never stays never;
+    configuration (R4) is never automatic."""
+    order = LEVELS
+    if level == "never" or slider == "balanced":
+        return level
+    if slider == "observe":
+        cap = "observe"
+    elif slider == "cautious":
+        cap = "act" if risk == Risk.R3 else "propose"
+    else:  # bold
+        raised = {Risk.R1: "act", Risk.R2: "act_tell", Risk.R3: "act", Risk.R4: "propose"}[risk]
+        return raised if order.index(raised) > order.index(level) else level
+    return cap if order.index(level) > order.index(cap) else level
 
 
 def _approver(risk: Risk) -> str:
