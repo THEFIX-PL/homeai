@@ -11,6 +11,7 @@ from homeassistant.helpers import issue_registry as ir
 from homeassistant.loader import async_get_loaded_integration
 from homeassistant.util import dt as dt_util
 
+from ...const import DOMAIN
 from ...world import Role
 from ..base import Category, DetectionContext, Detector, Need, Signal
 from .util import UNAVAILABLE, clock, critical, name, state, where
@@ -175,7 +176,11 @@ class IntegrationsDetector(Detector):
                 )
             )
         if ctx.settings.get("detectors.integrations.repairs"):
-            issues = [i for i in ir.async_get(ctx.hass).issues.values() if i.active and i.dismissed_version is None]
+            issues = [
+                i
+                for i in ir.async_get(ctx.hass).issues.values()
+                if i.active and i.dismissed_version is None and i.domain != DOMAIN  # HomeAI's own setup hints
+            ]
             if issues:
                 domains = sorted({i.domain for i in issues})
                 out.append(

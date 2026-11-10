@@ -233,7 +233,7 @@ class Scheduler:
     async def run(self, entry: dict[str, Any], at: datetime | None = None) -> str:
         at = at or dt_util.utcnow()
         entry["last_run"] = at.isoformat(timespec="seconds")
-        if entry.get("skip_when_away") and self.rt.presence.everyone_away():
+        if entry.get("skip_when_away") and (self.rt.presence.everyone_away() or self.rt.presence.vacation()):
             entry["last_result"] = "skipped_away"
             self.rt.journal.add(
                 "schedule", self.rt.text("journal|plan_skipped", title=entry["title"]), result="skipped"

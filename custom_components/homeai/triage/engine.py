@@ -70,7 +70,8 @@ class Triage:
         ):
             severity = 4
             reasons.append("critical_label")
-        if category in RAISE_WHEN_AWAY and settings.get("triage.raise_when_away") and self.rt.presence.everyone_away():
+        away = self.rt.presence.everyone_away() or self.rt.presence.vacation()
+        if category in RAISE_WHEN_AWAY and settings.get("triage.raise_when_away") and away:
             severity = min(4, severity + 1)
             reasons.append("everyone_away")
         if category not in NEVER_LOWER and settings.get("triage.calibration_enabled"):

@@ -161,6 +161,12 @@
       "R6": "R6 destructive",
       "auto": "Automatic"
     },
+    "policy.slider": {
+      "balanced": "Balanced",
+      "bold": "Bold",
+      "cautious": "Cautious",
+      "observe": "Only observe"
+    },
     "presence.role": {
       "admin": "Administrator",
       "guest": "Guest",
@@ -974,6 +980,10 @@
       "description": "Override the risk class of actions on this entity, device, area or floor.",
       "label": "Risk class"
     },
+    "policy.slider": {
+      "description": "One setting over the whole policy: only observe, cautious (propose comfort and device actions, repairs still run), balanced (the levels below) or bold (act on comfort and devices). Never stays never; configuration is never automatic.",
+      "label": "Autonomy"
+    },
     "presence.bed_entities": {
       "description": "Bed occupancy sensors of the person.",
       "label": "Bed sensors"
@@ -1013,6 +1023,10 @@
     "presence.sleep_sources": {
       "description": "Where HomeAI learns that someone sleeps, in order of trust: helper, sensors, AI inference, night hours.",
       "label": "Sleep sources"
+    },
+    "presence.vacation_mode": {
+      "description": "The household is away: security matters are raised and the plan skips entries that need someone at home.",
+      "label": "Vacation mode"
     },
     "presence.vacation_states": {
       "description": "States of the house mode helper that mean a longer absence.",

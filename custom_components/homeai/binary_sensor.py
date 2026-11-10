@@ -26,7 +26,7 @@ class AttentionSensor(HomeAIEntity, BinarySensorEntity):
     _attr_device_class = BinarySensorDeviceClass.PROBLEM
 
     def __init__(self, runtime: Any) -> None:
-        super().__init__(runtime, "attention")
+        super().__init__(runtime, "attention_needed")
 
     async def async_added_to_hass(self) -> None:
         self.async_on_remove(self.rt.module("situations").listen(self._changed))

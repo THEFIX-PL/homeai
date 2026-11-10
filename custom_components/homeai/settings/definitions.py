@@ -107,6 +107,7 @@ def _presence() -> list[Setting]:
     return [
         Setting("presence.role", T.SELECT, "member", s, scopes=PERSON, options=ROLES),
         Setting("presence.home_mode_entity", T.ENTITY, "", s, selector="entity"),
+        Setting("presence.vacation_mode", T.BOOL, False, s, admin_only=False),
         Setting("presence.vacation_states", T.STRINGS, ["vacation", "away"], s, advanced=True),
         Setting(
             "presence.sleep_sources",
@@ -320,12 +321,14 @@ def _notify() -> list[Setting]:
 
 
 LEVELS = ("never", "observe", "propose", "act_tell", "act")
+SLIDER = ("observe", "cautious", "balanced", "bold")
 RISK_OVERRIDES = ("auto", "R0", "R1", "R2", "R3", "R4", "R5", "R6")
 
 
 def _policy() -> list[Setting]:
     s = "policy"
     out = [
+        Setting("policy.slider", T.SELECT, "balanced", s, options=SLIDER, confirm="change"),
         Setting("policy.autonomy_r1", T.SELECT, "act_tell", s, options=LEVELS, confirm="change"),
         Setting("policy.autonomy_r2", T.SELECT, "propose", s, options=LEVELS, confirm="change"),
         Setting("policy.autonomy_r3", T.SELECT, "act", s, options=LEVELS, confirm="change"),

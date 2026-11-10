@@ -161,6 +161,12 @@
       "R6": "R6 destrukcyjne",
       "auto": "Automatycznie"
     },
+    "policy.slider": {
+      "balanced": "Zrównoważenie",
+      "bold": "Śmiało",
+      "cautious": "Ostrożnie",
+      "observe": "Tylko obserwuj"
+    },
     "presence.role": {
       "admin": "Administrator",
       "guest": "Gość",
@@ -974,6 +980,10 @@
       "description": "Nadpisz klasę ryzyka akcji na tej encji, urządzeniu, obszarze albo piętrze.",
       "label": "Klasa ryzyka"
     },
+    "policy.slider": {
+      "description": "Jedno ustawienie nad całą polityką: tylko obserwuj, ostrożnie (proponuj akcje komfortu i urządzeń, naprawy działają), zrównoważenie (poziomy poniżej) albo śmiało (działaj przy komforcie i urządzeniach). „Nigdy” zostaje „nigdy”; konfiguracja nigdy nie jest automatyczna.",
+      "label": "Samodzielność"
+    },
     "presence.bed_entities": {
       "description": "Czujniki zajętości łóżka osoby.",
       "label": "Czujniki łóżka"
@@ -1013,6 +1023,10 @@
     "presence.sleep_sources": {
       "description": "Skąd HomeAI wie, że ktoś śpi, w kolejności zaufania: pomocnik, czujniki, wniosek AI, godziny nocy.",
       "label": "Źródła snu"
+    },
+    "presence.vacation_mode": {
+      "description": "Domownicy wyjechali: sprawy bezpieczeństwa mają wyższą wagę, a plan pomija wpisy wymagające kogoś w domu.",
+      "label": "Tryb urlopu"
     },
     "presence.vacation_states": {
       "description": "Stany pomocnika trybu domu oznaczające dłuższą nieobecność.",

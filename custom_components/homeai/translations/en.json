@@ -169,6 +169,16 @@
         "standard": "Standard",
         "full": "Full"
       }
+    },
+    "mission": {
+      "options": {
+        "triage": "Assessment (P1)",
+        "investigate": "Investigation (P2)",
+        "arbitrate": "Arbitration (P3)",
+        "digest": "Digest",
+        "review": "Weekly review",
+        "learn": "Nightly learning"
+      }
     }
   },
   "exceptions": {
@@ -189,6 +199,12 @@
     },
     "presence_invalid": {
       "message": "The presence exception was not saved: {reason}."
+    },
+    "admin_required": {
+      "message": "Only an administrator can do this."
+    },
+    "situation_unknown": {
+      "message": "There is no such open situation."
     }
   },
   "entity": {
@@ -206,10 +222,13 @@
       },
       "ai_cost_month": {
         "name": "AI cost this month"
+      },
+      "next_plan_change": {
+        "name": "Next plan change"
       }
     },
     "binary_sensor": {
-      "attention": {
+      "attention_needed": {
         "name": "Attention needed",
         "state_attributes": {
           "highest_severity": {
@@ -251,6 +270,12 @@
     "switch": {
       "notifications_paused": {
         "name": "Pause notifications"
+      },
+      "ai": {
+        "name": "AI"
+      },
+      "vacation": {
+        "name": "Vacation mode"
       }
     },
     "calendar": {
@@ -264,6 +289,22 @@
     "conversation": {
       "assistant": {
         "name": "Assistant"
+      }
+    },
+    "select": {
+      "autonomy": {
+        "name": "Autonomy",
+        "state": {
+          "observe": "Only observe",
+          "cautious": "Cautious",
+          "balanced": "Balanced",
+          "bold": "Bold"
+        }
+      }
+    },
+    "number": {
+      "ai_budget_monthly": {
+        "name": "AI budget per month"
       }
     }
   },
@@ -515,6 +556,34 @@
           "description": "The exception to remove."
         }
       }
+    },
+    "ask": {
+      "name": "Ask HomeAI",
+      "description": "Asks HomeAI in the caller's account and returns the answer. Actions go through HomeAI's policy.",
+      "fields": {
+        "text": {
+          "name": "Question",
+          "description": "What to ask or ask for."
+        },
+        "conversation_id": {
+          "name": "Conversation",
+          "description": "Keeps a thread across calls; empty: one thread per caller."
+        }
+      }
+    },
+    "run_mission": {
+      "name": "Run a mission",
+      "description": "Runs a HomeAI mission now: assessment, investigation or arbitration of a situation, the digest, the weekly review or nightly learning. Administrators and automations only.",
+      "fields": {
+        "mission": {
+          "name": "Mission",
+          "description": "What to run."
+        },
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "For assessment, investigation and arbitration."
+        }
+      }
     }
   },
   "config_subentries": {
@@ -564,6 +633,20 @@
         "cannot_connect": "Cannot connect to the provider.",
         "unknown_model": "The provider does not know this model."
       }
+    }
+  },
+  "issues": {
+    "no_residents": {
+      "title": "HomeAI knows no residents",
+      "description": "No person has the role administrator or member, so nobody gets notifications and presence is unknown. Set roles in the HomeAI panel (Settings → Presence) or add people in Home Assistant."
+    },
+    "no_phones": {
+      "title": "HomeAI cannot reach anyone",
+      "description": "None of the residents has a phone with the Home Assistant app or a notify target. Install the Companion app or add notify targets per person in the HomeAI panel."
+    },
+    "no_areas": {
+      "title": "HomeAI does not know your rooms",
+      "description": "There are no areas in Home Assistant. With areas HomeAI says where things happen, groups related problems and targets actions; add them in Settings → Areas."
     }
   }
 }

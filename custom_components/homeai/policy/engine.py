@@ -107,7 +107,9 @@ class Policy:
             return "act"
         if risk >= Risk.R5:
             return "never"
-        return str(self.rt.settings.get(f"policy.autonomy_r{int(risk)}"))
+        return slide(
+            str(self.rt.settings.get(f"policy.autonomy_r{int(risk)}")), risk, str(self.rt.settings.get("policy.slider"))
+        )
 
     # ——— Decision ———
     async def decide(self, request: ActionRequest, now: datetime | None = None) -> Decision:
@@ -190,6 +192,23 @@ class Policy:
 
     def diagnostics(self) -> dict[str, Any]:
         return {"observing": self.observing(), "repairs_today": self._repairs_today}
+
+
+def slide(level: str, risk: Risk, slider: str) -> str:
+    """The autonomy slider over the per-class levels: observe caps everything at observing, cautious at proposing
+    (system repairs still run), balanced keeps the levels, bold acts on comfort and devices. Never stays never;
+    configuration (R4) is never automatic."""
+    order = LEVELS
+    if level == "never" or slider == "balanced":
+        return level
+    if slider == "observe":
+        cap = "observe"
+    elif slider == "cautious":
+        cap = "act" if risk == Risk.R3 else "propose"
+    else:  # bold
+        raised = {Risk.R1: "act", Risk.R2: "act_tell", Risk.R3: "act", Risk.R4: "propose"}[risk]
+        return raised if order.index(raised) > order.index(level) else level
+    return cap if order.index(level) > order.index(cap) else level
 
 
 def _approver(risk: Risk) -> str:

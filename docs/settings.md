@@ -51,6 +51,7 @@ Roles, house mode and how HomeAI knows who sleeps.
 |---|---|---|---|---|---|
 | **Role** — Administrators approve risky actions and configuration changes; members receive notifications; guests and ignored people are not residents. | `presence.role` | `member` | Administrator (`admin`), Member (`member`), Guest (`guest`), Ignore (`ignore`) | home, person |  |
 | **House mode helper** — Optional helper (for example input_select) describing the house mode, such as home, away or vacation. | `presence.home_mode_entity` | `` |  | home |  |
+| **Vacation mode** — The household is away: security matters are raised and the plan skips entries that need someone at home. | `presence.vacation_mode` | false |  | home |  |
 | **Vacation states** — States of the house mode helper that mean a longer absence. | `presence.vacation_states` | ["vacation", "away"] |  | home | advanced |
 | **Sleep sources** — Where HomeAI learns that someone sleeps, in order of trust: helper, sensors, AI inference, night hours. | `presence.sleep_sources` | ["helper", "sensors", "ai", "hours"] | Helper (`helper`), Sensors (`sensors`), AI inference (`ai`), Night hours (`hours`) | home |  |
 | **Sleep helper** — Switch or helper that says a person is asleep. | `presence.sleep_helper` | `` |  | home, person |  |
@@ -222,6 +223,7 @@ What HomeAI may do on its own, what needs a yes, and what never happens.
 
 | Setting | Key | Default | Range / options | Scope | Notes |
 |---|---|---|---|---|---|
+| **Autonomy** — One setting over the whole policy: only observe, cautious (propose comfort and device actions, repairs still run), balanced (the levels below) or bold (act on comfort and devices). Never stays never; configuration is never automatic. | `policy.slider` | `balanced` | Only observe (`observe`), Cautious (`cautious`), Balanced (`balanced`), Bold (`bold`) | home | confirm (change) |
 | **Comfort actions (R1)** — What HomeAI may do on its own with lights, scenes, media and messages. | `policy.autonomy_r1` | `act_tell` | Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | confirm (change) |
 | **Device actions (R2)** — What HomeAI may do on its own with appliances, covers, heating and cooling. | `policy.autonomy_r2` | `propose` | Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | confirm (change) |
 | **System repairs (R3)** — Reloading integrations, restarting add-ons and retrying backups, only from repair playbooks. | `policy.autonomy_r3` | `act` | Never (`never`), Only observe (`observe`), Propose and ask (`propose`), Act and tell (`act_tell`), Act (`act`) | home | confirm (change) |

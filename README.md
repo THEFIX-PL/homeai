@@ -63,13 +63,16 @@ would take on its own: the journal shows what it would have done.
 | What | Purpose |
 |---|---|
 | `sensor.homeai_situations` | Number of open situations that need attention; attribute `situations` with the list |
-| `binary_sensor.homeai_attention` | On while something of severity 2+ is not acknowledged |
+| `binary_sensor.homeai_attention_needed` | On while something of severity 2+ is not acknowledged |
 | `event.homeai_situation`, `event.homeai_notification` | Lifecycle and notification events for automations and displays |
 | `calendar.homeai_plan`, `calendar.homeai_presence` | The plan and presence exceptions |
+| `select.homeai_autonomy` | One slider over the whole policy: only observe, cautious, balanced, bold (administrators only) |
+| `switch.homeai_ai`, `switch.homeai_vacation`, `number.homeai_ai_budget_monthly` | AI on or off, vacation mode, monthly AI budget |
+| `sensor.homeai_next_plan_change` | When the plan does something next, and what |
 | `switch.homeai_notifications_paused` | Pause notifications (critical ones still go out by default) |
 | `sensor.homeai_ai_cost_today`, `sensor.homeai_ai_cost_month` | Estimated AI spend |
-| `conversation.homeai_assistant` | Talk to HomeAI from Assist and voice satellites |
-| Services `homeai.*` | `report_signal`, `clear_signal`, `acknowledge`, `handle`, `snooze`, `dismiss`, `send_digest`, `approve`, `deny`, `undo`, `plan_add`, `plan_remove`, `plan_skip`, `presence_add`, `presence_remove` |
+| `conversation.homeai` | Talk to HomeAI from Assist and voice satellites |
+| Services `homeai.*` | `ask` (returns HomeAI's answer), `run_mission`, `report_signal`, `clear_signal`, `acknowledge`, `handle`, `snooze`, `dismiss`, `send_digest`, `approve`, `deny`, `undo`, `plan_add`, `plan_remove`, `plan_skip`, `presence_add`, `presence_remove` |
 | LLM API “HomeAI” | Other assistants can read situations and act through HomeAI's policy |
 
 The dashboard card `custom:homeai-situations-card` shows open situations with quick reactions; no resource

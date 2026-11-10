@@ -44,6 +44,12 @@
     },
     "presence_remove": {
       "service": "mdi:account-cancel-outline"
+    },
+    "ask": {
+      "service": "mdi:chat-question-outline"
+    },
+    "run_mission": {
+      "service": "mdi:play-circle-outline"
     }
   },
   "entity": {
@@ -56,10 +62,13 @@
       },
       "ai_cost_month": {
         "default": "mdi:cash-multiple"
+      },
+      "next_plan_change": {
+        "default": "mdi:calendar-arrow-right"
       }
     },
     "binary_sensor": {
-      "attention": {
+      "attention_needed": {
         "default": "mdi:home-alert",
         "state": {
           "off": "mdi:home-outline"
@@ -80,6 +89,15 @@
         "state": {
           "on": "mdi:bell-off-outline"
         }
+      },
+      "ai": {
+        "default": "mdi:brain"
+      },
+      "vacation": {
+        "default": "mdi:home-outline",
+        "state": {
+          "on": "mdi:palm-tree"
+        }
       }
     },
     "calendar": {
@@ -93,6 +111,22 @@
     "conversation": {
       "assistant": {
         "default": "mdi:home-heart"
+      }
+    },
+    "select": {
+      "autonomy": {
+        "default": "mdi:robot-outline",
+        "state": {
+          "observe": "mdi:eye-outline",
+          "cautious": "mdi:tortoise",
+          "balanced": "mdi:scale-balance",
+          "bold": "mdi:rocket-launch-outline"
+        }
+      }
+    },
+    "number": {
+      "ai_budget_monthly": {
+        "default": "mdi:cash-lock"
       }
     }
   }

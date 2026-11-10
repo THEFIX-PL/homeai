@@ -208,3 +208,25 @@ presence_remove:
       required: true
       selector:
         text:
+ask:
+  fields:
+    text:
+      required: true
+      example: Is anything open at home?
+      selector:
+        text:
+          multiline: true
+    conversation_id:
+      selector:
+        text:
+run_mission:
+  fields:
+    mission:
+      required: true
+      selector:
+        select:
+          translation_key: mission
+          options: [triage, investigate, arbitrate, digest, review, learn]
+    situation_id:
+      selector:
+        text:

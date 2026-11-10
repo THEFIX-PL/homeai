@@ -23,6 +23,7 @@ class HomeAIConversation(HomeAIEntity, ConversationEntity):
 
     def __init__(self, runtime: Any) -> None:
         super().__init__(runtime, "assistant")
+        self.entity_id = "conversation.homeai"
 
     @property
     def supported_languages(self) -> list[str] | Literal["*"]:

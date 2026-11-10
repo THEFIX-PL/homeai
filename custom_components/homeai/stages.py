@@ -88,6 +88,12 @@ def _learning(rt: Any) -> Any:
     return Learning(rt)
 
 
+def _checks(rt: Any) -> Any:
+    from .checks import SetupChecks
+
+    return SetupChecks(rt)
+
+
 def _triage(rt: Any) -> Any:
     from .triage.engine import Triage
 
@@ -116,4 +122,5 @@ STAGES: list[tuple[str, Callable[[Any], Any]]] = [
     ("arbiter", _arbiter),
     ("memory", _memory),
     ("learning", _learning),
+    ("checks", _checks),
 ]

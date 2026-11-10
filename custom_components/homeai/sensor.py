@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import Any
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
@@ -18,6 +19,8 @@ async def async_setup_entry(
     entities: list[SensorEntity] = []
     if rt.module("situations") is not None:
         entities.append(SituationsSensor(rt))
+    if rt.module("scheduler") is not None:
+        entities.append(NextPlanSensor(rt))
     if rt.module("ai") is not None:
         entities += [AICostSensor(rt, "ai_cost_today"), AICostSensor(rt, "ai_cost_month")]
     from .platform_extras import extra_entities
@@ -96,3 +99,37 @@ class AICostSensor(HomeAIEntity, SensorEntity):
     def extra_state_attributes(self) -> dict[str, Any]:
         ledger = self.rt.module("ai").ledger
         return {"calls_today": ledger.calls_today(), "budget_allowed": ledger.allowed()}
+
+
+class NextPlanSensor(HomeAIEntity, SensorEntity):
+    """When the home's plan does something next; attributes say what."""
+
+    platform_domain = "sensor"
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+
+    def __init__(self, runtime: Any) -> None:
+        super().__init__(runtime, "next_plan_change")
+
+    async def async_added_to_hass(self) -> None:
+        self.async_on_remove(self.rt.module("scheduler").listen(self.async_write_ha_state))
+        self.async_on_remove(self.rt.on_tick(lambda _now: self.async_write_ha_state()))
+
+    def _next(self) -> tuple[Any, dict[str, Any]] | None:
+        from homeassistant.util import dt as dt_util
+
+        now = dt_util.utcnow()
+        found = self.rt.module("scheduler").occurrences(now, now + timedelta(days=8))
+        return found[0] if found else None
+
+    @property
+    def native_value(self) -> Any:
+        found = self._next()
+        return found[0] if found else None
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        found = self._next()
+        if not found:
+            return {}
+        entry = found[1]
+        return {"title": entry["title"], "entry_id": entry["id"], "reminder": bool(entry.get("reminder"))}

@@ -28,7 +28,7 @@ async def test_report_and_clear_signal(hass: HomeAssistant) -> None:
     assert s.title("en") == "Clean the washer filter" and s.severity == 2
 
     assert hass.states.get("sensor.homeai_situations").state == "1"
-    assert hass.states.get("binary_sensor.homeai_attention").state == "on"
+    assert hass.states.get("binary_sensor.homeai_attention_needed").state == "on"
     attrs = hass.states.get("sensor.homeai_situations").attributes
     assert attrs["situations"][0]["title"] == "Clean the washer filter"
 
@@ -58,7 +58,7 @@ async def test_acknowledge_all_and_entities(hass: HomeAssistant) -> None:
     result = await hass.services.async_call(DOMAIN, "acknowledge", {}, blocking=True, return_response=True)
     assert len(result["acknowledged"]) == 2
     await hass.async_block_till_done()
-    assert hass.states.get("binary_sensor.homeai_attention").state == "off"
+    assert hass.states.get("binary_sensor.homeai_attention_needed").state == "off"
     assert hass.states.get("sensor.homeai_situations").state == "0"
     event = hass.states.get("event.homeai_situation")
     assert event.attributes["event_type"] == "acknowledged"
