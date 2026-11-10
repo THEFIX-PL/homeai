@@ -23,9 +23,14 @@ def _error(key: str, **placeholders: str) -> ServiceValidationError:
 
 async def ask(rt: Any, call: ServiceCall) -> ServiceResponse:
     """Ask HomeAI in the caller's account; the answer is the response. Without AI: a summary of open matters."""
-    ai = rt.module("ai")
     user_id = call.context.user_id
     conversation = call.data.get("conversation_id") or f"service-{user_id or 'automation'}"
+    return await answer(rt, call.data["text"], conversation, user_id)
+
+
+async def answer(rt: Any, text: str, conversation: str, user_id: str | None) -> dict[str, Any]:
+    """HomeAI's reply in a conversation thread; without an AI tier, a summary of what is open."""
+    ai = rt.module("ai")
     if ai is None or not (ai.available("p1") or ai.available("p2")):
         engine = rt.module("situations")
         items = [s for s in engine.open() if s.severity >= 1] if engine else []
@@ -35,7 +40,7 @@ async def ask(rt: Any, call: ServiceCall) -> ServiceResponse:
             else rt.text("ai|all_quiet")
         )
         return {"reply": text, "actions": [], "ai": False}
-    reply, actions = await ai.chat(call.data["text"], conversation, user_id)
+    reply, actions = await ai.chat(text, conversation, user_id)
     return {
         "reply": reply,
         "actions": [{"what": a.get("what"), "status": a.get("status")} for a in actions],

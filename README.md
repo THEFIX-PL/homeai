@@ -50,8 +50,9 @@ learning when you add them.
    into `config/custom_components` and restart.
 2. **Settings → Devices & services → Add integration → HomeAI.** The wizard asks for the language, how much
    data may go to cloud AI, and each person's role (administrator, member, guest, ignore).
-3. Open the **HomeAI** panel in the sidebar. Situations, approvals, the plan, learning, the journal, all
-   settings and the AI status are there.
+3. Open the **HomeAI** panel in the sidebar. Situations, approvals, a chat, the plan, presence exceptions,
+   learning, your own rules, the journal, all settings (for the whole home or per floor, room, device, entity
+   or person, with history, import and export) and the AI status are there.
 4. Optional: on the integration's page choose **Add AI tier** to add P1, P2 or P3. The connection is checked
    without spending tokens.
 
@@ -75,8 +76,9 @@ would take on its own: the journal shows what it would have done.
 | Services `homeai.*` | `ask` (returns HomeAI's answer), `run_mission`, `report_signal`, `clear_signal`, `acknowledge`, `handle`, `snooze`, `dismiss`, `send_digest`, `approve`, `deny`, `undo`, `plan_add`, `plan_remove`, `plan_skip`, `presence_add`, `presence_remove` |
 | LLM API “HomeAI” | Other assistants can read situations and act through HomeAI's policy |
 
-The dashboard card `custom:homeai-situations-card` shows open situations with quick reactions; no resource
-needs to be added.
+Dashboard cards, with no resource to add: `custom:homeai-situations-card` (open situations with quick
+reactions), `custom:homeai-plan-card` (what the plan does next) and `custom:homeai-chat-card` (talk to HomeAI
+in your own account).
 
 ## Documentation
 

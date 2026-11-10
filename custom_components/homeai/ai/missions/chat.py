@@ -13,6 +13,7 @@ from ..prompts import CHAT
 from ..tools import ToolContext
 
 MAX_THREADS = 50
+MAX_LOG_TURNS = 30
 
 
 def _prune(messages: list[dict[str, Any]], turns: int) -> list[dict[str, Any]]:
@@ -34,7 +35,9 @@ async def chat(ai: Any, text: str, conversation_id: str, user_id: str | None) ->
     privacy = Privacy(rt, ai.privacy_level(cfg))
     thread = ai.threads.get(conversation_id)
     if thread is None or thread["user_id"] != user_id or thread["tier"] != tier:
-        thread = {"user_id": user_id, "tier": tier, "source": "", "messages": []}
+        # A new tier starts a fresh model thread; the visible log stays with the same person.
+        log = thread["log"] if thread is not None and thread["user_id"] == user_id and "log" in thread else []
+        thread = {"user_id": user_id, "tier": tier, "source": "", "messages": [], "log": log}
     ai.threads[conversation_id] = thread
     while len(ai.threads) > MAX_THREADS:
         ai.threads.pop(next(iter(ai.threads)))
@@ -69,4 +72,16 @@ async def chat(ai: Any, text: str, conversation_id: str, user_id: str | None) ->
     thread["messages"] = _prune(result.messages, int(rt.settings.get("ai.chat_turns")))
     thread["updated"] = dt_util.utcnow().isoformat(timespec="seconds")
     reply = privacy.restore(result.text) if result.text else rt.text("ai|unavailable")
+    now = thread["updated"]
+    log = thread.setdefault("log", [])
+    log.extend([{"role": "user", "text": text, "ts": now}, {"role": "assistant", "text": reply, "ts": now}])
+    del log[: -2 * MAX_LOG_TURNS]
     return reply, result.actions
+
+
+def history(ai: Any, conversation_id: str, user_id: str | None) -> list[dict[str, Any]]:
+    """What was said in a thread, for the person it belongs to."""
+    thread = ai.threads.get(conversation_id)
+    if thread is None or thread["user_id"] != user_id:
+        return []
+    return list(thread.get("log", []))

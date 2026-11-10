@@ -11,8 +11,10 @@ import "./views/settings";
 import "./views/ai";
 import "./views/learning";
 import "./views/rules";
+import "./views/chat";
+import "./views/presence";
 
-const TABS = ["situations", "approvals", "plan", "learning", "rules", "journal", "settings", "ai"] as const;
+const TABS = ["situations", "approvals", "chat", "plan", "presence", "learning", "rules", "journal", "settings", "ai"] as const;
 type Tab = (typeof TABS)[number];
 
 @customElement("homeai-panel")
@@ -49,6 +51,8 @@ export class HomeAIPanel extends LitElement {
       case "ai": return html`<homeai-ai .hass=${this.hass}></homeai-ai>`;
       case "learning": return html`<homeai-learning .hass=${this.hass}></homeai-learning>`;
       case "rules": return html`<homeai-rules .hass=${this.hass}></homeai-rules>`;
+      case "chat": return html`<homeai-chat .hass=${this.hass}></homeai-chat>`;
+      case "presence": return html`<homeai-presence .hass=${this.hass}></homeai-presence>`;
       default: return html`<homeai-situations .hass=${this.hass}></homeai-situations>`;
     }
   }
