@@ -6,6 +6,7 @@ from datetime import timedelta
 
 from freezegun.api import FrozenDateTimeFactory
 from homeassistant.core import HomeAssistant
+from homeassistant.util import dt as dt_util
 
 from custom_components.homeai.signals.detectors.external import parse_external
 
@@ -164,3 +165,23 @@ async def test_appliance_sensors_are_not_the_room(hass: HomeAssistant) -> None:
     await settle(hass, rt)
     cold = {s.id for s in rt.module("signals").signals.values() if s.kind == "temperature_low"}
     assert "temperature_low:sensor.freezer_temperature" in cold
+
+
+async def test_backup_never_succeeded_says_so(hass: HomeAssistant) -> None:
+    home = standard_home(hass)
+    home.entity(
+        "sensor.backup_last_successful",
+        "unknown",
+        platform="backup",
+        translation_key="last_successful_automatic_backup",
+        category="diagnostic",
+    )
+    rt = await setup_homeai(hass)
+    await settle(hass, rt)
+    [s] = [s for s in rt.module("situations").open() if s.kind == "backup_stale"]
+    assert s.description("en") == "No automatic backup has succeeded yet."
+    assert s.description("pl") == "Nie ma jeszcze żadnej udanej automatycznej kopii."
+    hass.states.async_set("sensor.backup_last_successful", (dt_util.utcnow() - timedelta(days=3)).isoformat())
+    await settle(hass, rt)
+    [s] = [s for s in rt.module("situations").open() if s.kind == "backup_stale"]
+    assert s.description("en").startswith("Last successful automatic backup: ")

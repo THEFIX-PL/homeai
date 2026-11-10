@@ -1552,10 +1552,12 @@
     },
     "backup_failed": {
       "description": "{reason} Ostatnia udana: {last_ok}.",
+      "description_never": "{reason} Żadna kopia jeszcze się nie udała.",
       "title": "Kopia się nie udała"
     },
     "backup_stale": {
       "description": "Ostatnia udana automatyczna kopia: {last_ok}.",
+      "description_never": "Nie ma jeszcze żadnej udanej automatycznej kopii.",
       "title": "Brak świeżej kopii"
     },
     "battery_low": {

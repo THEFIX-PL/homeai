@@ -1552,10 +1552,12 @@
     },
     "backup_failed": {
       "description": "{reason} Last successful: {last_ok}.",
+      "description_never": "{reason} No backup has succeeded yet.",
       "title": "Backup failed"
     },
     "backup_stale": {
       "description": "Last successful automatic backup: {last_ok}.",
+      "description_never": "No automatic backup has succeeded yet.",
       "title": "No recent backup"
     },
     "battery_low": {
