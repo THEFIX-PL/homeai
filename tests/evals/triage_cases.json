@@ -1,0 +1,28 @@
+[
+  {"name": "leak_kitchen", "signals": [{"kind": "leak", "category": "safety", "severity": 4, "data": {"name": "Sink leak", "where": "Kitchen"}, "need": "member"}],
+   "expect": {"severity": [4, 4], "who": ["member"]}},
+  {"name": "smoke_bedroom_night", "signals": [{"kind": "smoke", "category": "safety", "severity": 4, "data": {"name": "Smoke detector", "where": "Bedroom"}, "need": "member"}],
+   "expect": {"severity": [4, 4], "who": ["member"]}},
+  {"name": "leak_sensor_battery", "signals": [{"kind": "battery_low", "category": "maintenance", "severity": 2, "data": {"name": "Sink leak sensor", "where": "Kitchen", "level": "8%"}, "need": "member"}],
+   "expect": {"severity": [2, 3], "who": ["member"]}},
+  {"name": "integration_reauth", "signals": [{"kind": "integration_reauth", "category": "system", "severity": 2, "data": {"name": "Weather service"}, "need": "admin"}],
+   "expect": {"severity": [1, 3], "who": ["admin"]}},
+  {"name": "backup_old", "signals": [{"kind": "backup_old", "category": "system", "severity": 2, "data": {"hours": "80"}, "need": "admin"}],
+   "expect": {"severity": [1, 3], "who": ["admin"]}},
+  {"name": "lights_empty_home", "signals": [{"kind": "lights_away", "category": "energy", "severity": 1, "data": {"names": ["Ceiling lamp"]}, "need": "nobody"}],
+   "expect": {"severity": [0, 2], "who": ["nobody", "member"]}},
+  {"name": "window_heating", "signals": [{"kind": "window_heating", "category": "energy", "severity": 2, "data": {"name": "Bedroom window", "where": "Bedroom"}, "need": "member"}],
+   "expect": {"severity": [1, 2], "who": ["member"]}},
+  {"name": "washer_done_external", "signals": [{"kind": "external", "category": "info", "severity": 1, "data": {"title": "Washing finished", "description": "The washing machine finished its programme."}, "need": "member", "confidence": 0.8}],
+   "expect": {"severity": [0, 1], "who": ["member", "nobody"]}},
+  {"name": "update_available", "signals": [{"kind": "update_available", "category": "system", "severity": 1, "data": {"name": "Home Assistant Core"}, "need": "admin"}],
+   "expect": {"severity": [0, 1], "who": ["admin"]}},
+  {"name": "co2_high_bedroom", "signals": [{"kind": "co2_high", "category": "comfort", "severity": 2, "data": {"name": "Bedroom CO2", "where": "Bedroom", "value": "1900 ppm"}, "need": "member"}],
+   "expect": {"severity": [1, 3], "who": ["member"]}},
+  {"name": "conflicting_external", "signals": [
+      {"kind": "external", "category": "damage", "severity": 3, "data": {"title": "Freezer door open", "description": "Reported by the freezer."}, "need": "member", "confidence": 0.5},
+      {"kind": "external", "category": "info", "severity": 0, "data": {"title": "Freezer temperature normal", "description": "-19 °C"}, "need": "nobody", "confidence": 0.9}],
+   "expect": {"severity": [1, 3], "who": ["member"]}},
+  {"name": "plant_dry", "signals": [{"kind": "plant_problem", "category": "maintenance", "severity": 1, "data": {"name": "Monstera", "where": "Living room"}, "need": "member"}],
+   "expect": {"severity": [0, 2], "who": ["member"]}}
+]

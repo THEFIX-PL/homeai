@@ -2,6 +2,12 @@
   "actions": {
     "describe": "{service}: {targets}"
   },
+  "ai": {
+    "budget_over": "Budżet AI na ten {period} się skończył ({spent} z {limit}).",
+    "budget_warn": "AI zużyło {spent} z budżetu {limit} na ten {period}.",
+    "period_day": "dzień",
+    "period_month": "miesiąc"
+  },
   "common": {
     "and": "i"
   },
@@ -14,6 +20,7 @@
     "action_observed": "Zrobiłbym: {what}",
     "action_undone": "Cofnięto: {what}",
     "action_unverified": "Zrobione, bez potwierdzenia: {what}",
+    "ai_assessed": "{tier} ocenił: {title} — waga {severity}. {reason}",
     "approval_denied": "{who} odmowa: {what}",
     "approval_expired": "Prośba wygasła: {what}",
     "approval_granted": "{who} zgoda: {what}",
@@ -51,6 +58,10 @@
     "who_service": "Potrzebny serwis albo część zamienna."
   },
   "options": {
+    "ai.budget_mode": {
+      "block": "Wstrzymaj AI",
+      "warn": "Tylko ostrzegaj"
+    },
     "general.language": {
       "auto": "Auto",
       "en": "English",
@@ -141,6 +152,10 @@
       "description": "Wiedza o hubach, mostkach i Zigbee2MQTT.",
       "label": "Huby i mostki"
     },
+    "ai": {
+      "description": "Poziomy AI, ocena, budżety.",
+      "label": "AI"
+    },
     "detectors": {
       "description": "Co HomeAI obserwuje i jakie ma progi.",
       "label": "Wykrywanie"
@@ -214,6 +229,62 @@
     "adapters.zigbee2mqtt_addon": {
       "description": "Identyfikator dodatku Zigbee2MQTT (np. 45df7312_zigbee2mqtt) do restartu, gdy mostek jest offline. Puste: przeładowanie.",
       "label": "Dodatek Zigbee2MQTT"
+    },
+    "ai.budget_daily": {
+      "description": "Szacowany koszt AI na dzień. 0: bez limitu.",
+      "label": "Budżet dzienny"
+    },
+    "ai.budget_mode": {
+      "description": "Tylko ostrzegaj albo wstrzymaj wywołania AI do końca okresu.",
+      "label": "Gdy budżet się skończy"
+    },
+    "ai.budget_monthly": {
+      "description": "Szacowany koszt AI na miesiąc. 0: bez limitu.",
+      "label": "Budżet miesięczny"
+    },
+    "ai.budget_warn_percent": {
+      "description": "Ostrzegaj, gdy zużyto taką część budżetu.",
+      "label": "Ostrzegaj przy"
+    },
+    "ai.enabled": {
+      "description": "Używaj poziomów AI dodanych jako podwpisy. HomeAI działa też bez nich.",
+      "label": "AI"
+    },
+    "ai.max_calls_per_hour": {
+      "description": "Najwięcej wywołań AI na poziom w ciągu godziny.",
+      "label": "Wywołania na godzinę"
+    },
+    "ai.narrate_digest": {
+      "description": "Pozwól P1 przepisać podsumowanie w krótką wiadomość (nie przy minimalnej prywatności).",
+      "label": "Podsumowanie pisane przez AI"
+    },
+    "ai.p2_confidence": {
+      "description": "Gdy P1 jest mniej pewny niż ta wartość, poziom badawczy (P2) patrzy jeszcze raz.",
+      "label": "Badaj przy niepewności"
+    },
+    "ai.p2_min_severity": {
+      "description": "Sprawy co najmniej tak poważne sprawdza też P2 (5 = nigdy).",
+      "label": "Badaj od wagi"
+    },
+    "ai.p3_timeout": {
+      "description": "Jak długo może odpowiadać arbiter (P3); potrafi myśleć minutami.",
+      "label": "Limit czasu arbitra"
+    },
+    "ai.timeout": {
+      "description": "Jak długo P1 i P2 mogą odpowiadać.",
+      "label": "Limit czasu AI"
+    },
+    "ai.triage_confidence": {
+      "description": "Sygnały mniej pewne niż ta wartość sprawdza AI.",
+      "label": "Niejasne poniżej"
+    },
+    "ai.triage_enabled": {
+      "description": "Pozwól codziennemu poziomowi (P1) sprawdzać ocenę nowych albo niejasnych spraw.",
+      "label": "Ocena przez AI"
+    },
+    "ai.triage_new_kinds": {
+      "description": "Pozwól AI sprawdzić rodzaj sprawy, gdy zdarza się po raz pierwszy.",
+      "label": "Sprawdzaj nowe rodzaje"
     },
     "detectors.availability.enabled": {
       "description": "Obserwuj urządzenia, których wszystkie encje są niedostępne.",

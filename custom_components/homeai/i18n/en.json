@@ -2,6 +2,12 @@
   "actions": {
     "describe": "{service}: {targets}"
   },
+  "ai": {
+    "budget_over": "AI budget for this {period} is used up ({spent} of {limit}).",
+    "budget_warn": "AI has used {spent} of the {limit} budget for this {period}.",
+    "period_day": "day",
+    "period_month": "month"
+  },
   "common": {
     "and": "and"
   },
@@ -14,6 +20,7 @@
     "action_observed": "Would have done: {what}",
     "action_undone": "Undone: {what}",
     "action_unverified": "Done, not confirmed: {what}",
+    "ai_assessed": "{tier} assessed {title}: severity {severity}. {reason}",
     "approval_denied": "{who} refused: {what}",
     "approval_expired": "Approval expired: {what}",
     "approval_granted": "{who} approved: {what}",
@@ -51,6 +58,10 @@
     "who_service": "A technician or a replacement part is needed."
   },
   "options": {
+    "ai.budget_mode": {
+      "block": "Stop AI calls",
+      "warn": "Only warn"
+    },
     "general.language": {
       "auto": "Auto",
       "en": "English",
@@ -141,6 +152,10 @@
       "description": "Knowledge about hubs, bridges and Zigbee2MQTT.",
       "label": "Hubs and bridges"
     },
+    "ai": {
+      "description": "AI tiers, assessment, budgets.",
+      "label": "AI"
+    },
     "detectors": {
       "description": "What HomeAI watches and its limits.",
       "label": "Detection"
@@ -214,6 +229,62 @@
     "adapters.zigbee2mqtt_addon": {
       "description": "Slug of the Zigbee2MQTT add-on (e.g. 45df7312_zigbee2mqtt) to restart when the bridge is offline. Empty: reload instead.",
       "label": "Zigbee2MQTT add-on"
+    },
+    "ai.budget_daily": {
+      "description": "Estimated AI cost per day. 0: no limit.",
+      "label": "Daily budget"
+    },
+    "ai.budget_mode": {
+      "description": "Only warn, or stop AI calls until the period ends.",
+      "label": "When the budget is used up"
+    },
+    "ai.budget_monthly": {
+      "description": "Estimated AI cost per month. 0: no limit.",
+      "label": "Monthly budget"
+    },
+    "ai.budget_warn_percent": {
+      "description": "Warn when this share of a budget is used.",
+      "label": "Warn at"
+    },
+    "ai.enabled": {
+      "description": "Use the AI tiers added as subentries. HomeAI works without them.",
+      "label": "AI"
+    },
+    "ai.max_calls_per_hour": {
+      "description": "Most AI calls per tier per hour.",
+      "label": "Calls per hour"
+    },
+    "ai.narrate_digest": {
+      "description": "Let P1 rewrite the summary as a short message (not with minimal privacy).",
+      "label": "Write the summary with AI"
+    },
+    "ai.p2_confidence": {
+      "description": "When P1 is less sure than this, the investigation tier (P2) looks again.",
+      "label": "Investigate when unsure"
+    },
+    "ai.p2_min_severity": {
+      "description": "Situations at least this serious are also checked by P2 (5 = never).",
+      "label": "Investigate from severity"
+    },
+    "ai.p3_timeout": {
+      "description": "How long the arbiter (P3) may take; it can think for minutes.",
+      "label": "Arbiter timeout"
+    },
+    "ai.timeout": {
+      "description": "How long P1 and P2 may take to answer.",
+      "label": "AI timeout"
+    },
+    "ai.triage_confidence": {
+      "description": "Signals less certain than this are checked by AI.",
+      "label": "Unclear below"
+    },
+    "ai.triage_enabled": {
+      "description": "Let the everyday tier (P1) check the assessment of new or unclear situations.",
+      "label": "AI assessment"
+    },
+    "ai.triage_new_kinds": {
+      "description": "Let AI check a kind of situation the first time it happens.",
+      "label": "Check new kinds"
     },
     "detectors.availability.enabled": {
       "description": "Watch devices whose entities are all unavailable.",

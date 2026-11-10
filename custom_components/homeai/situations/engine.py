@@ -296,6 +296,12 @@ class SituationEngine:
         await self.emit("escalated", s)
         self.save()
 
+    async def reassessed(self, s: Situation) -> None:
+        """An AI tier changed the assessment: notifications and entities follow it."""
+        s.updated_at = dt_util.utcnow()
+        await self.emit("updated", s)
+        self.save()
+
     async def dismiss(self, situation_id: str, who: str) -> Situation | None:
         """“Not a problem”: mutes its signals for `situations.dismiss_days` and teaches calibration."""
         s = self.situations.get(situation_id)

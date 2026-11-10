@@ -139,6 +139,36 @@
         "home_office": "Working from home",
         "sick": "Sick"
       }
+    },
+    "tier": {
+      "options": {
+        "p1": "P1 — everyday brain",
+        "p2": "P2 — investigation",
+        "p3": "P3 — arbiter"
+      }
+    },
+    "provider": {
+      "options": {
+        "anthropic": "Anthropic (Claude)",
+        "openai_compatible": "OpenAI-compatible (Ollama, llama.cpp, vLLM…)"
+      }
+    },
+    "effort": {
+      "options": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "xhigh": "Very high",
+        "max": "Maximum"
+      }
+    },
+    "privacy_tier": {
+      "options": {
+        "default": "As in HomeAI settings",
+        "minimal": "Minimal",
+        "standard": "Standard",
+        "full": "Full"
+      }
     }
   },
   "exceptions": {
@@ -170,6 +200,12 @@
             "name": "Situations"
           }
         }
+      },
+      "ai_cost_today": {
+        "name": "AI cost today"
+      },
+      "ai_cost_month": {
+        "name": "AI cost this month"
       }
     },
     "binary_sensor": {
@@ -473,6 +509,55 @@
           "name": "Exception ID",
           "description": "The exception to remove."
         }
+      }
+    }
+  },
+  "config_subentries": {
+    "tier": {
+      "initiate_flow": {
+        "user": "Add AI tier"
+      },
+      "entry_type": "AI tier",
+      "step": {
+        "user": {
+          "title": "Add an AI tier",
+          "description": "P1 is the everyday brain (cheap or local), P2 investigates harder matters, P3 is the arbiter for the most difficult decisions. Several tiers of the same level are tried in order of priority.",
+          "data": {
+            "tier": "Tier",
+            "provider": "Provider"
+          }
+        },
+        "details": {
+          "title": "{tier} settings",
+          "description": "The connection is checked without spending tokens.",
+          "data": {
+            "api_key": "API key",
+            "model": "Model",
+            "effort": "Effort",
+            "fallbacks": "Fall back on refusals",
+            "base_url": "Server address",
+            "privacy": "Data sent",
+            "priority": "Priority",
+            "price_input": "Price of input",
+            "price_output": "Price of output"
+          },
+          "data_description": {
+            "base_url": "OpenAI-compatible endpoint, e.g. http://ollama.local:11434/v1",
+            "effort": "How deeply the model thinks. Higher costs more.",
+            "fallbacks": "If the model declines, the server retries on a suitable model.",
+            "privacy": "Default: the HomeAI privacy setting.",
+            "priority": "Lower is tried first.",
+            "price_input": "Dollars per million tokens; empty: the known price (local: free)."
+          }
+        }
+      },
+      "abort": {
+        "reconfigure_successful": "The AI tier was updated."
+      },
+      "error": {
+        "invalid_auth": "The key was rejected.",
+        "cannot_connect": "Cannot connect to the provider.",
+        "unknown_model": "The provider does not know this model."
       }
     }
   }

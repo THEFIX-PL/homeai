@@ -401,6 +401,26 @@ def _schedule() -> list[Setting]:
     ]
 
 
+def _ai() -> list[Setting]:
+    s = "ai"
+    return [
+        Setting("ai.enabled", T.BOOL, True, s),
+        Setting("ai.triage_enabled", T.BOOL, True, s),
+        Setting("ai.triage_confidence", T.FLOAT, 0.9, s, min=0, max=1, step=0.05, advanced=True),
+        Setting("ai.triage_new_kinds", T.BOOL, True, s, advanced=True),
+        Setting("ai.p2_confidence", T.FLOAT, 0.6, s, min=0, max=1, step=0.05),
+        Setting("ai.p2_min_severity", T.INT, 3, s, min=0, max=5),
+        Setting("ai.narrate_digest", T.BOOL, True, s),
+        Setting("ai.budget_mode", T.SELECT, "block", s, options=("warn", "block"), confirm="change"),
+        Setting("ai.budget_daily", T.FLOAT, 1.0, s, min=0, max=1000, step=0.1, unit="$"),
+        Setting("ai.budget_monthly", T.FLOAT, 10.0, s, min=0, max=10000, step=1, unit="$"),
+        Setting("ai.budget_warn_percent", T.INT, 80, s, min=10, max=100, unit="%"),
+        Setting("ai.max_calls_per_hour", T.INT, 60, s, min=1, max=10000, advanced=True),
+        Setting("ai.timeout", T.DURATION, 90, s, min=10, max=600, unit="s", advanced=True),
+        Setting("ai.p3_timeout", T.DURATION, 900, s, min=60, max=3600, unit="s", advanced=True),
+    ]
+
+
 SECTIONS = [
     _general,
     _world,
@@ -415,6 +435,7 @@ SECTIONS = [
     _repair,
     _adapters,
     _schedule,
+    _ai,
 ]
 
 

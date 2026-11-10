@@ -50,6 +50,12 @@
     "sensor": {
       "situations": {
         "default": "mdi:home-alert-outline"
+      },
+      "ai_cost_today": {
+        "default": "mdi:cash-clock"
+      },
+      "ai_cost_month": {
+        "default": "mdi:cash-multiple"
       }
     },
     "binary_sensor": {

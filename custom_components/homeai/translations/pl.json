@@ -139,6 +139,36 @@
         "home_office": "Praca z domu",
         "sick": "Choroba"
       }
+    },
+    "tier": {
+      "options": {
+        "p1": "P1 — codzienny mózg",
+        "p2": "P2 — badanie",
+        "p3": "P3 — arbiter"
+      }
+    },
+    "provider": {
+      "options": {
+        "anthropic": "Anthropic (Claude)",
+        "openai_compatible": "Zgodny z OpenAI (Ollama, llama.cpp, vLLM…)"
+      }
+    },
+    "effort": {
+      "options": {
+        "low": "Niski",
+        "medium": "Średni",
+        "high": "Wysoki",
+        "xhigh": "Bardzo wysoki",
+        "max": "Maksymalny"
+      }
+    },
+    "privacy_tier": {
+      "options": {
+        "default": "Jak w ustawieniach HomeAI",
+        "minimal": "Minimalne",
+        "standard": "Standardowe",
+        "full": "Pełne"
+      }
     }
   },
   "exceptions": {
@@ -170,6 +200,12 @@
             "name": "Sytuacje"
           }
         }
+      },
+      "ai_cost_today": {
+        "name": "Koszt AI dziś"
+      },
+      "ai_cost_month": {
+        "name": "Koszt AI w tym miesiącu"
       }
     },
     "binary_sensor": {
@@ -473,6 +509,55 @@
           "name": "ID wyjątku",
           "description": "Wyjątek do usunięcia."
         }
+      }
+    }
+  },
+  "config_subentries": {
+    "tier": {
+      "initiate_flow": {
+        "user": "Dodaj poziom AI"
+      },
+      "entry_type": "Poziom AI",
+      "step": {
+        "user": {
+          "title": "Dodaj poziom AI",
+          "description": "P1 to codzienny mózg domu (tani albo lokalny), P2 bada trudniejsze sprawy, P3 jest arbitrem najtrudniejszych decyzji. Kilka wpisów tego samego poziomu próbuje się w kolejności priorytetu.",
+          "data": {
+            "tier": "Poziom",
+            "provider": "Dostawca"
+          }
+        },
+        "details": {
+          "title": "Ustawienia {tier}",
+          "description": "Połączenie jest sprawdzane bez zużywania tokenów.",
+          "data": {
+            "api_key": "Klucz API",
+            "model": "Model",
+            "effort": "Wysiłek",
+            "fallbacks": "Zastępczy model przy odmowie",
+            "base_url": "Adres serwera",
+            "privacy": "Wysyłane dane",
+            "priority": "Priorytet",
+            "price_input": "Cena wejścia",
+            "price_output": "Cena wyjścia"
+          },
+          "data_description": {
+            "base_url": "Punkt zgodny z OpenAI, np. http://ollama.local:11434/v1",
+            "effort": "Jak głęboko model myśli. Wyższy kosztuje więcej.",
+            "fallbacks": "Gdy model odmówi, serwer ponowi na odpowiednim modelu.",
+            "privacy": "Domyślnie: ustawienie prywatności HomeAI.",
+            "priority": "Niższy jest próbowany pierwszy.",
+            "price_input": "Dolary za milion tokenów; puste: znana cena (lokalnie: za darmo)."
+          }
+        }
+      },
+      "abort": {
+        "reconfigure_successful": "Poziom AI zaktualizowano."
+      },
+      "error": {
+        "invalid_auth": "Klucz został odrzucony.",
+        "cannot_connect": "Nie można połączyć się z dostawcą.",
+        "unknown_model": "Dostawca nie zna tego modelu."
       }
     }
   }

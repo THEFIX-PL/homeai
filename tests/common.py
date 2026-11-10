@@ -28,12 +28,22 @@ async def setup_homeai(
     overrides: dict[str, dict[str, Any]] | None = None,
     *,
     ready: bool = True,
+    subentries: list[dict[str, Any]] | None = None,
 ) -> Any:
     """Set up HomeAI; returns the runtime. `overrides` maps scope keys ("person:person.anna") to settings."""
     initial: dict[str, Any] = {**FAST, **(settings or {})}
     if overrides:
         initial["overrides"] = overrides
-    entry = MockConfigEntry(domain=DOMAIN, data={"initial_settings": initial})
+    from homeassistant.config_entries import ConfigSubentryData
+
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={"initial_settings": initial},
+        subentries_data=[
+            ConfigSubentryData(data=sub, subentry_type="tier", title=f"{sub['tier']} {sub['model']}", unique_id=None)
+            for sub in subentries or []
+        ],
+    )
     entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()

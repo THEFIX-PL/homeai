@@ -64,6 +64,12 @@ def _scheduler(rt: Any) -> Any:
     return Scheduler(rt)
 
 
+def _ai(rt: Any) -> Any:
+    from .ai.module import AIModule
+
+    return AIModule(rt)
+
+
 def _triage(rt: Any) -> Any:
     from .triage.engine import Triage
 
@@ -88,4 +94,5 @@ STAGES: list[tuple[str, Callable[[Any], Any]]] = [
     ("adapters", _adapters),
     ("presence_exceptions", _presence_exceptions),
     ("scheduler", _scheduler),
+    ("ai", _ai),
 ]
