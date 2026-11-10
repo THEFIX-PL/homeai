@@ -1,0 +1,74 @@
+blueprint:
+  name: HomeAI notifications on an AWTRIX clock
+  description: >-
+    Shows HomeAI notifications (ladder steps with the event channel) on an AWTRIX 3 clock over MQTT and removes
+    them when the situation is acknowledged or resolved.
+  domain: automation
+  source_url: https://github.com/THEFIX-PL/homeai/blob/main/blueprints/automation/homeai/notification_to_awtrix.yaml
+  input:
+    prefix:
+      name: AWTRIX MQTT prefix
+      description: The prefix set in the clock, e.g. awtrix_1a2b3c.
+      selector:
+        text:
+    min_severity:
+      name: Minimum severity
+      default: 2
+      selector:
+        number:
+          min: 0
+          max: 4
+          mode: slider
+    duration:
+      name: Seconds on screen
+      default: 15
+      selector:
+        number:
+          min: 5
+          max: 120
+          unit_of_measurement: s
+
+mode: queued
+max: 10
+
+triggers:
+  - trigger: event
+    event_type: homeai_notification
+
+variables:
+  prefix: !input prefix
+  min_severity: !input min_severity
+  duration: !input duration
+  data: "{{ trigger.event.data }}"
+  colors:
+    "4": "#FF0000"
+    "3": "#FF8C00"
+    "2": "#00A3FF"
+    "1": "#22C55E"
+    "0": "#FFFFFF"
+
+actions:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ data.state == 'active' and (data.severity | int(0)) >= (min_severity | int) }}"
+        sequence:
+          - action: mqtt.publish
+            data:
+              topic: "{{ prefix }}/notify"
+              payload: >-
+                {{ {
+                  "text": data.title,
+                  "color": colors[(data.severity | int(0)) | string],
+                  "duration": duration | int,
+                  "hold": data.critical | default(false),
+                  "rainbow": false
+                } | to_json }}
+      - conditions:
+          - condition: template
+            value_template: "{{ data.state == 'cleared' }}"
+        sequence:
+          - action: mqtt.publish
+            data:
+              topic: "{{ prefix }}/notify/dismiss"
+              payload: ""

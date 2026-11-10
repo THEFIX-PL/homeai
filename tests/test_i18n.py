@@ -83,3 +83,18 @@ def test_ha_translations_cover_services_entities_and_exceptions() -> None:
             assert set(tr["entity"][platform]) == set(items), (lang, platform)
             for key in items:
                 assert key in icons["entity"][platform], (platform, key)
+
+
+def test_settings_doc_is_current() -> None:
+    from pathlib import Path
+    import subprocess
+    import sys
+
+    root = Path(__file__).parent.parent
+    result = subprocess.run(
+        [sys.executable, str(root / "scripts/gen_settings_doc.py"), "--check"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout

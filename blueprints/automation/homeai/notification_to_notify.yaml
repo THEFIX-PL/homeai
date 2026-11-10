@@ -1,0 +1,45 @@
+blueprint:
+  name: HomeAI notifications to a display
+  description: >-
+    Sends HomeAI notifications (ladder steps with the event channel) to any notify entity, for example a TV, a
+    tablet or a wall display.
+  domain: automation
+  source_url: https://github.com/THEFIX-PL/homeai/blob/main/blueprints/automation/homeai/notification_to_notify.yaml
+  input:
+    target:
+      name: Notify entity
+      selector:
+        entity:
+          domain: notify
+    min_severity:
+      name: Minimum severity
+      default: 2
+      selector:
+        number:
+          min: 0
+          max: 4
+          mode: slider
+
+mode: queued
+max: 10
+
+triggers:
+  - trigger: event
+    event_type: homeai_notification
+    event_data:
+      state: active
+
+conditions:
+  - condition: template
+    value_template: "{{ (trigger.event.data.severity | int(0)) >= (min_severity | int) }}"
+
+variables:
+  min_severity: !input min_severity
+
+actions:
+  - action: notify.send_message
+    target:
+      entity_id: !input target
+    data:
+      title: "{{ trigger.event.data.title }}"
+      message: "{{ trigger.event.data.message }}"
