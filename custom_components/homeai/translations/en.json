@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up HomeAI",
+        "description": "HomeAI is in early development. This version only adds the integration and does not do anything in your home yet."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "HomeAI is already set up. Only one instance is allowed."
+    }
+  }
+}
