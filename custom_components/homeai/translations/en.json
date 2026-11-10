@@ -74,11 +74,193 @@
         "guest": "Guest",
         "ignore": "Ignore"
       }
+    },
+    "category": {
+      "options": {
+        "safety": "Safety",
+        "security": "Security",
+        "damage": "Damage",
+        "system": "System",
+        "energy": "Energy",
+        "comfort": "Comfort",
+        "maintenance": "Maintenance",
+        "info": "Information"
+      }
+    },
+    "need": {
+      "options": {
+        "nobody": "Nobody",
+        "member": "A household member",
+        "admin": "An administrator",
+        "service": "A technician"
+      }
     }
   },
   "exceptions": {
     "not_loaded": {
       "message": "HomeAI is not loaded."
+    },
+    "bad_signal": {
+      "message": "The signal is not valid. Check the ID, title and severity."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "situations": {
+        "name": "Situations",
+        "state_attributes": {
+          "situations": {
+            "name": "Situations"
+          }
+        }
+      }
+    },
+    "binary_sensor": {
+      "attention": {
+        "name": "Attention needed",
+        "state_attributes": {
+          "highest_severity": {
+            "name": "Highest severity"
+          }
+        }
+      }
+    },
+    "event": {
+      "situation": {
+        "name": "Situation",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "opened": "Opened",
+              "updated": "Updated",
+              "escalated": "Escalated",
+              "acknowledged": "Acknowledged",
+              "snoozed": "Snoozed",
+              "handled": "Taken care of",
+              "dismissed": "Dismissed",
+              "resolved": "Resolved"
+            }
+          }
+        }
+      },
+      "notification": {
+        "name": "Notification",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "active": "Active",
+              "cleared": "Cleared"
+            }
+          }
+        }
+      }
+    },
+    "switch": {
+      "notifications_paused": {
+        "name": "Pause notifications"
+      }
+    }
+  },
+  "services": {
+    "report_signal": {
+      "name": "Report a signal",
+      "description": "Tells HomeAI about something it cannot detect by itself. HomeAI treats it like its own observations: correlates, triages and notifies.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "Stable identifier; reporting the same ID again updates the signal."
+        },
+        "title": {
+          "name": "Title",
+          "description": "Short text shown to people."
+        },
+        "description": {
+          "name": "Description",
+          "description": "Longer explanation, optional."
+        },
+        "severity": {
+          "name": "Severity",
+          "description": "0 information, 1 low, 2 medium, 3 high, 4 critical."
+        },
+        "category": {
+          "name": "Category",
+          "description": "What kind of matter it is."
+        },
+        "need": {
+          "name": "Who is needed",
+          "description": "Nobody, any household member, an administrator or a technician."
+        },
+        "entities": {
+          "name": "Entities",
+          "description": "Entities the signal is about."
+        },
+        "group": {
+          "name": "Group",
+          "description": "Signals with the same group form one situation."
+        },
+        "expires_minutes": {
+          "name": "Expires after",
+          "description": "Clear the signal automatically after this time."
+        }
+      }
+    },
+    "clear_signal": {
+      "name": "Clear a signal",
+      "description": "Clears a signal reported earlier with Report a signal.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "The ID used when reporting."
+        }
+      }
+    },
+    "acknowledge": {
+      "name": "Acknowledge",
+      "description": "“Got it”: stops notifications for a situation, or for all open situations when none is given.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "Leave empty for all open situations."
+        }
+      }
+    },
+    "handle": {
+      "name": "Take care of it",
+      "description": "“I'll handle it”: acknowledges the situation and assigns it to the caller.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "Leave empty for all open situations."
+        }
+      }
+    },
+    "snooze": {
+      "name": "Snooze",
+      "description": "Pauses notifications about a situation for a while.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "Leave empty for all open situations."
+        },
+        "minutes": {
+          "name": "Minutes",
+          "description": "Defaults to the snooze time in settings."
+        }
+      }
+    },
+    "dismiss": {
+      "name": "Not a problem",
+      "description": "Closes a situation and ignores its signals for the configured number of days. HomeAI learns from it.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "The situation to dismiss."
+        }
+      }
+    },
+    "send_digest": {
+      "name": "Send digest",
+      "description": "Sends the summary of open matters now."
     }
   }
 }

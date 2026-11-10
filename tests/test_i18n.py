@@ -50,3 +50,36 @@ def test_text_rendering_and_fallback() -> None:
     assert i18n.text("en", "nope|missing") == "missing"
     assert i18n.join("pl", ["a", "b", "c"]) == "a, b i c"
     assert i18n.text("en", "journal|setting_changed") == "Setting changed: {key}"
+
+
+def test_ha_translations_cover_services_entities_and_exceptions() -> None:
+    import json
+    from pathlib import Path
+    import re
+
+    import yaml
+
+    base = Path(__file__).parent.parent / "custom_components" / "homeai"
+    services = yaml.safe_load((base / "services.yaml").read_text()) or {}
+    code = "\n".join(p.read_text() for p in base.rglob("*.py"))
+    used_exceptions = set(re.findall(r'translation_key="([a-z_]+)"', code))
+    selector_keys = set(re.findall(r"translation_key: ([a-z_]+)", (base / "services.yaml").read_text()))
+    icons = json.loads((base / "icons.json").read_text())
+    en = json.loads((base / "translations" / "en.json").read_text())
+    for lang in ("en", "pl"):
+        tr = json.loads((base / "translations" / f"{lang}.json").read_text())
+        for name, spec in services.items():
+            assert tr["services"][name]["name"], (lang, name)
+            for field in (spec or {}).get("fields", {}):
+                assert tr["services"][name]["fields"][field]["name"], (lang, name, field)
+            assert name in icons["services"], name
+        for key in used_exceptions - {"not_loaded"} | {"not_loaded"}:
+            if key in en.get("exceptions", {}):
+                assert tr["exceptions"][key]["message"], (lang, key)
+        for key in selector_keys:
+            assert tr["selector"][key]["options"], (lang, key)
+        assert set(tr["entity"]) == set(en["entity"])
+        for platform, items in en["entity"].items():
+            assert set(tr["entity"][platform]) == set(items), (lang, platform)
+            for key in items:
+                assert key in icons["entity"][platform], (platform, key)

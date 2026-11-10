@@ -12,6 +12,7 @@ line-length = 120
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "ASYNC", "PL", "TRY", "PTH"]
 ignore = [
+    "RUF001", "RUF002", "RUF003",  # typographic dashes and quotes in texts are intended
   "PLR0911",  # many returns: validators and classifiers read best as early returns
   "PLR0912",
   "PLR0913",

@@ -24,7 +24,7 @@ from homeassistant.helpers import (
 )
 from homeassistant.helpers.debounce import Debouncer
 
-from ..const import LOGGER
+from ..const import DOMAIN, LOGGER
 from ..settings import SettingsManager, Target
 from .roles import Role, classify
 
@@ -60,8 +60,7 @@ class DeviceInfo:
     name: str
     area_id: str | None
     labels: frozenset[str]
-    config_entries: frozenset[str]
-    primary_config_entry: str | None
+    config_entry_id: str | None
     identifiers: frozenset[tuple[str, str]]
     manufacturer: str | None
     model: str | None
@@ -183,8 +182,8 @@ class WorldModel:
             for a in ar.async_get(self.hass).async_list_areas()
         }
         self.devices = {}
-        for d in dr.async_get(self.hass).devices.values():
-            if not d.disabled_by:
+        for d in dr.async_get(self.hass).devices:  # iterating yields device entries
+            if not d.disabled_by and not _own(d):
                 self.devices[d.id] = self._device_info(d)
         self.entities.clear()
         self._by_role.clear()
@@ -205,14 +204,12 @@ class WorldModel:
         self._notify("rebuild", set(self.entities))
 
     def _device_info(self, d: dr.DeviceEntry) -> DeviceInfo:
-        primary = getattr(d, "primary_config_entry", None) or getattr(d, "config_entry_id", None)
         return DeviceInfo(
             device_id=d.id,
             name=d.name_by_user or d.name or "",
             area_id=d.area_id,
             labels=frozenset(d.labels),
-            config_entries=frozenset(d.config_entries),
-            primary_config_entry=primary,
+            config_entry_id=d.config_entry_id,
             identifiers=frozenset(d.identifiers),
             manufacturer=d.manufacturer,
             model=d.model,
@@ -223,7 +220,7 @@ class WorldModel:
         self, entity_id: str, entry: er.RegistryEntry | None, area_id: str | None, labels: frozenset[str]
     ) -> bool:
         if entry is not None:
-            if entry.disabled_by:
+            if entry.disabled_by or entry.platform == DOMAIN:  # never watch our own entities
                 return False
             if entry.hidden_by and not self.settings.get("world.include_hidden"):
                 return False
@@ -349,7 +346,7 @@ class WorldModel:
             return
         old_entities = set(self.devices[device_id].entities) if device_id in self.devices else set()
         d = dr.async_get(self.hass).async_get(device_id)
-        if d is None or d.disabled_by or event.data.get("action") == "remove":
+        if d is None or d.disabled_by or _own(d) or event.data.get("action") == "remove":
             self.devices.pop(device_id, None)
         else:
             self.devices[device_id] = self._device_info(d)
@@ -460,3 +457,8 @@ class WorldModel:
             "persons": len(self.persons),
             "roles": {str(r): len(ids) for r, ids in sorted(self._by_role.items()) if ids},
         }
+
+
+def _own(d: dr.DeviceEntry) -> bool:
+    """HomeAI's own service device is not part of the home it watches."""
+    return any(domain == DOMAIN for domain, _ in d.identifiers)

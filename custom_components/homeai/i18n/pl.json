@@ -3,13 +3,38 @@
     "and": "i"
   },
   "journal": {
-    "setting_changed": "Zmiana ustawienia: {key}"
+    "acknowledged": "{who}: wiem — {title}",
+    "digest_sent": "Wysłano podsumowanie",
+    "notified": "Powiadomiono: {who} — {title}",
+    "setting_changed": "Zmiana ustawienia: {key}",
+    "situation_opened": "Sprawa: {title}",
+    "situation_resolved": "Ustąpiło: {title}"
+  },
+  "notify": {
+    "action_ack": "Wiem",
+    "action_handle": "Zajmę się",
+    "action_snooze": "Wycisz",
+    "digest_title": "Podsumowanie HomeAI",
+    "repair_failed": "HomeAI próbował to naprawić, bez skutku.",
+    "resolved_title": "Ustąpiło",
+    "who_admin": "Potrzebny administrator.",
+    "who_member": "Ktoś musi to sprawdzić.",
+    "who_nobody": "",
+    "who_service": "Potrzebny serwis albo część zamienna."
   },
   "options": {
     "general.language": {
       "auto": "Auto",
       "en": "English",
       "pl": "Polski"
+    },
+    "notify.digest_to": {
+      "admins": "Administratorzy",
+      "all": "Wszyscy",
+      "awake_home": "Osoby w domu, które nie śpią",
+      "home": "Osoby w domu",
+      "home_or_all": "Osoby w domu, a gdy nikogo — wszyscy",
+      "none": "Nikt"
     },
     "presence.role": {
       "admin": "Administrator",
@@ -35,9 +60,17 @@
     }
   },
   "sections": {
+    "detectors": {
+      "description": "Co HomeAI obserwuje i jakie ma progi.",
+      "label": "Wykrywanie"
+    },
     "general": {
       "description": "Język, pory dnia, dziennik i panel.",
       "label": "Ogólne"
+    },
+    "notify": {
+      "description": "Kto, jak i kiedy się dowiaduje.",
+      "label": "Powiadomienia"
     },
     "presence": {
       "description": "Role, tryb domu i skąd HomeAI wie, kto śpi.",
@@ -47,12 +80,340 @@
       "description": "Co może trafić do AI w chmurze.",
       "label": "Prywatność"
     },
+    "situations": {
+      "description": "Kiedy sprawy się otwierają i zamykają.",
+      "label": "Sprawy"
+    },
+    "triage": {
+      "description": "Jak poważna jest sprawa.",
+      "label": "Ocena"
+    },
     "world": {
       "description": "Które encje HomeAI obserwuje i jakie etykiety rozumie.",
       "label": "Model domu"
     }
   },
   "settings": {
+    "detectors.availability.enabled": {
+      "description": "Obserwuj urządzenia, których wszystkie encje są niedostępne.",
+      "label": "Urządzenia bez łączności: obserwuj"
+    },
+    "detectors.availability.minutes": {
+      "description": "Jak długo wszystkie encje urządzenia muszą być niedostępne.",
+      "label": "Brak łączności po"
+    },
+    "detectors.availability.severity": {
+      "description": "Waga 0–4 dla: urządzenie bez łączności (0 tylko dziennik, 4 krytyczne).",
+      "label": "Urządzenie bez łączności: waga"
+    },
+    "detectors.backups.enabled": {
+      "description": "Obserwuj nieudane, stare albo niepełne automatyczne kopie.",
+      "label": "Kopie zapasowe: obserwuj"
+    },
+    "detectors.backups.max_age_hours": {
+      "description": "Godziny od ostatniej udanej automatycznej kopii.",
+      "label": "Kopia za stara po"
+    },
+    "detectors.backups.severity": {
+      "description": "Waga 0–4 dla: problem z kopią (0 tylko dziennik, 4 krytyczne).",
+      "label": "Problem z kopią: waga"
+    },
+    "detectors.battery.enabled": {
+      "description": "Obserwuj słabe baterie.",
+      "label": "Baterie: obserwuj"
+    },
+    "detectors.battery.group": {
+      "description": "Wszystkie słabe baterie w jednej sprawie.",
+      "label": "Grupuj baterie"
+    },
+    "detectors.battery.safety_severity": {
+      "description": "Waga 0–4 dla: słaba bateria w czujniku bezpieczeństwa (0 tylko dziennik, 4 krytyczne).",
+      "label": "Słaba bateria w czujniku bezpieczeństwa: waga"
+    },
+    "detectors.battery.severity": {
+      "description": "Waga 0–4 dla: słaba bateria (0 tylko dziennik, 4 krytyczne).",
+      "label": "Słaba bateria: waga"
+    },
+    "detectors.battery.threshold": {
+      "description": "Zgłaszaj baterie na tym poziomie lub niżej.",
+      "label": "Próg baterii"
+    },
+    "detectors.consumables.enabled": {
+      "description": "Obserwuj filtry, szczotki i inne części do wymiany.",
+      "label": "Materiały eksploatacyjne: obserwuj"
+    },
+    "detectors.consumables.percent": {
+      "description": "Zgłaszaj materiały, którym zostało tyle życia lub mniej.",
+      "label": "Próg materiałów"
+    },
+    "detectors.consumables.severity": {
+      "description": "Waga 0–4 dla: materiał eksploatacyjny (0 tylko dziennik, 4 krytyczne).",
+      "label": "Materiał eksploatacyjny: waga"
+    },
+    "detectors.consumables.used_up_entities": {
+      "description": "Czujniki pokazujące zużycie (100 = zużyty) zamiast pozostałej żywotności.",
+      "label": "Czujniki zużycia"
+    },
+    "detectors.divergence.degrees": {
+      "description": "Największa różnica między czujnikami temperatury w jednym pokoju.",
+      "label": "Dozwolona różnica"
+    },
+    "detectors.divergence.enabled": {
+      "description": "Obserwuj czujniki temperatury w jednym pokoju, które się nie zgadzają.",
+      "label": "Rozbieżne czujniki: obserwuj"
+    },
+    "detectors.divergence.severity": {
+      "description": "Waga 0–4 dla: rozbieżne czujniki (0 tylko dziennik, 4 krytyczne).",
+      "label": "Rozbieżne czujniki: waga"
+    },
+    "detectors.environment.co2_max": {
+      "description": "Próg dla: wysokie co₂.",
+      "label": "Wysokie CO₂: próg"
+    },
+    "detectors.environment.co2_max_enabled": {
+      "description": "Zgłaszaj: wysokie co₂ w domu.",
+      "label": "Wysokie CO₂: obserwuj"
+    },
+    "detectors.environment.co2_max_severity": {
+      "description": "Waga 0–4 dla: wysokie co₂ (0 tylko dziennik, 4 krytyczne).",
+      "label": "Wysokie CO₂: waga"
+    },
+    "detectors.environment.enabled": {
+      "description": "Obserwuj progi temperatury, wilgotności, CO₂ i PM2,5.",
+      "label": "Warunki w domu: obserwuj"
+    },
+    "detectors.environment.humidity_max": {
+      "description": "Próg dla: wysoka wilgotność.",
+      "label": "Wysoka wilgotność: próg"
+    },
+    "detectors.environment.humidity_max_enabled": {
+      "description": "Zgłaszaj: wysoka wilgotność w domu.",
+      "label": "Wysoka wilgotność: obserwuj"
+    },
+    "detectors.environment.humidity_max_severity": {
+      "description": "Waga 0–4 dla: wysoka wilgotność (0 tylko dziennik, 4 krytyczne).",
+      "label": "Wysoka wilgotność: waga"
+    },
+    "detectors.environment.humidity_min": {
+      "description": "Próg dla: niska wilgotność.",
+      "label": "Niska wilgotność: próg"
+    },
+    "detectors.environment.humidity_min_enabled": {
+      "description": "Zgłaszaj: niska wilgotność w domu.",
+      "label": "Niska wilgotność: obserwuj"
+    },
+    "detectors.environment.humidity_min_severity": {
+      "description": "Waga 0–4 dla: niska wilgotność (0 tylko dziennik, 4 krytyczne).",
+      "label": "Niska wilgotność: waga"
+    },
+    "detectors.environment.minutes": {
+      "description": "Jak długo wartość musi być poza progiem.",
+      "label": "Poza progiem przez"
+    },
+    "detectors.environment.pm25_max": {
+      "description": "Próg dla: wysokie pm2,5.",
+      "label": "Wysokie PM2,5: próg"
+    },
+    "detectors.environment.pm25_max_enabled": {
+      "description": "Zgłaszaj: wysokie pm2,5 w domu.",
+      "label": "Wysokie PM2,5: obserwuj"
+    },
+    "detectors.environment.pm25_max_severity": {
+      "description": "Waga 0–4 dla: wysokie pm2,5 (0 tylko dziennik, 4 krytyczne).",
+      "label": "Wysokie PM2,5: waga"
+    },
+    "detectors.environment.temperature_max": {
+      "description": "Próg dla: wysoka temperatura.",
+      "label": "Wysoka temperatura: próg"
+    },
+    "detectors.environment.temperature_max_enabled": {
+      "description": "Zgłaszaj: wysoka temperatura w domu.",
+      "label": "Wysoka temperatura: obserwuj"
+    },
+    "detectors.environment.temperature_max_severity": {
+      "description": "Waga 0–4 dla: wysoka temperatura (0 tylko dziennik, 4 krytyczne).",
+      "label": "Wysoka temperatura: waga"
+    },
+    "detectors.environment.temperature_min": {
+      "description": "Próg dla: niska temperatura.",
+      "label": "Niska temperatura: próg"
+    },
+    "detectors.environment.temperature_min_enabled": {
+      "description": "Zgłaszaj: niska temperatura w domu.",
+      "label": "Niska temperatura: obserwuj"
+    },
+    "detectors.environment.temperature_min_severity": {
+      "description": "Waga 0–4 dla: niska temperatura (0 tylko dziennik, 4 krytyczne).",
+      "label": "Niska temperatura: waga"
+    },
+    "detectors.external.attributes": {
+      "description": "Przyjmuj sygnały, które inne integracje publikują w atrybucie homeai_signals.",
+      "label": "Czytaj atrybuty homeai_signals"
+    },
+    "detectors.external.enabled": {
+      "description": "Obserwuj sygnały zgłaszane przez automatyzacje i integracje.",
+      "label": "Sygnały innych integracji: obserwuj"
+    },
+    "detectors.integrations.enabled": {
+      "description": "Obserwuj integracje, które nie wstały albo proszą o ponowne logowanie, oraz zgłoszenia w Naprawach.",
+      "label": "Integracje: obserwuj"
+    },
+    "detectors.integrations.repairs": {
+      "description": "Zgłaszaj otwarte sprawy z Ustawienia → Naprawy.",
+      "label": "Zgłoszenia w Naprawach"
+    },
+    "detectors.integrations.repairs_severity": {
+      "description": "Waga 0–4 dla: zgłoszenia w naprawach (0 tylko dziennik, 4 krytyczne).",
+      "label": "Zgłoszenia w Naprawach: waga"
+    },
+    "detectors.integrations.severity": {
+      "description": "Waga 0–4 dla: problem integracji (0 tylko dziennik, 4 krytyczne).",
+      "label": "Problem integracji: waga"
+    },
+    "detectors.internet.enabled": {
+      "description": "Obserwuj połączenie domu z internetem.",
+      "label": "Łącze z internetem: obserwuj"
+    },
+    "detectors.internet.entity": {
+      "description": "Czujnik binarny włączony, gdy internet działa. Puste: pierwszy czujnik Ping.",
+      "label": "Czujnik internetu"
+    },
+    "detectors.internet.minutes": {
+      "description": "Jak długo łącze musi nie działać, zanim to się liczy.",
+      "label": "Brak internetu: czekaj"
+    },
+    "detectors.internet.severity": {
+      "description": "Waga 0–4 dla: brak internetu (0 tylko dziennik, 4 krytyczne).",
+      "label": "Brak internetu: waga"
+    },
+    "detectors.lights_away.enabled": {
+      "description": "Obserwuj światła włączone, gdy nikogo nie ma.",
+      "label": "Światła w pustym domu: obserwuj"
+    },
+    "detectors.lights_away.minutes": {
+      "description": "Jak długo światło musi świecić, gdy nikogo nie ma.",
+      "label": "Światło świeci przez"
+    },
+    "detectors.lights_away.severity": {
+      "description": "Waga 0–4 dla: światła w pustym domu (0 tylko dziennik, 4 krytyczne).",
+      "label": "Światła w pustym domu: waga"
+    },
+    "detectors.log.automation_severity": {
+      "description": "Waga 0–4 dla: nieudana automatyzacja (0 tylko dziennik, 4 krytyczne).",
+      "label": "Nieudana automatyzacja: waga"
+    },
+    "detectors.log.automations": {
+      "description": "Zgłaszaj automatyzacje, których ostatni przebieg się nie udał.",
+      "label": "Nieudane automatyzacje"
+    },
+    "detectors.log.enabled": {
+      "description": "Obserwuj błędy w logu Home Assistanta i automatyzacje, które się nie udały.",
+      "label": "Log i automatyzacje: obserwuj"
+    },
+    "detectors.log.min_errors": {
+      "description": "Zgłaszaj log dopiero od tylu błędów.",
+      "label": "Minimum błędów w logu"
+    },
+    "detectors.log.severity": {
+      "description": "Waga 0–4 dla: błędy w logu (0 tylko dziennik, 4 krytyczne).",
+      "label": "Błędy w logu: waga"
+    },
+    "detectors.log.window_hours": {
+      "description": "Jak daleko wstecz liczą się błędy w logu i nieudane automatyzacje.",
+      "label": "Okno logu"
+    },
+    "detectors.problems.enabled": {
+      "description": "Obserwuj czujniki problemu i rośliny wymagające uwagi.",
+      "label": "Urządzenia zgłaszające problem: obserwuj"
+    },
+    "detectors.problems.plant_severity": {
+      "description": "Waga 0–4 dla: problem rośliny (0 tylko dziennik, 4 krytyczne).",
+      "label": "Problem rośliny: waga"
+    },
+    "detectors.problems.severity": {
+      "description": "Waga 0–4 dla: problem urządzenia (0 tylko dziennik, 4 krytyczne).",
+      "label": "Problem urządzenia: waga"
+    },
+    "detectors.safety.enabled": {
+      "description": "Obserwuj czujniki zalania, dymu, gazu, czadu i sabotażu.",
+      "label": "Czujniki bezpieczeństwa: obserwuj"
+    },
+    "detectors.safety.severity_carbon_monoxide": {
+      "description": "Waga 0–4 dla: czad (0 tylko dziennik, 4 krytyczne).",
+      "label": "Czad: waga"
+    },
+    "detectors.safety.severity_gas": {
+      "description": "Waga 0–4 dla: gaz (0 tylko dziennik, 4 krytyczne).",
+      "label": "Gaz: waga"
+    },
+    "detectors.safety.severity_leak": {
+      "description": "Waga 0–4 dla: zalanie (0 tylko dziennik, 4 krytyczne).",
+      "label": "Zalanie: waga"
+    },
+    "detectors.safety.severity_safety": {
+      "description": "Waga 0–4 dla: alarm bezpieczeństwa (0 tylko dziennik, 4 krytyczne).",
+      "label": "Alarm bezpieczeństwa: waga"
+    },
+    "detectors.safety.severity_smoke": {
+      "description": "Waga 0–4 dla: dym (0 tylko dziennik, 4 krytyczne).",
+      "label": "Dym: waga"
+    },
+    "detectors.safety.severity_tamper": {
+      "description": "Waga 0–4 dla: sabotaż (0 tylko dziennik, 4 krytyczne).",
+      "label": "Sabotaż: waga"
+    },
+    "detectors.security.away_minutes": {
+      "description": "Jak długo drzwi, okno albo zamek muszą być otwarte, gdy nikogo nie ma.",
+      "label": "Otwarte, gdy nikogo nie ma: czekaj"
+    },
+    "detectors.security.enabled": {
+      "description": "Obserwuj drzwi, okna, bramy i zamki otwarte, gdy nikogo nie ma albo wszyscy śpią.",
+      "label": "Zabezpieczenia: obserwuj"
+    },
+    "detectors.security.night_minutes": {
+      "description": "Jak długo coś musi być otwarte, gdy wszyscy w domu śpią.",
+      "label": "Otwarte w nocy: czekaj"
+    },
+    "detectors.security.openings_at_night": {
+      "description": "Zgłaszaj też drzwi i okna (nie tylko zamki i bramy) otwarte w nocy.",
+      "label": "Okna w nocy"
+    },
+    "detectors.stale.enabled": {
+      "description": "Obserwuj czujniki, które przestały raportować.",
+      "label": "Milczące czujniki: obserwuj"
+    },
+    "detectors.stale.hours": {
+      "description": "Godziny bez raportu czujnika pomiarowego. 0 wyłącza.",
+      "label": "Milczy po"
+    },
+    "detectors.stale.severity": {
+      "description": "Waga 0–4 dla: milczący czujnik (0 tylko dziennik, 4 krytyczne).",
+      "label": "Milczący czujnik: waga"
+    },
+    "detectors.system_refresh": {
+      "description": "Jak często czytać kopie, log i ślady automatyzacji.",
+      "label": "Odświeżanie danych systemu"
+    },
+    "detectors.updates.enabled": {
+      "description": "Obserwuj dostępne aktualizacje.",
+      "label": "Aktualizacje: obserwuj"
+    },
+    "detectors.updates.severity": {
+      "description": "Waga 0–4 dla: aktualizacje (0 tylko dziennik, 4 krytyczne).",
+      "label": "Aktualizacje: waga"
+    },
+    "detectors.window_heating.enabled": {
+      "description": "Obserwuj okno otwarte w ogrzewanym pokoju.",
+      "label": "Okno otwarte przy grzaniu: obserwuj"
+    },
+    "detectors.window_heating.minutes": {
+      "description": "Jak długo okno musi być otwarte przy grzaniu.",
+      "label": "Okno otwarte przez"
+    },
+    "detectors.window_heating.severity": {
+      "description": "Waga 0–4 dla: okno otwarte przy grzaniu (0 tylko dziennik, 4 krytyczne).",
+      "label": "Okno otwarte przy grzaniu: waga"
+    },
     "general.assistant_name": {
       "description": "Jak HomeAI przedstawia się w wiadomościach i rozmowach.",
       "label": "Nazwa asystenta"
@@ -96,6 +457,90 @@
     "general.tick_seconds": {
       "description": "Jak często działają sprawdzenia zależne od czasu (niedostępność, terminy, harmonogram).",
       "label": "Co ile sprawdzać"
+    },
+    "notify.announce_resolved": {
+      "description": "Wyślij krótką wiadomość, gdy zgłoszona sprawa ustąpi.",
+      "label": "Informuj o ustąpieniu"
+    },
+    "notify.critical_sound": {
+      "description": "Sprawy krytyczne używają alertów krytycznych, słyszalnych nawet w trybie cichym.",
+      "label": "Krytyczne przebijają ciszę"
+    },
+    "notify.digest_enabled": {
+      "description": "Wysyłaj podsumowanie otwartych spraw o ustalonych porach.",
+      "label": "Podsumowanie dnia"
+    },
+    "notify.digest_max_items": {
+      "description": "Najwięcej spraw w podsumowaniu.",
+      "label": "Pozycji w podsumowaniu"
+    },
+    "notify.digest_times": {
+      "description": "Godziny (GG:MM) podsumowania.",
+      "label": "Pory podsumowania"
+    },
+    "notify.digest_to": {
+      "description": "Kto dostaje podsumowanie.",
+      "label": "Odbiorcy podsumowania"
+    },
+    "notify.discover_apps": {
+      "description": "Używaj urządzeń z aplikacją towarzyszącą tej osoby.",
+      "label": "Wykrywaj telefony"
+    },
+    "notify.include_tablets": {
+      "description": "Wysyłaj też na tablety i komputery z aplikacją.",
+      "label": "Także tablety i komputery"
+    },
+    "notify.ladder_0": {
+      "description": "Kroki dla spraw do dziennika: po ilu minutach, do kogo, kanały, powtarzanie, krytyczne.",
+      "label": "Eskalacja: waga 0"
+    },
+    "notify.ladder_1": {
+      "description": "Kroki dla spraw na dziś: po ilu minutach, do kogo, kanały, powtarzanie, krytyczne.",
+      "label": "Eskalacja: waga 1"
+    },
+    "notify.ladder_2": {
+      "description": "Kroki dla spraw do uwagi: po ilu minutach, do kogo, kanały, powtarzanie, krytyczne.",
+      "label": "Eskalacja: waga 2"
+    },
+    "notify.ladder_3": {
+      "description": "Kroki dla spraw pilnych: po ilu minutach, do kogo, kanały, powtarzanie, krytyczne.",
+      "label": "Eskalacja: waga 3"
+    },
+    "notify.ladder_4": {
+      "description": "Kroki dla spraw krytycznych: po ilu minutach, do kogo, kanały, powtarzanie, krytyczne.",
+      "label": "Eskalacja: waga 4"
+    },
+    "notify.max_per_day": {
+      "description": "Najwięcej niekrytycznych powiadomień dla jednej osoby na dobę.",
+      "label": "Powiadomień na dobę"
+    },
+    "notify.open_path": {
+      "description": "Ścieżka otwierana z powiadomienia.",
+      "label": "Otwieraj w panelu"
+    },
+    "notify.paused": {
+      "description": "Zatrzymaj wszystkie powiadomienia poza krytycznymi (patrz niżej).",
+      "label": "Wstrzymaj powiadomienia"
+    },
+    "notify.paused_allows_critical": {
+      "description": "Sprawy krytyczne są ogłaszane mimo wstrzymania.",
+      "label": "Krytyczne mimo wstrzymania"
+    },
+    "notify.snooze_minutes": {
+      "description": "Na jak długo „Wycisz” ucisza sprawę.",
+      "label": "Wycisz na"
+    },
+    "notify.targets": {
+      "description": "Encje albo usługi notify tej osoby, oprócz wykrytych telefonów.",
+      "label": "Dodatkowe cele powiadomień"
+    },
+    "notify.tts_entity": {
+      "description": "Encja syntezy mowy do powiadomień głosowych.",
+      "label": "Silnik mowy"
+    },
+    "notify.tts_players": {
+      "description": "Odtwarzacze do powiadomień głosowych.",
+      "label": "Głośniki"
     },
     "presence.bed_entities": {
       "description": "Czujniki zajętości łóżka osoby.",
@@ -169,6 +614,50 @@
       "description": "Encje, których dane nigdy nie opuszczają domu.",
       "label": "Nigdy nie wysyłaj tych encji"
     },
+    "situations.close_after": {
+      "description": "Jak długo sprawa musi ustąpić, zanim zostanie zamknięta.",
+      "label": "Czekaj przed zamknięciem"
+    },
+    "situations.dismiss_days": {
+      "description": "Ile dni odrzucona sprawa milczy.",
+      "label": "„To nie problem” trwa"
+    },
+    "situations.min_duration": {
+      "description": "Jak długo nowa sprawa musi trwać, zanim ktoś się o niej dowie.",
+      "label": "Czekaj przed ogłoszeniem"
+    },
+    "situations.min_duration_damage": {
+      "description": "Opóźnienie spraw grożących szkodą.",
+      "label": "Czekaj przed ogłoszeniem: szkody"
+    },
+    "situations.min_duration_safety": {
+      "description": "Opóźnienie spraw bezpieczeństwa (zalanie, dym).",
+      "label": "Czekaj przed ogłoszeniem: bezpieczeństwo"
+    },
+    "situations.min_duration_security": {
+      "description": "Opóźnienie spraw zabezpieczeń.",
+      "label": "Czekaj przed ogłoszeniem: zabezpieczenia"
+    },
+    "triage.calibration_dismiss_ratio": {
+      "description": "Udział odrzuconych spraw, który obniża wagę.",
+      "label": "Uczenie: udział odrzuconych"
+    },
+    "triage.calibration_enabled": {
+      "description": "Obniżaj wagę rodzajów spraw ciągle odrzucanych (nigdy bezpieczeństwa).",
+      "label": "Ucz się z „to nie problem”"
+    },
+    "triage.calibration_min_events": {
+      "description": "Ile spraw danego rodzaju, zanim uczenie zadziała.",
+      "label": "Uczenie: minimum spraw"
+    },
+    "triage.raise_when_away": {
+      "description": "Sprawy bezpieczeństwa, zabezpieczeń i szkód są o stopień poważniejsze, gdy nikogo nie ma.",
+      "label": "Podnoś, gdy nikogo nie ma"
+    },
+    "triage.severity_overrides": {
+      "description": "Stała waga dla rodzaju sprawy, np. {\"updates\": 1}.",
+      "label": "Wagi na sztywno"
+    },
     "world.create_labels": {
       "description": "Utwórz etykiety rozumiane przez HomeAI (pomiń, osobiste, krytyczne, akcja ochronna, prywatne), jeśli ich nie ma.",
       "label": "Twórz etykiety HomeAI"
@@ -213,5 +702,177 @@
       "description": "Wszystkie encje, tylko udostępnione asystentom głosowym albo tylko wybrane pomieszczenia.",
       "label": "Które encje HomeAI widzi"
     }
+  },
+  "signals": {
+    "automation_error": {
+      "description": "{when}: {error}",
+      "title": "Automatyzacja z błędem: {name}"
+    },
+    "backup_agent": {
+      "description": "Sprawdź miejsce kopii w Ustawienia → Kopie zapasowe.",
+      "title": "Kopia nie trafiła do: {agent}"
+    },
+    "backup_failed": {
+      "description": "{reason} Ostatnia udana: {last_ok}.",
+      "title": "Kopia się nie udała"
+    },
+    "backup_stale": {
+      "description": "Ostatnia udana automatyczna kopia: {last_ok}.",
+      "title": "Brak świeżej kopii"
+    },
+    "battery_low": {
+      "description": "{where} · {level}",
+      "title": "Wymień baterię: {name}",
+      "title_many": "Wymień {count} baterie"
+    },
+    "carbon_monoxide": {
+      "description": "{name} wykrył tlenek węgla.",
+      "title": "Czad: {where}"
+    },
+    "co2_high": {
+      "description": "{name}: {value} {unit}. Otwórz okno.",
+      "title": "Duszno: {where}"
+    },
+    "consumable_low": {
+      "description": "{where}",
+      "title": "Do serwisu: {name}",
+      "title_many": "{count} rzeczy do serwisu"
+    },
+    "device_unavailable": {
+      "description": "{where} · od {since}.",
+      "title": "Nie odpowiada: {name}",
+      "title_many": "{count} urządzeń nie odpowiada"
+    },
+    "garage_away": {
+      "description": "{where}",
+      "title": "Otwarte, a nikogo nie ma: {name}"
+    },
+    "garage_night": {
+      "description": "{where}",
+      "title": "Otwarte w nocy: {name}"
+    },
+    "gas": {
+      "description": "{name} wykrył gaz.",
+      "title": "Gaz: {where}"
+    },
+    "humidity_high": {
+      "description": "{name}: {value} {unit} (próg {limit}).",
+      "title": "Wilgotno: {where}"
+    },
+    "humidity_low": {
+      "description": "{name}: {value} {unit} (próg {limit}).",
+      "title": "Suche powietrze: {where}"
+    },
+    "integration_failed_unload": {
+      "description": "Zwykle pomaga restart Home Assistanta.",
+      "title": "Integracja nie dała się zatrzymać: {name}"
+    },
+    "integration_migration_error": {
+      "description": "{reason}",
+      "title": "Integracja nie przeszła migracji: {name}"
+    },
+    "integration_reauth": {
+      "description": "Integracja prosi o ponowne zalogowanie ({account}).",
+      "title": "Zaloguj się ponownie: {name}"
+    },
+    "integration_setup_error": {
+      "description": "{reason}",
+      "title": "Integracja nie wstała: {name}"
+    },
+    "integration_setup_retry": {
+      "description": "{reason}",
+      "title": "Integracja ponawia połączenie: {name}"
+    },
+    "internet_down": {
+      "description": "Od {since}. Usługi w chmurze nie działają.",
+      "title": "Dom nie ma internetu"
+    },
+    "leak": {
+      "description": "{name} wykrył wodę.",
+      "title": "Zalanie: {where}"
+    },
+    "lights_away": {
+      "description": "{where}",
+      "title": "Świeci się, a nikogo nie ma"
+    },
+    "lock_away": {
+      "description": "{where}",
+      "title": "Niezamknięte, a nikogo nie ma: {name}"
+    },
+    "lock_night": {
+      "description": "{where}",
+      "title": "Niezamknięte w nocy: {name}"
+    },
+    "log_errors": {
+      "description": "{message}",
+      "title": "{count} błędów w logu"
+    },
+    "opening_away": {
+      "description": "{where}",
+      "title": "Otwarte, a nikogo nie ma: {name}",
+      "title_many": "{count} rzeczy otwartych, a nikogo nie ma"
+    },
+    "opening_night": {
+      "description": "{where}",
+      "title": "Otwarte w nocy: {name}",
+      "title_many": "{count} rzeczy otwartych w nocy"
+    },
+    "plant_problem": {
+      "description": "{problem} · {where}",
+      "title": "Roślina wymaga uwagi: {name}",
+      "title_many": "{count} roślin wymaga uwagi"
+    },
+    "pm25_high": {
+      "description": "{name}: {value} {unit}.",
+      "title": "Zanieczyszczone powietrze: {where}"
+    },
+    "problem_entity": {
+      "description": "{device} · {where}",
+      "title": "Zgłasza problem: {name}"
+    },
+    "repairs_issues": {
+      "description": "Zgłasza: {domains}.",
+      "title": "{count} zgłoszeń w Naprawach"
+    },
+    "safety": {
+      "description": "{name} zgłasza zagrożenie.",
+      "title": "Alarm bezpieczeństwa: {where}"
+    },
+    "sensor_divergence": {
+      "description": "{low} i {high} różnią się o {diff}°.",
+      "title": "Czujniki się różnią: {where}"
+    },
+    "smoke": {
+      "description": "{name} wykrył dym.",
+      "title": "Dym: {where}"
+    },
+    "stale_sensor": {
+      "description": "{where} · ostatni raport {since}.",
+      "title": "Czujnik milczy: {name}",
+      "title_many": "{count} czujników milczy"
+    },
+    "tamper": {
+      "description": "Ktoś może majstrować przy urządzeniu.",
+      "title": "Sabotaż: {name}"
+    },
+    "temperature_high": {
+      "description": "{name}: {value} {unit} (próg {limit}).",
+      "title": "Gorąco: {where}"
+    },
+    "temperature_low": {
+      "description": "{name}: {value} {unit} (próg {limit}).",
+      "title": "Zimno: {where}"
+    },
+    "updates": {
+      "description": "{names}",
+      "title": "{count} aktualizacji do zainstalowania"
+    },
+    "window_heating": {
+      "description": "{name}",
+      "title": "Okno otwarte przy grzaniu: {where}"
+    }
+  },
+  "situation": {
+    "and_more": "{title} i {count} więcej"
   }
 }

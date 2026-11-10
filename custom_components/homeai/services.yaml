@@ -1,0 +1,84 @@
+report_signal:
+  fields:
+    id:
+      required: true
+      example: washing_machine_filter
+      selector:
+        text:
+    title:
+      required: true
+      example: Clean the washing machine filter
+      selector:
+        text:
+    description:
+      selector:
+        text:
+          multiline: true
+    severity:
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 4
+          mode: box
+    category:
+      default: info
+      selector:
+        select:
+          translation_key: category
+          options: [safety, security, damage, system, energy, comfort, maintenance, info]
+    need:
+      default: member
+      selector:
+        select:
+          translation_key: need
+          options: [nobody, member, admin, service]
+    entities:
+      selector:
+        entity:
+          multiple: true
+    group:
+      selector:
+        text:
+    expires_minutes:
+      selector:
+        number:
+          min: 1
+          max: 525600
+          unit_of_measurement: min
+          mode: box
+clear_signal:
+  fields:
+    id:
+      required: true
+      selector:
+        text:
+acknowledge:
+  fields:
+    situation_id:
+      selector:
+        text:
+handle:
+  fields:
+    situation_id:
+      selector:
+        text:
+snooze:
+  fields:
+    situation_id:
+      selector:
+        text:
+    minutes:
+      selector:
+        number:
+          min: 1
+          max: 10080
+          unit_of_measurement: min
+          mode: box
+dismiss:
+  fields:
+    situation_id:
+      required: true
+      selector:
+        text:
+send_digest:

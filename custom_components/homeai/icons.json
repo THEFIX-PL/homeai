@@ -1,0 +1,56 @@
+{
+  "services": {
+    "report_signal": {
+      "service": "mdi:alert-plus-outline"
+    },
+    "clear_signal": {
+      "service": "mdi:alert-remove-outline"
+    },
+    "acknowledge": {
+      "service": "mdi:check"
+    },
+    "handle": {
+      "service": "mdi:hand-back-right-outline"
+    },
+    "snooze": {
+      "service": "mdi:bell-sleep-outline"
+    },
+    "dismiss": {
+      "service": "mdi:close-circle-outline"
+    },
+    "send_digest": {
+      "service": "mdi:text-box-outline"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "situations": {
+        "default": "mdi:home-alert-outline"
+      }
+    },
+    "binary_sensor": {
+      "attention": {
+        "default": "mdi:home-alert",
+        "state": {
+          "off": "mdi:home-outline"
+        }
+      }
+    },
+    "event": {
+      "situation": {
+        "default": "mdi:home-alert-outline"
+      },
+      "notification": {
+        "default": "mdi:bell-ring-outline"
+      }
+    },
+    "switch": {
+      "notifications_paused": {
+        "default": "mdi:bell-outline",
+        "state": {
+          "on": "mdi:bell-off-outline"
+        }
+      }
+    }
+  }
+}

@@ -19,7 +19,7 @@ from homeassistant.util import dt as dt_util
 from . import i18n
 from .const import LOGGER
 from .journal import Journal
-from .settings import SettingsManager, build_registry
+from .settings import SettingError, SettingsManager, build_registry
 from .world import Presence, WorldModel
 
 if TYPE_CHECKING:
@@ -76,13 +76,20 @@ class HomeAIRuntime:
         initial = self.entry.data.get("initial_settings")
         if not initial or self.entry.data.get("initial_settings_applied"):
             return
+
+        def apply(key: str, value: Any, skey: str = "global") -> None:
+            try:
+                self.settings.set(key, value, skey=skey, user="setup", confirmed=True)
+            except SettingError as err:  # one bad value must not stop the setup
+                LOGGER.warning("Initial setting %s ignored: %s", key, err)
+
         for key, values in initial.items():
             if key == "overrides":
                 for skey, inner in values.items():
                     for k, v in inner.items():
-                        self.settings.set(k, v, skey=skey, user="setup", confirmed=True)
+                        apply(k, v, skey)
             else:
-                self.settings.set(key, values, user="setup", confirmed=True)
+                apply(key, values)
         self.hass.config_entries.async_update_entry(
             self.entry, data={**self.entry.data, "initial_settings_applied": True}
         )

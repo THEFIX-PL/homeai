@@ -6,7 +6,9 @@ label and description in `i18n/`; defaults are valid. Modules read values throug
 
 from __future__ import annotations
 
-from .registry import Scope, Setting, SettingsRegistry, SettingType as T
+from typing import Any
+
+from .registry import Scope, Setting, SettingError, SettingsRegistry, SettingType as T
 
 G = frozenset({Scope.GLOBAL})
 PERSON = frozenset({Scope.GLOBAL, Scope.PERSON})
@@ -15,6 +17,55 @@ THING = frozenset({Scope.GLOBAL, Scope.FLOOR, Scope.AREA, Scope.DEVICE, Scope.EN
 DEVICE_ENTITY = frozenset({Scope.GLOBAL, Scope.DEVICE, Scope.ENTITY})
 
 ROLES = ("admin", "member", "guest", "ignore")
+LADDER_TO = ("none", "all", "home", "home_or_all", "admins", "awake_home")
+LADDER_CHANNELS = ("push", "persistent", "tts", "event")
+CATEGORIES = ("safety", "security", "damage", "system", "energy", "comfort", "maintenance", "info")
+
+
+def validate_ladder(value: Any) -> list[dict[str, Any]]:
+    """Escalation ladder: a list of steps {after, to, channels, repeat?, critical?}."""
+    if not isinstance(value, list) or len(value) > 10:
+        raise SettingError("ladder: a list of up to 10 steps")
+    steps = []
+    for i, step in enumerate(value, start=1):
+        if not isinstance(step, dict) or set(step) - {"after", "to", "channels", "repeat", "critical"}:
+            raise SettingError(f"ladder step {i}: fields after, to, channels, repeat, critical")
+        after, repeat = step.get("after", 0), step.get("repeat", 0)
+        if not isinstance(after, int) or isinstance(after, bool) or not 0 <= after <= 1440:
+            raise SettingError(f"ladder step {i}: after is 0–1440 minutes")
+        if not isinstance(repeat, int) or isinstance(repeat, bool) or not 0 <= repeat <= 1440:
+            raise SettingError(f"ladder step {i}: repeat is 0–1440 minutes")
+        if step.get("to", "none") not in LADDER_TO:
+            raise SettingError(f"ladder step {i}: to is one of {', '.join(LADDER_TO)}")
+        channels = step.get("channels") or []
+        if not isinstance(channels, list) or any(c not in LADDER_CHANNELS for c in channels):
+            raise SettingError(f"ladder step {i}: channels from {', '.join(LADDER_CHANNELS)}")
+        steps.append(
+            {
+                "after": after,
+                "to": step.get("to", "none"),
+                "channels": list(dict.fromkeys(channels)),
+                "repeat": repeat,
+                "critical": bool(step.get("critical", False)),
+            }
+        )
+    return steps
+
+
+def validate_severity_map(value: Any) -> dict[str, int]:
+    """Kind → severity 0–4 overrides."""
+    if not isinstance(value, dict):
+        raise SettingError("an object of kind → severity")
+    out = {}
+    for kind, sev in value.items():
+        if not isinstance(kind, str) or isinstance(sev, bool) or not isinstance(sev, int) or not 0 <= sev <= 4:
+            raise SettingError(f"{kind}: severity 0–4")
+        out[kind] = sev
+    return out
+
+
+def _sev(key: str, default: int, section: str, scopes: frozenset = G, advanced: bool = True) -> Setting:
+    return Setting(key, T.INT, default, section, scopes=scopes, min=0, max=4, advanced=advanced)
 
 
 def _general() -> list[Setting]:
@@ -87,7 +138,187 @@ def _privacy() -> list[Setting]:
     ]
 
 
-SECTIONS = [_general, _world, _presence, _privacy]
+def _detectors() -> list[Setting]:
+    s = "detectors"
+    out = [
+        Setting("detectors.system_refresh", T.DURATION, 300, s, min=60, max=3600, unit="s", advanced=True),
+    ]
+    for key in (
+        "safety",
+        "security",
+        "internet",
+        "availability",
+        "integrations",
+        "backups",
+        "updates",
+        "log",
+        "battery",
+        "consumables",
+        "problems",
+        "stale",
+        "environment",
+        "divergence",
+        "lights_away",
+        "window_heating",
+        "external",
+    ):
+        out.append(
+            Setting(
+                f"detectors.{key}.enabled",
+                T.BOOL,
+                True,
+                s,
+                confirm="disable" if key in ("safety", "security") else None,
+            )
+        )
+    out += [
+        _sev("detectors.safety.severity_leak", 4, s, THING),
+        _sev("detectors.safety.severity_smoke", 4, s, THING),
+        _sev("detectors.safety.severity_gas", 4, s, THING),
+        _sev("detectors.safety.severity_carbon_monoxide", 4, s, THING),
+        _sev("detectors.safety.severity_safety", 3, s, THING),
+        _sev("detectors.safety.severity_tamper", 2, s, THING),
+        Setting("detectors.security.away_minutes", T.INT, 10, s, scopes=THING, min=0, max=720, unit="min"),
+        Setting("detectors.security.night_minutes", T.INT, 30, s, scopes=THING, min=0, max=720, unit="min"),
+        Setting("detectors.security.openings_at_night", T.BOOL, True, s, scopes=THING),
+        Setting("detectors.internet.entity", T.ENTITY, "", s, selector="entity"),
+        Setting("detectors.internet.minutes", T.INT, 2, s, min=0, max=120, unit="min"),
+        _sev("detectors.internet.severity", 3, s),
+        Setting("detectors.availability.minutes", T.INT, 15, s, scopes=THING, min=1, max=10080, unit="min"),
+        _sev("detectors.availability.severity", 1, s, THING),
+        _sev("detectors.integrations.severity", 1, s),
+        Setting("detectors.integrations.repairs", T.BOOL, True, s),
+        _sev("detectors.integrations.repairs_severity", 0, s),
+        Setting("detectors.backups.max_age_hours", T.INT, 30, s, min=1, max=720, unit="h"),
+        _sev("detectors.backups.severity", 1, s),
+        _sev("detectors.updates.severity", 0, s),
+        Setting("detectors.log.window_hours", T.INT, 24, s, min=1, max=168, unit="h", advanced=True),
+        Setting("detectors.log.min_errors", T.INT, 1, s, min=1, max=1000, advanced=True),
+        _sev("detectors.log.severity", 0, s),
+        Setting("detectors.log.automations", T.BOOL, True, s),
+        _sev("detectors.log.automation_severity", 1, s),
+        Setting("detectors.battery.threshold", T.INT, 20, s, scopes=THING, min=1, max=99, unit="%"),
+        _sev("detectors.battery.severity", 1, s, THING),
+        _sev("detectors.battery.safety_severity", 2, s, THING),
+        Setting("detectors.battery.group", T.BOOL, True, s),
+        Setting("detectors.consumables.percent", T.INT, 10, s, scopes=THING, min=0, max=100, unit="%"),
+        Setting("detectors.consumables.used_up_entities", T.ENTITIES, [], s, selector="entity", advanced=True),
+        _sev("detectors.consumables.severity", 0, s, THING),
+        _sev("detectors.problems.severity", 1, s, THING),
+        _sev("detectors.problems.plant_severity", 1, s, THING),
+        Setting("detectors.stale.hours", T.INT, 6, s, scopes=THING, min=0, max=720, unit="h"),
+        _sev("detectors.stale.severity", 0, s, THING),
+        Setting("detectors.environment.minutes", T.INT, 20, s, scopes=THING, min=0, max=1440, unit="min"),
+        Setting("detectors.divergence.degrees", T.FLOAT, 2.5, s, scopes=PLACE, min=0.5, max=20, unit="°"),
+        _sev("detectors.divergence.severity", 0, s),
+        Setting("detectors.lights_away.minutes", T.INT, 10, s, scopes=THING, min=0, max=720, unit="min"),
+        _sev("detectors.lights_away.severity", 2, s),
+        Setting("detectors.window_heating.minutes", T.INT, 10, s, scopes=THING, min=0, max=720, unit="min"),
+        _sev("detectors.window_heating.severity", 2, s, THING),
+        Setting("detectors.external.attributes", T.BOOL, True, s, advanced=True),
+    ]
+    env = [
+        ("temperature_min", 10.0, -20, 30, "°C", 3, True),
+        ("temperature_max", 30.0, 15, 60, "°C", 1, True),
+        ("humidity_max", 70.0, 30, 100, "%", 1, True),
+        ("humidity_min", 25.0, 0, 60, "%", 0, False),
+        ("co2_max", 1500.0, 400, 10000, "ppm", 1, True),
+        ("pm25_max", 50.0, 1, 1000, "µg/m³", 1, True),
+    ]
+    for name, default, lo, hi, unit, sev, enabled in env:
+        base = f"detectors.environment.{name}"
+        out += [
+            Setting(f"{base}_enabled", T.BOOL, enabled, s, scopes=THING),
+            Setting(base, T.FLOAT, default, s, scopes=THING, min=lo, max=hi, unit=unit),
+            _sev(f"{base}_severity", sev, s, THING),
+        ]
+    return out
+
+
+def _situations() -> list[Setting]:
+    s = "situations"
+    out = [
+        Setting("situations.min_duration", T.DURATION, 60, s, min=0, max=3600, unit="s"),
+        Setting("situations.close_after", T.DURATION, 300, s, min=0, max=86400, unit="s"),
+        Setting("situations.dismiss_days", T.INT, 7, s, min=1, max=365, unit="d"),
+    ]
+    defaults = {"safety": 0, "security": 30, "damage": 60}
+    for category in CATEGORIES:
+        if category in defaults:
+            out.append(
+                Setting(
+                    f"situations.min_duration_{category}",
+                    T.DURATION,
+                    defaults[category],
+                    s,
+                    min=0,
+                    max=3600,
+                    unit="s",
+                    advanced=True,
+                )
+            )
+    return out
+
+
+def _triage() -> list[Setting]:
+    s = "triage"
+    return [
+        Setting("triage.severity_overrides", T.JSON, {}, s, advanced=True, validator=validate_severity_map),
+        Setting("triage.raise_when_away", T.BOOL, True, s),
+        Setting("triage.calibration_enabled", T.BOOL, True, s),
+        Setting("triage.calibration_min_events", T.INT, 5, s, min=2, max=100, advanced=True),
+        Setting("triage.calibration_dismiss_ratio", T.FLOAT, 0.6, s, min=0.1, max=1.0, advanced=True),
+    ]
+
+
+DEFAULT_LADDERS: dict[int, list[dict[str, Any]]] = {
+    4: [{"after": 0, "to": "all", "channels": ["push", "persistent", "tts", "event"], "repeat": 5, "critical": True}],
+    3: [
+        {"after": 0, "to": "home_or_all", "channels": ["push", "persistent", "event"], "repeat": 0, "critical": False},
+        {"after": 15, "to": "all", "channels": ["push"], "repeat": 0, "critical": False},
+    ],
+    2: [{"after": 0, "to": "home_or_all", "channels": ["push", "event"], "repeat": 0, "critical": False}],
+    1: [{"after": 0, "to": "none", "channels": ["persistent", "event"], "repeat": 0, "critical": False}],
+    0: [],
+}
+
+
+def _notify() -> list[Setting]:
+    s = "notify"
+    out = [
+        Setting("notify.paused", T.BOOL, False, s, confirm="change"),
+        Setting("notify.paused_allows_critical", T.BOOL, True, s, confirm="disable"),
+        Setting("notify.targets", T.STRINGS, [], s, scopes=PERSON, selector="notify"),
+        Setting("notify.discover_apps", T.BOOL, True, s, scopes=PERSON),
+        Setting("notify.include_tablets", T.BOOL, False, s, scopes=PERSON),
+        Setting("notify.max_per_day", T.INT, 20, s, min=1, max=500),
+        Setting("notify.critical_sound", T.BOOL, True, s),
+        Setting("notify.snooze_minutes", T.INT, 240, s, min=5, max=10080, unit="min"),
+        Setting("notify.announce_resolved", T.BOOL, False, s),
+        Setting("notify.open_path", T.STRING, "homeai", s, advanced=True, max=100),
+        Setting("notify.tts_entity", T.ENTITY, "", s, selector="tts"),
+        Setting("notify.tts_players", T.ENTITIES, [], s, selector="media_player"),
+        Setting("notify.digest_enabled", T.BOOL, True, s),
+        Setting("notify.digest_times", T.STRINGS, ["08:00", "20:00"], s, max=6),
+        Setting("notify.digest_to", T.SELECT, "home_or_all", s, options=LADDER_TO),
+        Setting("notify.digest_max_items", T.INT, 10, s, min=1, max=50),
+    ]
+    for sev in (4, 3, 2, 1, 0):
+        out.append(
+            Setting(
+                f"notify.ladder_{sev}",
+                T.JSON,
+                DEFAULT_LADDERS[sev],
+                s,
+                advanced=sev < 2,
+                validator=validate_ladder,
+                confirm="change" if sev >= 3 else None,
+            )
+        )
+    return out
+
+
+SECTIONS = [_general, _world, _presence, _privacy, _detectors, _situations, _triage, _notify]
 
 
 def build_registry() -> SettingsRegistry:

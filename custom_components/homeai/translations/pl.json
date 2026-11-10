@@ -74,11 +74,193 @@
         "guest": "Gość",
         "ignore": "Pomiń"
       }
+    },
+    "category": {
+      "options": {
+        "safety": "Bezpieczeństwo",
+        "security": "Ochrona",
+        "damage": "Szkody",
+        "system": "System",
+        "energy": "Energia",
+        "comfort": "Komfort",
+        "maintenance": "Konserwacja",
+        "info": "Informacja"
+      }
+    },
+    "need": {
+      "options": {
+        "nobody": "Nikt",
+        "member": "Domownik",
+        "admin": "Administrator",
+        "service": "Fachowiec"
+      }
     }
   },
   "exceptions": {
     "not_loaded": {
       "message": "HomeAI nie jest załadowany."
+    },
+    "bad_signal": {
+      "message": "Sygnał jest nieprawidłowy. Sprawdź ID, tytuł i wagę."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "situations": {
+        "name": "Sytuacje",
+        "state_attributes": {
+          "situations": {
+            "name": "Sytuacje"
+          }
+        }
+      }
+    },
+    "binary_sensor": {
+      "attention": {
+        "name": "Potrzebna uwaga",
+        "state_attributes": {
+          "highest_severity": {
+            "name": "Najwyższa waga"
+          }
+        }
+      }
+    },
+    "event": {
+      "situation": {
+        "name": "Sytuacja",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "opened": "Otwarta",
+              "updated": "Zmieniona",
+              "escalated": "Eskalowana",
+              "acknowledged": "Przyjęta",
+              "snoozed": "Odłożona",
+              "handled": "Ktoś się zajmuje",
+              "dismissed": "Odrzucona",
+              "resolved": "Rozwiązana"
+            }
+          }
+        }
+      },
+      "notification": {
+        "name": "Powiadomienie",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "active": "Aktywne",
+              "cleared": "Wyczyszczone"
+            }
+          }
+        }
+      }
+    },
+    "switch": {
+      "notifications_paused": {
+        "name": "Wstrzymaj powiadomienia"
+      }
+    }
+  },
+  "services": {
+    "report_signal": {
+      "name": "Zgłoś sygnał",
+      "description": "Informuje HomeAI o czymś, czego nie wykryje samo. HomeAI traktuje to jak własne obserwacje: łączy, ocenia i powiadamia.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "Stały identyfikator; ponowne zgłoszenie z tym samym ID aktualizuje sygnał."
+        },
+        "title": {
+          "name": "Tytuł",
+          "description": "Krótki tekst pokazywany ludziom."
+        },
+        "description": {
+          "name": "Opis",
+          "description": "Dłuższe wyjaśnienie, opcjonalne."
+        },
+        "severity": {
+          "name": "Waga",
+          "description": "0 informacja, 1 niska, 2 średnia, 3 wysoka, 4 krytyczna."
+        },
+        "category": {
+          "name": "Kategoria",
+          "description": "Jakiego rodzaju to sprawa."
+        },
+        "need": {
+          "name": "Kto jest potrzebny",
+          "description": "Nikt, dowolny domownik, administrator albo fachowiec."
+        },
+        "entities": {
+          "name": "Encje",
+          "description": "Encje, których dotyczy sygnał."
+        },
+        "group": {
+          "name": "Grupa",
+          "description": "Sygnały z tą samą grupą tworzą jedną sytuację."
+        },
+        "expires_minutes": {
+          "name": "Wygasa po",
+          "description": "Wyczyść sygnał automatycznie po tym czasie."
+        }
+      }
+    },
+    "clear_signal": {
+      "name": "Wyczyść sygnał",
+      "description": "Czyści sygnał zgłoszony wcześniej akcją Zgłoś sygnał.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "ID użyte przy zgłoszeniu."
+        }
+      }
+    },
+    "acknowledge": {
+      "name": "Przyjmij",
+      "description": "„Rozumiem”: zatrzymuje powiadomienia o sytuacji, albo o wszystkich otwartych, gdy nie podano żadnej.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Puste oznacza wszystkie otwarte sytuacje."
+        }
+      }
+    },
+    "handle": {
+      "name": "Zajmę się tym",
+      "description": "„Zajmę się tym”: przyjmuje sytuację i przypisuje ją wywołującemu.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Puste oznacza wszystkie otwarte sytuacje."
+        }
+      }
+    },
+    "snooze": {
+      "name": "Odłóż",
+      "description": "Wstrzymuje na chwilę powiadomienia o sytuacji.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Puste oznacza wszystkie otwarte sytuacje."
+        },
+        "minutes": {
+          "name": "Minuty",
+          "description": "Domyślnie czas odłożenia z ustawień."
+        }
+      }
+    },
+    "dismiss": {
+      "name": "To nie problem",
+      "description": "Zamyka sytuację i ignoruje jej sygnały przez ustawioną liczbę dni. HomeAI się na tym uczy.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Sytuacja do odrzucenia."
+        }
+      }
+    },
+    "send_digest": {
+      "name": "Wyślij podsumowanie",
+      "description": "Wysyła teraz podsumowanie otwartych spraw."
     }
   }
 }

@@ -160,3 +160,11 @@ async def test_listeners(hass: HomeAssistant) -> None:
     remove()
     m.set("t.threshold", 22)
     assert seen == ["t.threshold", "t.threshold"]
+
+
+async def test_bad_initial_setting_does_not_break_setup(hass) -> None:
+    from .common import setup_homeai
+
+    rt = await setup_homeai(hass, {"triage.calibration_min_events": 0, "notify.max_per_day": 7})
+    assert rt.settings.get("notify.max_per_day") == 7
+    assert rt.settings.get("triage.calibration_min_events") != 0
