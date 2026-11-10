@@ -30,10 +30,24 @@ Run the checks before opening a pull request:
 ruff check .
 ruff format --check .
 pytest
+python scripts/gen_settings_doc.py --check
 ```
+
+The panel and the card are written in TypeScript with Lit and bundled with esbuild. The bundle is committed, so
+rebuild it after changing `frontend/src`:
+
+```bash
+cd frontend
+npm ci
+npm run check
+npm run build
+```
+
+After adding or changing a setting, regenerate the settings reference with `python scripts/gen_settings_doc.py`.
+Triage evals against a real provider are described in [docs/ai.md](docs/ai.md).
 
 ## Pull requests
 
 - Keep each pull request to one change, with tests.
 - New settings come with UI fields and translations; new behaviour comes with scenario tests.
-- CI runs hassfest, the HACS validation, ruff and pytest; all must pass.
+- CI runs hassfest, the HACS validation, ruff, pytest and the frontend build check; all must pass.

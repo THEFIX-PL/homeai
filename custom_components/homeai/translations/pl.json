@@ -3,11 +3,567 @@
     "step": {
       "user": {
         "title": "Konfiguracja HomeAI",
-        "description": "HomeAI jest na wczesnym etapie rozwoju. Ta wersja tylko dodaje integrację i jeszcze niczego w domu nie robi."
+        "description": "HomeAI zauważa, co zmienia się w domu, decyduje, co z tym zrobić, naprawia, co może, i odzywa się tylko wtedy, gdy potrzebny jest człowiek. Działa bez AI; poziomy AI można dodać później jako podwpisy.",
+        "data": {
+          "language": "Język komunikatów HomeAI",
+          "privacy": "Dane wysyłane do AI w chmurze"
+        },
+        "data_description": {
+          "language": "Auto oznacza język Home Assistanta.",
+          "privacy": "Standardowy wysyła nazwy urządzeń, pokoi i osób. Minimalny zastępuje osoby i pokoje neutralnymi etykietami. Pełny wysyła też tytuły wydarzeń z kalendarzy."
+        }
+      },
+      "people": {
+        "title": "Domownicy",
+        "description": "Wybierz rolę każdej osoby. Administratorzy zatwierdzają ryzykowne akcje i zmiany konfiguracji, domownicy dostają powiadomienia, a goście i osoby pominięte nie są liczeni jako mieszkańcy. Osoby: {people}"
       }
     },
     "abort": {
       "single_instance_allowed": "HomeAI jest już skonfigurowany. Dozwolona jest tylko jedna instancja."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Szybkie ustawienia HomeAI",
+        "description": "Wszystkie pozostałe ustawienia są w panelu HomeAI.",
+        "data": {
+          "general_language": "Język",
+          "privacy_level": "Dane wysyłane do AI w chmurze",
+          "notify_paused": "Wstrzymaj powiadomienia"
+        }
+      }
+    },
+    "abort": {
+      "not_loaded": "HomeAI nie działa. Przeładuj integrację i spróbuj ponownie."
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "auto": "Auto (język Home Assistanta)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "general_language": {
+      "options": {
+        "auto": "Auto (język Home Assistanta)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "privacy": {
+      "options": {
+        "standard": "Standardowy",
+        "minimal": "Minimalny",
+        "full": "Pełny"
+      }
+    },
+    "privacy_level": {
+      "options": {
+        "standard": "Standardowy",
+        "minimal": "Minimalny",
+        "full": "Pełny"
+      }
+    },
+    "role": {
+      "options": {
+        "admin": "Administrator",
+        "member": "Domownik",
+        "guest": "Gość",
+        "ignore": "Pomiń"
+      }
+    },
+    "category": {
+      "options": {
+        "safety": "Bezpieczeństwo",
+        "security": "Ochrona",
+        "damage": "Szkody",
+        "system": "System",
+        "energy": "Energia",
+        "comfort": "Komfort",
+        "maintenance": "Konserwacja",
+        "info": "Informacja"
+      }
+    },
+    "need": {
+      "options": {
+        "nobody": "Nikt",
+        "member": "Domownik",
+        "admin": "Administrator",
+        "service": "Fachowiec"
+      }
+    },
+    "plan_to": {
+      "options": {
+        "all": "Wszyscy",
+        "home": "Osoby w domu",
+        "home_or_all": "Osoby w domu, a gdy nikogo — wszyscy",
+        "admins": "Administratorzy"
+      }
+    },
+    "plan_kind": {
+      "options": {
+        "once": "Raz",
+        "daily": "Codziennie",
+        "weekly": "Wybrane dni",
+        "sun": "Wschód albo zachód słońca"
+      }
+    },
+    "weekday": {
+      "options": {
+        "0": "Poniedziałek",
+        "1": "Wtorek",
+        "2": "Środa",
+        "3": "Czwartek",
+        "4": "Piątek",
+        "5": "Sobota",
+        "6": "Niedziela"
+      }
+    },
+    "sun_event": {
+      "options": {
+        "sunrise": "Wschód słońca",
+        "sunset": "Zachód słońca",
+        "dawn": "Świt",
+        "dusk": "Zmierzch",
+        "solar_noon": "Górowanie słońca"
+      }
+    },
+    "presence_kind": {
+      "options": {
+        "away": "Poza domem",
+        "vacation": "Wyjazd",
+        "guests": "Goście",
+        "home_office": "Praca z domu",
+        "sick": "Choroba"
+      }
+    },
+    "tier": {
+      "options": {
+        "p1": "P1 — codzienny mózg",
+        "p2": "P2 — badanie",
+        "p3": "P3 — arbiter"
+      }
+    },
+    "provider": {
+      "options": {
+        "anthropic": "Anthropic (Claude)",
+        "openai_compatible": "Zgodny z OpenAI (Ollama, llama.cpp, vLLM…)"
+      }
+    },
+    "effort": {
+      "options": {
+        "low": "Niski",
+        "medium": "Średni",
+        "high": "Wysoki",
+        "xhigh": "Bardzo wysoki",
+        "max": "Maksymalny"
+      }
+    },
+    "privacy_tier": {
+      "options": {
+        "default": "Jak w ustawieniach HomeAI",
+        "minimal": "Minimalne",
+        "standard": "Standardowe",
+        "full": "Pełne"
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "HomeAI nie jest załadowany."
+    },
+    "bad_signal": {
+      "message": "Sygnał jest nieprawidłowy. Sprawdź ID, tytuł i wagę."
+    },
+    "person_required": {
+      "message": "Zgodę albo odmowę może wydać tylko osoba, nie automatyzacja."
+    },
+    "approval_unavailable": {
+      "message": "Ta prośba już nie czeka albo nie możesz o niej decydować."
+    },
+    "plan_invalid": {
+      "message": "Wpis planu nie został zapisany: {reason}."
+    },
+    "presence_invalid": {
+      "message": "Wyjątek obecności nie został zapisany: {reason}."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "situations": {
+        "name": "Sytuacje",
+        "state_attributes": {
+          "situations": {
+            "name": "Sytuacje"
+          }
+        }
+      },
+      "ai_cost_today": {
+        "name": "Koszt AI dziś"
+      },
+      "ai_cost_month": {
+        "name": "Koszt AI w tym miesiącu"
+      }
+    },
+    "binary_sensor": {
+      "attention": {
+        "name": "Potrzebna uwaga",
+        "state_attributes": {
+          "highest_severity": {
+            "name": "Najwyższa waga"
+          }
+        }
+      }
+    },
+    "event": {
+      "situation": {
+        "name": "Sytuacja",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "opened": "Otwarta",
+              "updated": "Zmieniona",
+              "escalated": "Eskalowana",
+              "acknowledged": "Przyjęta",
+              "snoozed": "Odłożona",
+              "handled": "Ktoś się zajmuje",
+              "dismissed": "Odrzucona",
+              "resolved": "Rozwiązana"
+            }
+          }
+        }
+      },
+      "notification": {
+        "name": "Powiadomienie",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "active": "Aktywne",
+              "cleared": "Wyczyszczone"
+            }
+          }
+        }
+      }
+    },
+    "switch": {
+      "notifications_paused": {
+        "name": "Wstrzymaj powiadomienia"
+      }
+    },
+    "calendar": {
+      "plan": {
+        "name": "Plan"
+      },
+      "presence": {
+        "name": "Obecność"
+      }
+    },
+    "conversation": {
+      "assistant": {
+        "name": "Asystent"
+      }
+    }
+  },
+  "services": {
+    "report_signal": {
+      "name": "Zgłoś sygnał",
+      "description": "Informuje HomeAI o czymś, czego nie wykryje samo. HomeAI traktuje to jak własne obserwacje: łączy, ocenia i powiadamia.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "Stały identyfikator; ponowne zgłoszenie z tym samym ID aktualizuje sygnał."
+        },
+        "title": {
+          "name": "Tytuł",
+          "description": "Krótki tekst pokazywany ludziom."
+        },
+        "description": {
+          "name": "Opis",
+          "description": "Dłuższe wyjaśnienie, opcjonalne."
+        },
+        "severity": {
+          "name": "Waga",
+          "description": "0 informacja, 1 niska, 2 średnia, 3 wysoka, 4 krytyczna."
+        },
+        "category": {
+          "name": "Kategoria",
+          "description": "Jakiego rodzaju to sprawa."
+        },
+        "need": {
+          "name": "Kto jest potrzebny",
+          "description": "Nikt, dowolny domownik, administrator albo fachowiec."
+        },
+        "entities": {
+          "name": "Encje",
+          "description": "Encje, których dotyczy sygnał."
+        },
+        "group": {
+          "name": "Grupa",
+          "description": "Sygnały z tą samą grupą tworzą jedną sytuację."
+        },
+        "expires_minutes": {
+          "name": "Wygasa po",
+          "description": "Wyczyść sygnał automatycznie po tym czasie."
+        }
+      }
+    },
+    "clear_signal": {
+      "name": "Wyczyść sygnał",
+      "description": "Czyści sygnał zgłoszony wcześniej akcją Zgłoś sygnał.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "ID użyte przy zgłoszeniu."
+        }
+      }
+    },
+    "acknowledge": {
+      "name": "Przyjmij",
+      "description": "„Rozumiem”: zatrzymuje powiadomienia o sytuacji, albo o wszystkich otwartych, gdy nie podano żadnej.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Puste oznacza wszystkie otwarte sytuacje."
+        }
+      }
+    },
+    "handle": {
+      "name": "Zajmę się tym",
+      "description": "„Zajmę się tym”: przyjmuje sytuację i przypisuje ją wywołującemu.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Puste oznacza wszystkie otwarte sytuacje."
+        }
+      }
+    },
+    "snooze": {
+      "name": "Odłóż",
+      "description": "Wstrzymuje na chwilę powiadomienia o sytuacji.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Puste oznacza wszystkie otwarte sytuacje."
+        },
+        "minutes": {
+          "name": "Minuty",
+          "description": "Domyślnie czas odłożenia z ustawień."
+        }
+      }
+    },
+    "dismiss": {
+      "name": "To nie problem",
+      "description": "Zamyka sytuację i ignoruje jej sygnały przez ustawioną liczbę dni. HomeAI się na tym uczy.",
+      "fields": {
+        "situation_id": {
+          "name": "ID sytuacji",
+          "description": "Sytuacja do odrzucenia."
+        }
+      }
+    },
+    "send_digest": {
+      "name": "Wyślij podsumowanie",
+      "description": "Wysyła teraz podsumowanie otwartych spraw."
+    },
+    "approve": {
+      "name": "Zgoda",
+      "description": "Zatwierdza akcję, o którą pytało HomeAI. Domownicy zatwierdzają akcje komfortu i urządzeń, administratorzy wszystko inne.",
+      "fields": {
+        "approval_id": {
+          "name": "ID prośby",
+          "description": "Prośba do zatwierdzenia."
+        }
+      }
+    },
+    "deny": {
+      "name": "Odmowa",
+      "description": "Odrzuca akcję, o którą pytało HomeAI.",
+      "fields": {
+        "approval_id": {
+          "name": "ID prośby",
+          "description": "Prośba do odrzucenia."
+        }
+      }
+    },
+    "undo": {
+      "name": "Cofnij",
+      "description": "Przywraca stany sprzed akcji komfortu albo urządzeń.",
+      "fields": {
+        "action_id": {
+          "name": "ID akcji",
+          "description": "Akcja do cofnięcia."
+        }
+      }
+    },
+    "plan_add": {
+      "name": "Dodaj do planu",
+      "description": "Dodaje akcję albo przypomnienie do planu domu. Osoby bez uprawnień administratora planują tylko proste akcje urządzeń.",
+      "fields": {
+        "title": {
+          "name": "Tytuł",
+          "description": "Widoczny w kalendarzu."
+        },
+        "service": {
+          "name": "Akcja",
+          "description": "Usługa do wykonania, np. light.turn_on."
+        },
+        "entity_id": {
+          "name": "Encje",
+          "description": "Cele akcji."
+        },
+        "data": {
+          "name": "Dane",
+          "description": "Dodatkowe dane usługi."
+        },
+        "reminder": {
+          "name": "Przypomnienie",
+          "description": "Zamiast akcji: wiadomość do ludzi."
+        },
+        "to": {
+          "name": "Przypomnij",
+          "description": "Kto dostaje przypomnienie."
+        },
+        "kind": {
+          "name": "Powtarzanie",
+          "description": "Raz, codziennie, w wybrane dni albo względem słońca."
+        },
+        "time": {
+          "name": "Godzina",
+          "description": "Czas lokalny dla: raz, codziennie, w wybrane dni."
+        },
+        "date": {
+          "name": "Data",
+          "description": "Dla: raz."
+        },
+        "days": {
+          "name": "Dni tygodnia",
+          "description": "Dla: w wybrane dni (i opcjonalnie słońce)."
+        },
+        "event": {
+          "name": "Zdarzenie słońca",
+          "description": "Dla: słońce."
+        },
+        "offset": {
+          "name": "Przesunięcie",
+          "description": "Minuty przed (ujemne) albo po zdarzeniu słońca."
+        },
+        "skip_when_away": {
+          "name": "Pomiń, gdy nikogo nie ma",
+          "description": "Nie wykonuj, gdy wszyscy są poza domem."
+        }
+      }
+    },
+    "plan_remove": {
+      "name": "Usuń z planu",
+      "description": "Usuwa wpis planu. Osoby bez uprawnień administratora usuwają tylko własne.",
+      "fields": {
+        "entry_id": {
+          "name": "ID wpisu",
+          "description": "Wpis do usunięcia."
+        }
+      }
+    },
+    "plan_skip": {
+      "name": "Pomiń dzień",
+      "description": "Pomija jeden dzień powtarzanego wpisu planu.",
+      "fields": {
+        "entry_id": {
+          "name": "ID wpisu",
+          "description": "Wpis."
+        },
+        "date": {
+          "name": "Data",
+          "description": "Dzień do pominięcia."
+        }
+      }
+    },
+    "presence_add": {
+      "name": "Dodaj wyjątek obecności",
+      "description": "Wyjazd, goście, praca z domu albo choroba, dla jednej osoby albo całego domu.",
+      "fields": {
+        "kind": {
+          "name": "Rodzaj",
+          "description": "Jaki to wyjątek."
+        },
+        "person": {
+          "name": "Osoba",
+          "description": "Puste: cały dom."
+        },
+        "start": {
+          "name": "Początek",
+          "description": "Kiedy się zaczyna."
+        },
+        "end": {
+          "name": "Koniec",
+          "description": "Kiedy się kończy."
+        },
+        "note": {
+          "name": "Notatka",
+          "description": "Opcjonalna."
+        }
+      }
+    },
+    "presence_remove": {
+      "name": "Usuń wyjątek obecności",
+      "description": "Usuwa wyjątek obecności.",
+      "fields": {
+        "exception_id": {
+          "name": "ID wyjątku",
+          "description": "Wyjątek do usunięcia."
+        }
+      }
+    }
+  },
+  "config_subentries": {
+    "tier": {
+      "initiate_flow": {
+        "user": "Dodaj poziom AI"
+      },
+      "entry_type": "Poziom AI",
+      "step": {
+        "user": {
+          "title": "Dodaj poziom AI",
+          "description": "P1 to codzienny mózg domu (tani albo lokalny), P2 bada trudniejsze sprawy, P3 jest arbitrem najtrudniejszych decyzji. Kilka wpisów tego samego poziomu próbuje się w kolejności priorytetu.",
+          "data": {
+            "tier": "Poziom",
+            "provider": "Dostawca"
+          }
+        },
+        "details": {
+          "title": "Ustawienia {tier}",
+          "description": "Połączenie jest sprawdzane bez zużywania tokenów.",
+          "data": {
+            "api_key": "Klucz API",
+            "model": "Model",
+            "effort": "Wysiłek",
+            "fallbacks": "Zastępczy model przy odmowie",
+            "base_url": "Adres serwera",
+            "privacy": "Wysyłane dane",
+            "priority": "Priorytet",
+            "price_input": "Cena wejścia",
+            "price_output": "Cena wyjścia"
+          },
+          "data_description": {
+            "base_url": "Punkt zgodny z OpenAI, np. {example_url}",
+            "effort": "Jak głęboko model myśli. Wyższy kosztuje więcej.",
+            "fallbacks": "Gdy model odmówi, serwer ponowi na odpowiednim modelu.",
+            "privacy": "Domyślnie: ustawienie prywatności HomeAI.",
+            "priority": "Niższy jest próbowany pierwszy.",
+            "price_input": "Dolary za milion tokenów; puste: znana cena (lokalnie: za darmo)."
+          }
+        }
+      },
+      "abort": {
+        "reconfigure_successful": "Poziom AI zaktualizowano."
+      },
+      "error": {
+        "invalid_auth": "Klucz został odrzucony.",
+        "cannot_connect": "Nie można połączyć się z dostawcą.",
+        "unknown_model": "Dostawca nie zna tego modelu."
+      }
     }
   }
 }

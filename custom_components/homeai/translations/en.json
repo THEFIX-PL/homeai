@@ -3,11 +3,567 @@
     "step": {
       "user": {
         "title": "Set up HomeAI",
-        "description": "HomeAI is in early development. This version only adds the integration and does not do anything in your home yet."
+        "description": "HomeAI notices what changes in your home, decides what to do, fixes what it can and tells you only when a person is needed. It works without AI; AI tiers can be added later as subentries.",
+        "data": {
+          "language": "Language of HomeAI's messages",
+          "privacy": "Data sent to cloud AI"
+        },
+        "data_description": {
+          "language": "Auto follows Home Assistant's language.",
+          "privacy": "Standard sends device, room and people names. Minimal replaces people and rooms with neutral labels. Full also sends calendar event titles."
+        }
+      },
+      "people": {
+        "title": "People",
+        "description": "Choose each person's role. Administrators approve risky actions and configuration changes; members get notifications; guests and ignored people are not tracked as residents. People: {people}"
       }
     },
     "abort": {
       "single_instance_allowed": "HomeAI is already set up. Only one instance is allowed."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HomeAI quick settings",
+        "description": "All other settings are in the HomeAI panel.",
+        "data": {
+          "general_language": "Language",
+          "privacy_level": "Data sent to cloud AI",
+          "notify_paused": "Pause notifications"
+        }
+      }
+    },
+    "abort": {
+      "not_loaded": "HomeAI is not running. Reload the integration and try again."
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "auto": "Auto (Home Assistant's language)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "general_language": {
+      "options": {
+        "auto": "Auto (Home Assistant's language)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "privacy": {
+      "options": {
+        "standard": "Standard",
+        "minimal": "Minimal",
+        "full": "Full"
+      }
+    },
+    "privacy_level": {
+      "options": {
+        "standard": "Standard",
+        "minimal": "Minimal",
+        "full": "Full"
+      }
+    },
+    "role": {
+      "options": {
+        "admin": "Administrator",
+        "member": "Member",
+        "guest": "Guest",
+        "ignore": "Ignore"
+      }
+    },
+    "category": {
+      "options": {
+        "safety": "Safety",
+        "security": "Security",
+        "damage": "Damage",
+        "system": "System",
+        "energy": "Energy",
+        "comfort": "Comfort",
+        "maintenance": "Maintenance",
+        "info": "Information"
+      }
+    },
+    "need": {
+      "options": {
+        "nobody": "Nobody",
+        "member": "A household member",
+        "admin": "An administrator",
+        "service": "A technician"
+      }
+    },
+    "plan_to": {
+      "options": {
+        "all": "Everyone",
+        "home": "People at home",
+        "home_or_all": "People at home, else everyone",
+        "admins": "Administrators"
+      }
+    },
+    "plan_kind": {
+      "options": {
+        "once": "Once",
+        "daily": "Every day",
+        "weekly": "Chosen weekdays",
+        "sun": "Sunrise or sunset"
+      }
+    },
+    "weekday": {
+      "options": {
+        "0": "Monday",
+        "1": "Tuesday",
+        "2": "Wednesday",
+        "3": "Thursday",
+        "4": "Friday",
+        "5": "Saturday",
+        "6": "Sunday"
+      }
+    },
+    "sun_event": {
+      "options": {
+        "sunrise": "Sunrise",
+        "sunset": "Sunset",
+        "dawn": "Dawn",
+        "dusk": "Dusk",
+        "solar_noon": "Solar noon"
+      }
+    },
+    "presence_kind": {
+      "options": {
+        "away": "Away",
+        "vacation": "Vacation",
+        "guests": "Guests",
+        "home_office": "Working from home",
+        "sick": "Sick"
+      }
+    },
+    "tier": {
+      "options": {
+        "p1": "P1 — everyday brain",
+        "p2": "P2 — investigation",
+        "p3": "P3 — arbiter"
+      }
+    },
+    "provider": {
+      "options": {
+        "anthropic": "Anthropic (Claude)",
+        "openai_compatible": "OpenAI-compatible (Ollama, llama.cpp, vLLM…)"
+      }
+    },
+    "effort": {
+      "options": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "xhigh": "Very high",
+        "max": "Maximum"
+      }
+    },
+    "privacy_tier": {
+      "options": {
+        "default": "As in HomeAI settings",
+        "minimal": "Minimal",
+        "standard": "Standard",
+        "full": "Full"
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "HomeAI is not loaded."
+    },
+    "bad_signal": {
+      "message": "The signal is not valid. Check the ID, title and severity."
+    },
+    "person_required": {
+      "message": "Only a person can approve or deny, not an automation."
+    },
+    "approval_unavailable": {
+      "message": "This request is no longer pending, or you may not decide it."
+    },
+    "plan_invalid": {
+      "message": "The plan entry was not saved: {reason}."
+    },
+    "presence_invalid": {
+      "message": "The presence exception was not saved: {reason}."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "situations": {
+        "name": "Situations",
+        "state_attributes": {
+          "situations": {
+            "name": "Situations"
+          }
+        }
+      },
+      "ai_cost_today": {
+        "name": "AI cost today"
+      },
+      "ai_cost_month": {
+        "name": "AI cost this month"
+      }
+    },
+    "binary_sensor": {
+      "attention": {
+        "name": "Attention needed",
+        "state_attributes": {
+          "highest_severity": {
+            "name": "Highest severity"
+          }
+        }
+      }
+    },
+    "event": {
+      "situation": {
+        "name": "Situation",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "opened": "Opened",
+              "updated": "Updated",
+              "escalated": "Escalated",
+              "acknowledged": "Acknowledged",
+              "snoozed": "Snoozed",
+              "handled": "Taken care of",
+              "dismissed": "Dismissed",
+              "resolved": "Resolved"
+            }
+          }
+        }
+      },
+      "notification": {
+        "name": "Notification",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "active": "Active",
+              "cleared": "Cleared"
+            }
+          }
+        }
+      }
+    },
+    "switch": {
+      "notifications_paused": {
+        "name": "Pause notifications"
+      }
+    },
+    "calendar": {
+      "plan": {
+        "name": "Plan"
+      },
+      "presence": {
+        "name": "Presence"
+      }
+    },
+    "conversation": {
+      "assistant": {
+        "name": "Assistant"
+      }
+    }
+  },
+  "services": {
+    "report_signal": {
+      "name": "Report a signal",
+      "description": "Tells HomeAI about something it cannot detect by itself. HomeAI treats it like its own observations: correlates, triages and notifies.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "Stable identifier; reporting the same ID again updates the signal."
+        },
+        "title": {
+          "name": "Title",
+          "description": "Short text shown to people."
+        },
+        "description": {
+          "name": "Description",
+          "description": "Longer explanation, optional."
+        },
+        "severity": {
+          "name": "Severity",
+          "description": "0 information, 1 low, 2 medium, 3 high, 4 critical."
+        },
+        "category": {
+          "name": "Category",
+          "description": "What kind of matter it is."
+        },
+        "need": {
+          "name": "Who is needed",
+          "description": "Nobody, any household member, an administrator or a technician."
+        },
+        "entities": {
+          "name": "Entities",
+          "description": "Entities the signal is about."
+        },
+        "group": {
+          "name": "Group",
+          "description": "Signals with the same group form one situation."
+        },
+        "expires_minutes": {
+          "name": "Expires after",
+          "description": "Clear the signal automatically after this time."
+        }
+      }
+    },
+    "clear_signal": {
+      "name": "Clear a signal",
+      "description": "Clears a signal reported earlier with Report a signal.",
+      "fields": {
+        "id": {
+          "name": "ID",
+          "description": "The ID used when reporting."
+        }
+      }
+    },
+    "acknowledge": {
+      "name": "Acknowledge",
+      "description": "“Got it”: stops notifications for a situation, or for all open situations when none is given.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "Leave empty for all open situations."
+        }
+      }
+    },
+    "handle": {
+      "name": "Take care of it",
+      "description": "“I'll handle it”: acknowledges the situation and assigns it to the caller.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "Leave empty for all open situations."
+        }
+      }
+    },
+    "snooze": {
+      "name": "Snooze",
+      "description": "Pauses notifications about a situation for a while.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "Leave empty for all open situations."
+        },
+        "minutes": {
+          "name": "Minutes",
+          "description": "Defaults to the snooze time in settings."
+        }
+      }
+    },
+    "dismiss": {
+      "name": "Not a problem",
+      "description": "Closes a situation and ignores its signals for the configured number of days. HomeAI learns from it.",
+      "fields": {
+        "situation_id": {
+          "name": "Situation ID",
+          "description": "The situation to dismiss."
+        }
+      }
+    },
+    "send_digest": {
+      "name": "Send digest",
+      "description": "Sends the summary of open matters now."
+    },
+    "approve": {
+      "name": "Approve",
+      "description": "Approves an action HomeAI asked about. Residents may approve comfort and device actions, administrators everything else.",
+      "fields": {
+        "approval_id": {
+          "name": "Approval ID",
+          "description": "The request to approve."
+        }
+      }
+    },
+    "deny": {
+      "name": "Deny",
+      "description": "Refuses an action HomeAI asked about.",
+      "fields": {
+        "approval_id": {
+          "name": "Approval ID",
+          "description": "The request to refuse."
+        }
+      }
+    },
+    "undo": {
+      "name": "Undo",
+      "description": "Restores the states from before a comfort or device action.",
+      "fields": {
+        "action_id": {
+          "name": "Action ID",
+          "description": "The action to undo."
+        }
+      }
+    },
+    "plan_add": {
+      "name": "Add to the plan",
+      "description": "Adds an action or a reminder to the home's plan. People who are not administrators may plan only simple device actions.",
+      "fields": {
+        "title": {
+          "name": "Title",
+          "description": "Shown in the calendar."
+        },
+        "service": {
+          "name": "Action",
+          "description": "Service to run, e.g. light.turn_on."
+        },
+        "entity_id": {
+          "name": "Entities",
+          "description": "Targets of the action."
+        },
+        "data": {
+          "name": "Data",
+          "description": "Extra service data."
+        },
+        "reminder": {
+          "name": "Reminder",
+          "description": "Instead of an action: a message sent to people."
+        },
+        "to": {
+          "name": "Remind",
+          "description": "Who gets the reminder."
+        },
+        "kind": {
+          "name": "Repeat",
+          "description": "Once, daily, on chosen weekdays, or relative to the sun."
+        },
+        "time": {
+          "name": "Time",
+          "description": "Local time for once, daily and weekly."
+        },
+        "date": {
+          "name": "Date",
+          "description": "For once."
+        },
+        "days": {
+          "name": "Weekdays",
+          "description": "For weekly (and optionally sun)."
+        },
+        "event": {
+          "name": "Sun event",
+          "description": "For sun."
+        },
+        "offset": {
+          "name": "Offset",
+          "description": "Minutes before (negative) or after the sun event."
+        },
+        "skip_when_away": {
+          "name": "Skip when nobody is home",
+          "description": "Do not run while everyone is away."
+        }
+      }
+    },
+    "plan_remove": {
+      "name": "Remove from the plan",
+      "description": "Removes a plan entry. People who are not administrators may remove only their own.",
+      "fields": {
+        "entry_id": {
+          "name": "Entry ID",
+          "description": "The entry to remove."
+        }
+      }
+    },
+    "plan_skip": {
+      "name": "Skip a day",
+      "description": "Skips one day of a repeating plan entry.",
+      "fields": {
+        "entry_id": {
+          "name": "Entry ID",
+          "description": "The entry."
+        },
+        "date": {
+          "name": "Date",
+          "description": "The day to skip."
+        }
+      }
+    },
+    "presence_add": {
+      "name": "Add a presence exception",
+      "description": "A trip, guests, working from home or sickness, for one person or the household.",
+      "fields": {
+        "kind": {
+          "name": "Kind",
+          "description": "What kind of exception."
+        },
+        "person": {
+          "name": "Person",
+          "description": "Empty: the whole household."
+        },
+        "start": {
+          "name": "Start",
+          "description": "When it starts."
+        },
+        "end": {
+          "name": "End",
+          "description": "When it ends."
+        },
+        "note": {
+          "name": "Note",
+          "description": "Optional."
+        }
+      }
+    },
+    "presence_remove": {
+      "name": "Remove a presence exception",
+      "description": "Removes a presence exception.",
+      "fields": {
+        "exception_id": {
+          "name": "Exception ID",
+          "description": "The exception to remove."
+        }
+      }
+    }
+  },
+  "config_subentries": {
+    "tier": {
+      "initiate_flow": {
+        "user": "Add AI tier"
+      },
+      "entry_type": "AI tier",
+      "step": {
+        "user": {
+          "title": "Add an AI tier",
+          "description": "P1 is the everyday brain (cheap or local), P2 investigates harder matters, P3 is the arbiter for the most difficult decisions. Several tiers of the same level are tried in order of priority.",
+          "data": {
+            "tier": "Tier",
+            "provider": "Provider"
+          }
+        },
+        "details": {
+          "title": "{tier} settings",
+          "description": "The connection is checked without spending tokens.",
+          "data": {
+            "api_key": "API key",
+            "model": "Model",
+            "effort": "Effort",
+            "fallbacks": "Fall back on refusals",
+            "base_url": "Server address",
+            "privacy": "Data sent",
+            "priority": "Priority",
+            "price_input": "Price of input",
+            "price_output": "Price of output"
+          },
+          "data_description": {
+            "base_url": "OpenAI-compatible endpoint, e.g. {example_url}",
+            "effort": "How deeply the model thinks. Higher costs more.",
+            "fallbacks": "If the model declines, the server retries on a suitable model.",
+            "privacy": "Default: the HomeAI privacy setting.",
+            "priority": "Lower is tried first.",
+            "price_input": "Dollars per million tokens; empty: the known price (local: free)."
+          }
+        }
+      },
+      "abort": {
+        "reconfigure_successful": "The AI tier was updated."
+      },
+      "error": {
+        "invalid_auth": "The key was rejected.",
+        "cannot_connect": "Cannot connect to the provider.",
+        "unknown_model": "The provider does not know this model."
+      }
     }
   }
 }
