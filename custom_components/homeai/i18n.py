@@ -53,6 +53,33 @@ class _SafeDict(dict):
         return "{" + key + "}"
 
 
+def plural(lang: str, count: Any, forms: list[str]) -> str:
+    """The form for a number: Polish has three (1 bateria, 2 baterie, 5 baterii), English two."""
+    try:
+        n = abs(int(str(count)))
+    except ValueError:
+        return forms[-1]
+    if lang == "pl" and len(forms) == 3:
+        if n == 1:
+            return forms[0]
+        if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14:
+            return forms[1]
+        return forms[2]
+    return forms[0] if n == 1 else forms[-1]
+
+
+class _Formatter(string.Formatter):
+    """`{count:plural:one|few|many}` picks the form for `count`; everything else formats as usual."""
+
+    def __init__(self, lang: str) -> None:
+        self.lang = lang
+
+    def format_field(self, value: Any, format_spec: str) -> Any:
+        if format_spec.startswith("plural:"):
+            return plural(self.lang, value, format_spec.removeprefix("plural:").split("|"))
+        return super().format_field(value, format_spec)
+
+
 def text(lang: str, path: str, **placeholders: Any) -> str:
     """Rendered text at `path` (segments separated by `|`, so keys may contain dots)."""
     value = _lookup(_load(lang), path)
@@ -62,7 +89,7 @@ def text(lang: str, path: str, **placeholders: Any) -> str:
         return path.rsplit("|", 1)[-1]
     if not placeholders:
         return value
-    return string.Formatter().vformat(value, (), _SafeDict({k: _fmt(v, lang) for k, v in placeholders.items()}))
+    return _Formatter(lang).vformat(value, (), _SafeDict({k: _fmt(v, lang) for k, v in placeholders.items()}))
 
 
 def has(lang: str, path: str) -> bool:

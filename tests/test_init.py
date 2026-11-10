@@ -103,3 +103,15 @@ async def test_diagnostics(hass: HomeAssistant) -> None:
     diag = await async_get_config_entry_diagnostics(hass, entry)
     assert diag["settings"]["global"] == {"general.language": "pl"}
     assert diag["world"]["entities"] > 0
+
+
+def test_every_stage_module_is_preloaded() -> None:
+    """Stage factories import lazily; each of those modules must be imported in the executor first."""
+    from pathlib import Path
+    import re
+
+    from custom_components.homeai import stages
+
+    source = (Path(stages.__file__)).read_text(encoding="utf-8")
+    lazy = set(re.findall(r"^    from \.([\w.]+) import", source, re.MULTILINE))
+    assert lazy <= set(stages.STAGE_MODULES), lazy - set(stages.STAGE_MODULES)

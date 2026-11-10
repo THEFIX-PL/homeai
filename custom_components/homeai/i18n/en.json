@@ -12,7 +12,7 @@
     "decision_escalate_human": "a person must decide",
     "decision_reject": "rejected",
     "no_tier": "No AI tier is configured. Add one in HomeAI's integration settings.",
-    "open_summary": "{count} matters are open: {titles}.",
+    "open_summary": "{count} {count:plural:matter is|matters are} open: {titles}.",
     "period_day": "day",
     "period_month": "month",
     "unavailable": "I cannot answer right now. Please try again later."
@@ -55,11 +55,11 @@
   },
   "learning": {
     "habit_title": "{what}: {action} at {time} on {days}",
-    "habits_found": "Found {count} habits to propose",
+    "habits_found": "Found {count} {count:plural:habit|habits} to propose",
     "review_actions": "Actions: {done} done, {undone} undone, {observed} only observed.",
     "review_approvals": "Requests: {approved} approved, {denied} refused, {expired} expired.",
     "review_cost": "AI cost this week: ${cost}.",
-    "review_proposals": "{count} proposals wait for you in the HomeAI panel.",
+    "review_proposals": "{count} {count:plural:proposal waits|proposals wait} for you in the HomeAI panel.",
     "review_raise": "These were always approved; HomeAI could do them alone: {actions}.",
     "review_sent": "Weekly review sent",
     "review_situations": "Situations resolved this week: {count}; open now: {open}.",
@@ -671,6 +671,10 @@
     "detectors.divergence.severity": {
       "description": "Severity 0–4 of disagreeing sensors (0 journal only, 4 critical).",
       "label": "Disagreeing sensors: severity"
+    },
+    "detectors.environment.appliance_words": {
+      "description": "Words in a sensor's or device's name that mark it as inside an appliance (freezer, fridge, oven, aquarium). Their temperature and humidity are not treated as the room's.",
+      "label": "Appliance sensors"
     },
     "detectors.environment.co2_max": {
       "description": "The limit for high co₂.",
@@ -1643,7 +1647,7 @@
     },
     "log_errors": {
       "description": "{message}",
-      "title": "{count} errors in the log"
+      "title": "{count} {count:plural:error|errors} in the log"
     },
     "opening_away": {
       "description": "{where}",
@@ -1675,7 +1679,7 @@
     },
     "repairs_issues": {
       "description": "From: {domains}.",
-      "title": "{count} issues in Repairs"
+      "title": "{count} {count:plural:issue|issues} in Repairs"
     },
     "safety": {
       "description": "{name} reports a danger.",
@@ -1708,7 +1712,7 @@
     },
     "updates": {
       "description": "{names}",
-      "title": "{count} updates available"
+      "title": "{count} {count:plural:update|updates} available"
     },
     "window_heating": {
       "description": "{name}",

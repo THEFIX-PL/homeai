@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 
 from custom_components.homeai.signals.detectors.external import parse_external
 
-from .common import setup_homeai
+from .common import settle, setup_homeai
 from .home import standard_home
 
 
@@ -136,3 +136,31 @@ def test_parse_external_validation() -> None:
     assert parse_external({"id": "", "title": "T"}, source="s") is None
     assert parse_external({"id": "x", "title": "T", "category": "nope"}, source="s") is None
     assert parse_external("x", source="s") is None
+
+
+async def test_appliance_sensors_are_not_the_room(hass: HomeAssistant) -> None:
+    """A freezer's thermometer in the kitchen is not a cold kitchen; a custom rule watches it instead."""
+    home = standard_home(hass)
+    freezer = home.device("Zamrażarka", area="Kitchen")
+    home.entity(
+        "sensor.freezer_temperature",
+        "-18",
+        device=freezer,
+        device_class="temperature",
+        attrs={"unit_of_measurement": "°C", "friendly_name": "Zamrażarka Temperatura"},
+    )
+    home.entity(
+        "sensor.kitchen_temperature",
+        "8",
+        area="Kitchen",
+        device_class="temperature",
+        attrs={"unit_of_measurement": "°C", "friendly_name": "Kitchen temperature"},
+    )
+    rt = await setup_homeai(hass, {"detectors.environment.minutes": 0})
+    await settle(hass, rt)
+    cold = {s.id for s in rt.module("signals").signals.values() if s.kind == "temperature_low"}
+    assert cold == {"temperature_low:sensor.kitchen_temperature"}
+    rt.settings.set("detectors.environment.appliance_words", [])
+    await settle(hass, rt)
+    cold = {s.id for s in rt.module("signals").signals.values() if s.kind == "temperature_low"}
+    assert "temperature_low:sensor.freezer_temperature" in cold

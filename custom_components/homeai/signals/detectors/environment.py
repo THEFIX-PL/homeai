@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 from ...world import Role
 from ..base import Category, DetectionContext, Detector, Need, Signal
-from .util import area_of, device_of, name, setting, where
+from .util import appliance, area_of, device_of, name, setting, where
 
 # (role, kind, settings key, direction, category)
 CHECKS: tuple[tuple[Role, str, str, str, Category], ...] = (
@@ -21,7 +21,8 @@ CHECKS: tuple[tuple[Role, str, str, str, Category], ...] = (
 
 class EnvironmentDetector(Detector):
     """Indoor values beyond their limits for at least `detectors.environment.minutes`. Outdoor sensors (no area),
-    diagnostic sensors and sensors on devices that control something (a thermostat's own reading) are left out."""
+    diagnostic sensors, sensors on devices that control something (a thermostat's own reading) and sensors inside
+    appliances (a freezer's thermometer) are left out."""
 
     key = "environment"
     roles = (Role.TEMPERATURE, Role.HUMIDITY, Role.CO2, Role.PM25)
@@ -37,7 +38,7 @@ class EnvironmentDetector(Detector):
                 info = ctx.world.entity(entity_id)
                 if info is None or info.area_id is None or info.category:
                     continue
-                if not setting(ctx, f"{key}_enabled", entity_id):
+                if not setting(ctx, f"{key}_enabled", entity_id) or appliance(ctx, entity_id):
                     continue
                 if info.device_id and any(
                     (e := ctx.world.entity(x)) is not None and Role.CONTROLLABLE in e.roles
@@ -92,7 +93,7 @@ class DivergenceDetector(Detector):
         for entity_id in ctx.world.with_role(Role.TEMPERATURE):
             info = ctx.world.entity(entity_id)
             value = ctx.world.value(entity_id)
-            if info is None or info.area_id is None or value is None or info.category:
+            if info is None or info.area_id is None or value is None or info.category or appliance(ctx, entity_id):
                 continue
             by_area.setdefault(info.area_id, []).append((entity_id, value))
         out = []

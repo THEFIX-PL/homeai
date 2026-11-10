@@ -7,6 +7,7 @@ subentries for AI tiers and the settings panel).
 
 from __future__ import annotations
 
+import importlib
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -25,8 +26,18 @@ CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 type HomeAIConfigEntry = ConfigEntry[HomeAIRuntime]
 
 
+def _preload() -> None:
+    """Import every HomeAI module in an executor thread; the event loop then only finds them in sys.modules."""
+    from . import stages
+    from .api import registry  # noqa: F401
+
+    for name in stages.STAGE_MODULES:
+        importlib.import_module(f".{name}", __package__)
+
+
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Register things that live as long as Home Assistant: WebSocket commands and services."""
+    await hass.async_add_executor_job(_preload)
     async_register_websocket(hass)
     async_register_services(hass)
     return True

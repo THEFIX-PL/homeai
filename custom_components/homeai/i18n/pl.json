@@ -672,6 +672,10 @@
       "description": "Waga 0–4 dla: rozbieżne czujniki (0 tylko dziennik, 4 krytyczne).",
       "label": "Rozbieżne czujniki: waga"
     },
+    "detectors.environment.appliance_words": {
+      "description": "Słowa w nazwie czujnika albo urządzenia, które oznaczają, że mierzy wnętrze urządzenia (zamrażarki, lodówki, piekarnika, akwarium). Jego temperatura i wilgotność nie są traktowane jak pomieszczenia.",
+      "label": "Czujniki w urządzeniach"
+    },
     "detectors.environment.co2_max": {
       "description": "Próg dla: wysokie co₂.",
       "label": "Wysokie CO₂: próg"
@@ -1557,7 +1561,7 @@
     "battery_low": {
       "description": "{where} · {level}",
       "title": "Wymień baterię: {name}",
-      "title_many": "Wymień {count} baterie"
+      "title_many": "Wymień {count} {count:plural:baterię|baterie|baterii}"
     },
     "bridge_offline": {
       "description": "{name} jest offline; urządzenia połączone przez niego nie odpowiadają.",
@@ -1579,7 +1583,7 @@
     "device_unavailable": {
       "description": "{where} · od {since}.",
       "title": "Nie odpowiada: {name}",
-      "title_many": "{count} urządzeń nie odpowiada"
+      "title_many": "{count} {count:plural:urządzenie nie odpowiada|urządzenia nie odpowiadają|urządzeń nie odpowiada}"
     },
     "garage_away": {
       "description": "{where}",
@@ -1643,27 +1647,27 @@
     },
     "log_errors": {
       "description": "{message}",
-      "title": "{count} błędów w logu"
+      "title": "{count} {count:plural:błąd|błędy|błędów} w logu"
     },
     "opening_away": {
       "description": "{where}",
       "title": "Otwarte, a nikogo nie ma: {name}",
-      "title_many": "{count} rzeczy otwartych, a nikogo nie ma"
+      "title_many": "{count} {count:plural:rzecz otwarta|rzeczy otwarte|rzeczy otwartych}, a nikogo nie ma"
     },
     "opening_night": {
       "description": "{where}",
       "title": "Otwarte w nocy: {name}",
-      "title_many": "{count} rzeczy otwartych w nocy"
+      "title_many": "{count} {count:plural:rzecz otwarta|rzeczy otwarte|rzeczy otwartych} w nocy"
     },
     "plant_dry": {
       "title": "Podlej roślinę: {name}",
-      "title_many": "{count} roślin potrzebuje wody",
+      "title_many": "{count} {count:plural:roślina potrzebuje|rośliny potrzebują|roślin potrzebuje} wody",
       "description": "Wilgotność gleby {level} · {where}"
     },
     "plant_problem": {
       "description": "{problem} · {where}",
       "title": "Roślina wymaga uwagi: {name}",
-      "title_many": "{count} roślin wymaga uwagi"
+      "title_many": "{count} {count:plural:roślina wymaga|rośliny wymagają|roślin wymaga} uwagi"
     },
     "pm25_high": {
       "description": "{name}: {value} {unit}.",
@@ -1675,7 +1679,7 @@
     },
     "repairs_issues": {
       "description": "Zgłasza: {domains}.",
-      "title": "{count} zgłoszeń w Naprawach"
+      "title": "{count} {count:plural:zgłoszenie|zgłoszenia|zgłoszeń} w Naprawach"
     },
     "safety": {
       "description": "{name} zgłasza zagrożenie.",
@@ -1692,7 +1696,7 @@
     "stale_sensor": {
       "description": "{where} · ostatni raport {since}.",
       "title": "Czujnik milczy: {name}",
-      "title_many": "{count} czujników milczy"
+      "title_many": "{count} {count:plural:czujnik milczy|czujniki milczą|czujników milczy}"
     },
     "tamper": {
       "description": "Ktoś może majstrować przy urządzeniu.",
@@ -1708,7 +1712,7 @@
     },
     "updates": {
       "description": "{names}",
-      "title": "{count} aktualizacji do zainstalowania"
+      "title": "{count} {count:plural:aktualizacja|aktualizacje|aktualizacji} do zainstalowania"
     },
     "window_heating": {
       "description": "{name}",

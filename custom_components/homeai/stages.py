@@ -112,6 +112,28 @@ def _notify(rt: Any) -> Any:
     return NotificationRouter(rt)
 
 
+# Modules the stages import, loaded in an executor thread before setup so the event loop never imports.
+STAGE_MODULES: tuple[str, ...] = (
+    "signals.hub",
+    "situations.engine",
+    "policy",
+    "actions.executor",
+    "actions.approvals",
+    "repair.runner",
+    "adapters.bridges",
+    "schedule.presence",
+    "schedule.scheduler",
+    "schedule.commitments",
+    "ai.module",
+    "ai.arbiter",
+    "memory.store",
+    "learning.module",
+    "checks",
+    "triage.engine",
+    "notify.router",
+    "panel",
+)
+
 STAGES: list[tuple[str, Callable[[Any], Any]]] = [
     ("signals", _signals),
     ("situations", _situations),

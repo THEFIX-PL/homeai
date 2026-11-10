@@ -246,6 +246,7 @@ def _detectors() -> list[Setting]:
         Setting("detectors.stale.hours", T.INT, 6, s, scopes=THING, min=0, max=720, unit="h"),
         _sev("detectors.stale.severity", 0, s, THING),
         Setting("detectors.environment.minutes", T.INT, 20, s, scopes=THING, min=0, max=1440, unit="min"),
+        Setting("detectors.environment.appliance_words", T.STRINGS, list(APPLIANCE_WORDS), s, max=60, advanced=True),
         Setting("detectors.divergence.degrees", T.FLOAT, 2.5, s, scopes=PLACE, min=0.5, max=20, unit="°"),
         _sev("detectors.divergence.severity", 0, s),
         Setting("detectors.lights_away.minutes", T.INT, 10, s, scopes=THING, min=0, max=720, unit="min"),
@@ -359,6 +360,28 @@ def _notify() -> list[Setting]:
 
 LEVELS = ("never", "observe", "propose", "act_tell", "act")
 SLIDER = ("observe", "cautious", "balanced", "bold")
+# Words in a sensor's or device's name that mark it as inside an appliance, not measuring the room (en, pl).
+APPLIANCE_WORDS = (
+    "fridge",
+    "freezer",
+    "refrigerator",
+    "oven",
+    "sauna",
+    "aquarium",
+    "terrarium",
+    "pool",
+    "boiler",
+    "lodówk",
+    "zamraż",
+    "chłodziar",
+    "piekarn",
+    "akwari",
+    "terrari",
+    "basen",
+    "bojler",
+    "kocioł",
+    "kotł",
+)
 PLAYBOOK_KEYS = ("reload_entry", "wait_then_reload", "reload_after_outage", "retry_backup", "restart_addon", "action")
 RISK_OVERRIDES = ("auto", "R0", "R1", "R2", "R3", "R4", "R5", "R6")
 MATRIX_ACTORS = ("homeai", "ai", "repair", "schedule")

@@ -143,6 +143,7 @@ What HomeAI watches and its limits.
 | **Silent after** — Hours without a report from a measuring sensor. 0 turns this off. | `detectors.stale.hours` | 6 | 0–720 h | area, device, entity, floor, home |  |
 | **Silent sensor: severity** — Severity 0–4 of silent sensor (0 journal only, 4 critical). | `detectors.stale.severity` | 0 | 0–4 | area, device, entity, floor, home | advanced |
 | **Beyond limit for** — How long a value must stay beyond its limit. | `detectors.environment.minutes` | 20 | 0–1440 min | area, device, entity, floor, home |  |
+| **Appliance sensors** — Words in a sensor's or device's name that mark it as inside an appliance (freezer, fridge, oven, aquarium). Their temperature and humidity are not treated as the room's. | `detectors.environment.appliance_words` | see panel | –60 | home | advanced |
 | **Allowed difference** — Maximum difference between temperature sensors in one room. | `detectors.divergence.degrees` | 2.5 | 0.5–20 ° | area, floor, home |  |
 | **Disagreeing sensors: severity** — Severity 0–4 of disagreeing sensors (0 journal only, 4 critical). | `detectors.divergence.severity` | 0 | 0–4 | home | advanced |
 | **Lights on for** — How long lights must be on while everyone is away. | `detectors.lights_away.minutes` | 10 | 0–720 min | area, device, entity, floor, home |  |
