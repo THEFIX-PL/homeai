@@ -94,6 +94,7 @@ What HomeAI watches and its limits.
 | **Log and automations: watch** — Watch errors in Home Assistant's log and automations that failed. | `detectors.log.enabled` | true |  | home |  |
 | **Batteries: watch** — Watch low batteries. | `detectors.battery.enabled` | true |  | home |  |
 | **Consumables: watch** — Watch filters, brushes and other parts that need replacing. | `detectors.consumables.enabled` | true |  | home |  |
+| **Plant watering: watch** — Watch soil moisture sensors and say when plants need water. | `detectors.watering.enabled` | true |  | home |  |
 | **Devices reporting problems: watch** — Watch problem sensors and plants that need attention. | `detectors.problems.enabled` | true |  | home |  |
 | **Silent sensors: watch** — Watch sensors that stopped reporting. | `detectors.stale.enabled` | true |  | home |  |
 | **Indoor environment: watch** — Watch temperature, humidity, CO₂ and PM2.5 limits. | `detectors.environment.enabled` | true |  | home |  |
@@ -135,6 +136,8 @@ What HomeAI watches and its limits.
 | **Consumable threshold** — Report consumables with this much life left or less. | `detectors.consumables.percent` | 10 | 0–100 % | area, device, entity, floor, home |  |
 | **Sensors showing usage** — Consumable sensors that show how much is used (100 = worn out) instead of what is left. | `detectors.consumables.used_up_entities` | [] |  | home | advanced |
 | **Consumable: severity** — Severity 0–4 of consumable (0 journal only, 4 critical). | `detectors.consumables.severity` | 0 | 0–4 | area, device, entity, floor, home | advanced |
+| **Soil moisture limit** — Below this soil moisture a plant needs water. | `detectors.watering.min` | 20 | 1–90 % | area, device, entity, floor, home |  |
+| **Plant watering: severity** — Severity 0–4 of a plant that needs water (0 journal only, 4 critical). | `detectors.watering.severity` | 1 | 0–4 | area, device, entity, floor, home | advanced |
 | **Device problem: severity** — Severity 0–4 of device problem (0 journal only, 4 critical). | `detectors.problems.severity` | 1 | 0–4 | area, device, entity, floor, home | advanced |
 | **Plant problem: severity** — Severity 0–4 of plant problem (0 journal only, 4 critical). | `detectors.problems.plant_severity` | 1 | 0–4 | area, device, entity, floor, home | advanced |
 | **Silent after** — Hours without a report from a measuring sensor. 0 turns this off. | `detectors.stale.hours` | 6 | 0–720 h | area, device, entity, floor, home |  |
@@ -213,6 +216,8 @@ Who hears what, how and when.
 | **Summary times** — Times (HH:MM) of the summary. | `notify.digest_times` | ["08:00", "20:00"] | –6 | home |  |
 | **Summary recipients** — Who receives the summary. | `notify.digest_to` | `home_or_all` | Nobody (`none`), Everyone (`all`), People at home (`home`), People at home, else everyone (`home_or_all`), Administrators (`admins`), People awake at home (`awake_home`) | home |  |
 | **Summary items** — Most situations listed in a summary. | `notify.digest_max_items` | 10 | 1–50 | home |  |
+| **Notification title template** — Your own title in Home Assistant template syntax, e.g. {{ title }} ({{ severity }}). Variables: title, message, description, severity, category, kind, who, who_text, repair_failed, situation_id, entities. Empty or failing: the built-in title. | `notify.template_title` | `` | up to 1000 characters | home | advanced |
+| **Notification text template** — Your own text in Home Assistant template syntax, with the same variables as the title. Empty or failing: the built-in text. | `notify.template_message` | `` | up to 4000 characters | home | advanced |
 | **Escalation: severity 4** — Steps for critical situations: after minutes, to whom, channels, repeat, critical. | `notify.ladder_4` | see panel |  | home | confirm (change) |
 | **Escalation: severity 3** — Steps for urgent situations: after minutes, to whom, channels, repeat, critical. | `notify.ladder_3` | see panel |  | home | confirm (change) |
 | **Escalation: severity 2** — Steps for attention situations: after minutes, to whom, channels, repeat, critical. | `notify.ladder_2` | see panel |  | home |  |
@@ -313,6 +318,9 @@ The home's plan and presence exceptions.
 | **Who may add to the plan** — Everyone, residents (administrators and members, not guests) or only administrators. Administrators may always. | `schedule.who_may_add` | `everyone` | Everyone (`everyone`), Residents (`residents`), Administrators (`admins`) | home |  |
 | **New entries skip when away** — New plan entries skip their run while everyone is away or on vacation, unless the entry says otherwise. | `schedule.default_skip_when_away` | false |  | home |  |
 | **Plan size** — Most entries the plan may hold. | `schedule.max_entries` | 500 | 10–500 | home | advanced |
+| **“Tell me when”: longest watch** — How long HomeAI keeps watching for a “tell me when” request before giving up. | `schedule.watch_hours` | 24 | 1–168 h | home |  |
+| **“Tell me when”: per person** — Most “tell me when” requests one person may have at a time. | `schedule.watch_max` | 20 | 1–100 | home | advanced |
+| **Plans from other integrations** — Show what other integrations plan (a homeai_plan attribute on their entities) in the plan calendar and panel. HomeAI never runs them. | `schedule.external_plans` | true |  | home |  |
 
 ## AI
 

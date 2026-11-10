@@ -22,7 +22,13 @@ from .detectors.behaviour import LightsAwayDetector, WindowHeatingDetector
 from .detectors.custom import CustomDetector
 from .detectors.environment import DivergenceDetector, EnvironmentDetector
 from .detectors.external import ExternalDetector
-from .detectors.maintenance import BatteryDetector, ConsumableDetector, ProblemDetector, StaleSensorDetector
+from .detectors.maintenance import (
+    BatteryDetector,
+    ConsumableDetector,
+    ProblemDetector,
+    StaleSensorDetector,
+    WateringDetector,
+)
 from .detectors.safety import SafetyDetector, SecurityDetector
 from .detectors.system import (
     AvailabilityDetector,
@@ -51,6 +57,7 @@ def default_detectors() -> list[Detector]:
         LogDetector(),
         BatteryDetector(),
         ConsumableDetector(),
+        WateringDetector(),
         ProblemDetector(),
         StaleSensorDetector(),
         EnvironmentDetector(),

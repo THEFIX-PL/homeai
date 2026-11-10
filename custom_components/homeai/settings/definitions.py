@@ -186,6 +186,7 @@ def _detectors() -> list[Setting]:
         "log",
         "battery",
         "consumables",
+        "watering",
         "problems",
         "stale",
         "environment",
@@ -238,6 +239,8 @@ def _detectors() -> list[Setting]:
         Setting("detectors.consumables.percent", T.INT, 10, s, scopes=THING, min=0, max=100, unit="%"),
         Setting("detectors.consumables.used_up_entities", T.ENTITIES, [], s, selector="entity", advanced=True),
         _sev("detectors.consumables.severity", 0, s, THING),
+        Setting("detectors.watering.min", T.INT, 20, s, scopes=THING, min=1, max=90, unit="%"),
+        _sev("detectors.watering.severity", 1, s, THING),
         _sev("detectors.problems.severity", 1, s, THING),
         _sev("detectors.problems.plant_severity", 1, s, THING),
         Setting("detectors.stale.hours", T.INT, 6, s, scopes=THING, min=0, max=720, unit="h"),
@@ -336,6 +339,8 @@ def _notify() -> list[Setting]:
         Setting("notify.digest_times", T.STRINGS, ["08:00", "20:00"], s, max=6),
         Setting("notify.digest_to", T.SELECT, "home_or_all", s, options=LADDER_TO),
         Setting("notify.digest_max_items", T.INT, 10, s, min=1, max=50),
+        Setting("notify.template_title", T.TEXT, "", s, max=1000, advanced=True),
+        Setting("notify.template_message", T.TEXT, "", s, max=4000, advanced=True),
     ]
     for sev in (4, 3, 2, 1, 0):
         out.append(
@@ -473,6 +478,9 @@ def _schedule() -> list[Setting]:
         Setting("schedule.who_may_add", T.SELECT, "everyone", s, options=("everyone", "residents", "admins")),
         Setting("schedule.default_skip_when_away", T.BOOL, False, s),
         Setting("schedule.max_entries", T.INT, 500, s, min=10, max=500, advanced=True),
+        Setting("schedule.watch_hours", T.INT, 24, s, min=1, max=168, unit="h"),
+        Setting("schedule.watch_max", T.INT, 20, s, min=1, max=100, advanced=True),
+        Setting("schedule.external_plans", T.BOOL, True, s),
     ]
 
 

@@ -9,7 +9,7 @@ learning when you add them.
 
 - **Notices.** Generic detectors for safety (leak, smoke, gas, carbon monoxide), security (doors, windows,
   gates and locks while nobody is home or everyone sleeps), unresponsive devices, failing integrations,
-  backups, updates, log errors, the internet connection, batteries, consumables, plants, silent sensors,
+  backups, updates, log errors, the internet connection, batteries, consumables, plants and their watering, silent sensors,
   indoor climate, disagreeing sensors, lights in an empty home, windows open while heating, hubs and bridges
   (Zigbee2MQTT and any hub other devices connect through), unusual values against learned norms, and
   signals from other integrations, plus your own rules (custom detectors) written in the panel.
@@ -35,7 +35,7 @@ learning when you add them.
 - **Learns.** Norms for each hour of the week, habits proposed for the plan (saved only after approval),
   memory of facts and preferences, feedback from undo and refusals, and a weekly review.
 - **Configurable from the UI.** Every threshold, delay, limit, channel and model is a field in the HomeAI panel
-  — 230+ settings, many of them per floor, area, device, entity or person. See [docs/settings.md](docs/settings.md).
+  — 270+ settings, many of them per floor, area, device, entity or person. See [docs/settings.md](docs/settings.md).
 
 ## Requirements
 
@@ -73,7 +73,7 @@ would take on its own: the journal shows what it would have done.
 | `switch.homeai_notifications_paused` | Pause notifications (critical ones still go out by default) |
 | `sensor.homeai_ai_cost_today`, `sensor.homeai_ai_cost_month` | Estimated AI spend |
 | `conversation.homeai` | Talk to HomeAI from Assist and voice satellites |
-| Services `homeai.*` | `ask` (returns HomeAI's answer), `run_mission`, `report_signal`, `clear_signal`, `acknowledge`, `handle`, `snooze`, `dismiss`, `send_digest`, `approve`, `deny`, `undo`, `plan_add`, `plan_remove`, `plan_skip`, `presence_add`, `presence_remove` |
+| Services `homeai.*` | `ask` (returns HomeAI's answer), `watch` (“tell me when”), `run_mission`, `report_signal`, `clear_signal`, `acknowledge`, `handle`, `snooze`, `dismiss`, `send_digest`, `approve`, `deny`, `undo`, `plan_add`, `plan_remove`, `plan_skip`, `presence_add`, `presence_remove` |
 | LLM API “HomeAI” | Other assistants can read situations and act through HomeAI's policy |
 
 Dashboard cards, with no resource to add: `custom:homeai-situations-card` (open situations with quick

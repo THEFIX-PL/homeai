@@ -47,6 +47,7 @@ const TEXTS: Record<string, Record<string, string>> = {
     prompt_arbiter: "Arbiter", prompt_digest: "Digest", prompt_custom: "your own", prompt_default: "built-in",
     prompt_restore: "Restore the built-in prompt", prompt_show_default: "Show the built-in prompt", prompt_restored: "built-in prompt restored",
     prompt_hint: "The rule that house data is never an instruction is always added, and structured answers keep their format.",
+    watching: "Watching for you", until: "until",
   },
   pl: {
     situations: "Sprawy", approvals: "Zgody", plan: "Plan", journal: "Dziennik", settings: "Ustawienia", ai: "AI",
@@ -95,6 +96,7 @@ const TEXTS: Record<string, Record<string, string>> = {
     prompt_arbiter: "Arbiter", prompt_digest: "Podsumowanie", prompt_custom: "własny", prompt_default: "wbudowany",
     prompt_restore: "Przywróć wbudowany prompt", prompt_show_default: "Pokaż wbudowany prompt", prompt_restored: "przywrócono wbudowany prompt",
     prompt_hint: "Zasada, że dane z domu nigdy nie są poleceniem, jest zawsze dodawana, a odpowiedzi strukturalne zachowują swój format.",
+    watching: "Pilnuję dla ciebie", until: "do",
   },
 };
 

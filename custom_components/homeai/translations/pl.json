@@ -179,6 +179,15 @@
         "review": "Przegląd tygodniowy",
         "learn": "Nocne uczenie"
       }
+    },
+    "watch_condition": {
+      "options": {
+        "state": "Staje się",
+        "not_state": "Przestaje być",
+        "above": "Przekracza",
+        "below": "Spada poniżej",
+        "changes": "Zmienia się"
+      }
     }
   },
   "exceptions": {
@@ -205,6 +214,9 @@
     },
     "situation_unknown": {
       "message": "Nie ma takiej otwartej sprawy."
+    },
+    "watch_invalid": {
+      "message": "HomeAI nie może tego pilnować: {reason}."
     }
   },
   "entity": {
@@ -582,6 +594,32 @@
         "situation_id": {
           "name": "ID sprawy",
           "description": "Dla oceny, badania i arbitrażu."
+        }
+      }
+    },
+    "watch": {
+      "name": "Powiedz mi, kiedy",
+      "description": "Mówi raz, gdy encja spełni warunek, potem przestaje pilnować. Działa na twoim koncie.",
+      "fields": {
+        "entity_id": {
+          "name": "Encja",
+          "description": "Czego pilnować."
+        },
+        "condition": {
+          "name": "Warunek",
+          "description": "Kiedy powiedzieć."
+        },
+        "value": {
+          "name": "Wartość",
+          "description": "Stan albo liczba do porównania (niepotrzebne przy każdej zmianie)."
+        },
+        "message": {
+          "name": "Wiadomość",
+          "description": "Co powiedzieć; puste: HomeAI opisze, co się stało."
+        },
+        "hours": {
+          "name": "Przez",
+          "description": "Jak długo pilnować; najwyżej tyle, ile w ustawieniu HomeAI."
         }
       }
     }

@@ -52,6 +52,8 @@ SIMPLE_SERVICES = frozenset(
     }
 )
 MAX_ENTRIES = 500
+EXTERNAL_ATTRIBUTE = "homeai_plan"
+MAX_EXTERNAL = 50  # per entity
 
 
 class PlanError(ValueError):
@@ -208,6 +210,44 @@ class Scheduler:
                 if dt_util.as_local(t).date().isoformat() not in entry.get("skip_dates", []):
                     out.append((t, entry))
         return sorted(out, key=lambda x: x[0])
+
+    def external(self, start: datetime, end: datetime) -> list[tuple[datetime, dict[str, Any]]]:
+        """Plans other integrations publish in a `homeai_plan` attribute: a list of {start, title, end?}.
+        Shown with the plan (calendar, panel, next change) but never run by HomeAI; their owner runs them."""
+        if not self.rt.settings.get("schedule.external_plans"):
+            return []
+        out = []
+        for state in self.hass.states.async_all():
+            items = state.attributes.get(EXTERNAL_ATTRIBUTE)
+            if not isinstance(items, list):
+                continue
+            for i, item in enumerate(items[:MAX_EXTERNAL]):
+                if not isinstance(item, dict) or not item.get("title"):
+                    continue
+                at = dt_util.parse_datetime(str(item.get("start") or item.get("at") or ""))
+                if at is None:
+                    continue
+                at = dt_util.as_utc(at if at.tzinfo else at.replace(tzinfo=dt_util.get_default_time_zone()))
+                if not start <= at < end:
+                    continue
+                ends = dt_util.parse_datetime(str(item.get("end") or ""))
+                out.append(
+                    (
+                        at,
+                        {
+                            "id": f"external:{state.entity_id}:{i}",
+                            "title": str(item["title"])[:200],
+                            "source": state.entity_id,
+                            "end": dt_util.as_utc(ends).isoformat() if ends else None,
+                            "external": True,
+                        },
+                    )
+                )
+        return sorted(out, key=lambda x: x[0])
+
+    def all_occurrences(self, start: datetime, end: datetime) -> list[tuple[datetime, dict[str, Any]]]:
+        """HomeAI's own entries and what other integrations plan, for showing (not for running)."""
+        return sorted([*self.occurrences(start, end), *self.external(start, end)], key=lambda x: x[0])
 
     def next_due(self, after: datetime) -> datetime | None:
         times = [

@@ -5,7 +5,8 @@ import { shared } from "../styles";
 import type { HomeAssistant } from "../types";
 
 interface When { kind: string; time?: string; date?: string; days?: number[]; event?: string; offset?: number }
-interface Occurrence { at: string; entry_id: string; title: string }
+interface Occurrence { at: string; entry_id: string; title: string; external?: boolean; source?: string | null }
+interface Watch { id: string; what: string; message: string; expires: string; person: string }
 interface Entry {
   id: string;
   title: string;
@@ -78,6 +79,7 @@ export class HomeAIPlan extends LitElement {
   @property({ attribute: false }) hass!: HomeAssistant;
   @state() private occurrences: Occurrence[] = [];
   @state() private entries: Entry[] = [];
+  @state() private watches: Watch[] = [];
   @state() private draft?: Draft;
   @state() private error = "";
 
@@ -92,6 +94,16 @@ export class HomeAIPlan extends LitElement {
     const res = await this.hass.callWS<{ entries: Entry[]; occurrences: Occurrence[] }>({ type: "homeai/plan/list", days: 14 });
     this.entries = res.entries;
     this.occurrences = res.occurrences;
+    try {
+      this.watches = (await this.hass.callWS<{ items: Watch[] }>({ type: "homeai/watches/list" })).items;
+    } catch {
+      this.watches = [];
+    }
+  }
+
+  private async removeWatch(id: string): Promise<void> {
+    await this.hass.callWS({ type: "homeai/watches/delete", watch_id: id });
+    await this.load();
   }
 
   private async removeEntry(id: string): Promise<void> {
@@ -213,8 +225,9 @@ export class HomeAIPlan extends LitElement {
       ${this.draft ? this.form() : nothing}
       ${this.entries.length ? html`
         <div class="card"><div class="title">${t(lang, "plan_next")}</div><ul class="plain">
-          ${this.occurrences.slice(0, 40).map((o) => html`<li class="row"><span class="muted">${when(o.at, lang)}</span><span class="grow">${o.title}</span>
-            <button title=${t(lang, "plan_skip")} @click=${() => this.skip(o)}>${t(lang, "plan_skip")}</button></li>`)}
+          ${this.occurrences.slice(0, 40).map((o) => html`<li class="row"><span class="muted">${when(o.at, lang)}</span>
+            <span class="grow">${o.title}${o.external ? html` <span class="muted">· ${this.hass.states[o.source ?? ""]?.attributes.friendly_name ?? o.source}</span>` : nothing}</span>
+            ${o.external ? nothing : html`<button title=${t(lang, "plan_skip")} @click=${() => this.skip(o)}>${t(lang, "plan_skip")}</button>`}</li>`)}
         </ul></div>
         <div class="card"><div class="title">${t(lang, "plan_entries")}</div><ul class="plain">
           ${this.entries.map(
@@ -223,6 +236,11 @@ export class HomeAIPlan extends LitElement {
               <button @click=${() => (this.draft = fromEntry(e))}>${t(lang, "edit")}</button>
               <button @click=${() => this.removeEntry(e.id)}>${t(lang, "remove")}</button></li>`,
           )}
-        </ul></div>` : html`<div class="empty">${t(lang, "no_plan")}</div>`}`;
+        </ul></div>` : html`<div class="empty">${t(lang, "no_plan")}</div>`}
+      ${this.watches.length ? html`<div class="card"><div class="title">${t(lang, "watching")}</div><ul class="plain">
+        ${this.watches.map((w) => html`<li class="row"><span class="grow">${w.what}${w.message ? html`<br /><span class="muted">${w.message}</span>` : nothing}<br />
+          <span class="muted">${t(lang, "until")} ${when(w.expires, lang)}</span></span>
+          <button @click=${() => this.removeWatch(w.id)}>${t(lang, "remove")}</button></li>`)}
+      </ul></div>` : nothing}`;
   }
 }

@@ -1,4 +1,5 @@
-"""Maintenance: batteries, consumables, plants, devices reporting a problem and sensors that stopped reporting."""
+"""Maintenance: batteries, consumables, plants and their watering, devices reporting a problem and sensors that
+stopped reporting."""
 
 from __future__ import annotations
 
@@ -199,6 +200,45 @@ class StaleSensorDetector(Detector):
                     data={"name": name(ctx, entity_id), "where": where(ctx, area_id=area), "since": clock(last)},
                     need=Need.MEMBER,
                     tags=frozenset(),
+                )
+            )
+        return out
+
+
+class WateringDetector(Detector):
+    """Soil moisture sensors below their limit: plants that need water, grouped into one situation."""
+
+    key = "watering"
+    roles = (Role.SOIL_MOISTURE,)
+
+    def evaluate(self, ctx: DetectionContext) -> list[Signal]:
+        out = []
+        for entity_id in sorted(ctx.world.with_role(Role.SOIL_MOISTURE)):
+            value = ctx.world.value(entity_id)
+            info = ctx.world.entity(entity_id)
+            if value is None or info is None or info.domain != "sensor" or (info.unit and info.unit != "%"):
+                continue
+            if value >= float(setting(ctx, "detectors.watering.min", entity_id)):
+                continue
+            area = area_of(ctx, entity_id)
+            device_id = device_of(ctx, entity_id)
+            out.append(
+                Signal(
+                    id=f"watering:{entity_id}",
+                    detector=self.key,
+                    kind="plant_dry",
+                    category=Category.MAINTENANCE,
+                    severity=int(setting(ctx, "detectors.watering.severity", entity_id)),
+                    entities=(entity_id,),
+                    device_id=device_id,
+                    area_id=area,
+                    data={
+                        "name": ctx.world.device_name(device_id) if device_id else name(ctx, entity_id),
+                        "where": where(ctx, area_id=area),
+                        "level": f"{round(value)}%",
+                    },
+                    need=Need.MEMBER,
+                    root="watering",
                 )
             )
         return out

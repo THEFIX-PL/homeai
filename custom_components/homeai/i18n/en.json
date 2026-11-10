@@ -49,7 +49,9 @@
     "repair_succeeded": "Fixed: {title}",
     "setting_changed": "Setting changed: {key}",
     "situation_opened": "Situation: {title}",
-    "situation_resolved": "Resolved: {title}"
+    "situation_resolved": "Resolved: {title}",
+    "watch_added": "Watching: {what}",
+    "watch_met": "Told as promised: {what}"
   },
   "learning": {
     "habit_title": "{what}: {action} at {time} on {days}",
@@ -345,6 +347,15 @@
     "home_office": "Working from home",
     "sick": "Sick",
     "vacation": "Vacation"
+  },
+  "schedule": {
+    "watch_above": "{name} goes above {value}",
+    "watch_below": "{name} goes below {value}",
+    "watch_changes": "{name} changes",
+    "watch_done": "As you asked: {what}.",
+    "watch_not_state": "{name} is no longer {value}",
+    "watch_state": "{name} becomes {value}",
+    "watch_title": "HomeAI"
   },
   "sections": {
     "adapters": {
@@ -897,6 +908,18 @@
       "description": "Severity 0–4 of updates (0 journal only, 4 critical).",
       "label": "Updates: severity"
     },
+    "detectors.watering.enabled": {
+      "description": "Watch soil moisture sensors and say when plants need water.",
+      "label": "Plant watering: watch"
+    },
+    "detectors.watering.min": {
+      "description": "Below this soil moisture a plant needs water.",
+      "label": "Soil moisture limit"
+    },
+    "detectors.watering.severity": {
+      "description": "Severity 0–4 of a plant that needs water (0 journal only, 4 critical).",
+      "label": "Plant watering: severity"
+    },
     "detectors.window_heating.enabled": {
       "description": "Watch a window open in a room that is being heated.",
       "label": "Window open while heating: watch"
@@ -1124,6 +1147,14 @@
     "notify.targets": {
       "description": "Notify entities or services for this person, besides discovered phones.",
       "label": "Extra notification targets"
+    },
+    "notify.template_message": {
+      "description": "Your own text in Home Assistant template syntax, with the same variables as the title. Empty or failing: the built-in text.",
+      "label": "Notification text template"
+    },
+    "notify.template_title": {
+      "description": "Your own title in Home Assistant template syntax, e.g. {{ title }} ({{ severity }}). Variables: title, message, description, severity, category, kind, who, who_text, repair_failed, situation_id, entities. Empty or failing: the built-in title.",
+      "label": "Notification title template"
     },
     "notify.tts_entity": {
       "description": "Text-to-speech entity for spoken notifications.",
@@ -1389,6 +1420,10 @@
       "description": "How long plan entries look in the calendar.",
       "label": "Plan event length"
     },
+    "schedule.external_plans": {
+      "description": "Show what other integrations plan (a homeai_plan attribute on their entities) in the plan calendar and panel. HomeAI never runs them.",
+      "label": "Plans from other integrations"
+    },
     "schedule.max_entries": {
       "description": "Most entries the plan may hold.",
       "label": "Plan size"
@@ -1396,6 +1431,14 @@
     "schedule.presence_keep_days": {
       "description": "Days to keep presence exceptions after they end.",
       "label": "Keep past exceptions"
+    },
+    "schedule.watch_hours": {
+      "description": "How long HomeAI keeps watching for a “tell me when” request before giving up.",
+      "label": "“Tell me when”: longest watch"
+    },
+    "schedule.watch_max": {
+      "description": "Most “tell me when” requests one person may have at a time.",
+      "label": "“Tell me when”: per person"
     },
     "schedule.who_may_add": {
       "description": "Everyone, residents (administrators and members, not guests) or only administrators. Administrators may always.",
@@ -1611,6 +1654,11 @@
       "description": "{where}",
       "title": "Open at night: {name}",
       "title_many": "{count} things open at night"
+    },
+    "plant_dry": {
+      "title": "Water the plant: {name}",
+      "title_many": "{count} plants need water",
+      "description": "Soil moisture {level} · {where}"
     },
     "plant_problem": {
       "description": "{problem} · {where}",

@@ -50,6 +50,9 @@
     },
     "run_mission": {
       "service": "mdi:play-circle-outline"
+    },
+    "watch": {
+      "service": "mdi:eye-check-outline"
     }
   },
   "entity": {

@@ -160,7 +160,38 @@ class NotificationRouter:
         parts.append(self.rt.text(f"notify|who_{who}"))
         if s.repair.get("attempts"):
             parts.append(self.rt.text("notify|repair_failed"))
-        return title, " ".join(p for p in parts if p)
+        message = " ".join(p for p in parts if p)
+        variables = {
+            "title": title,
+            "message": message,
+            "description": s.description(lang),
+            "severity": s.severity,
+            "category": str(s.category),
+            "kind": s.kind,
+            "who": who,
+            "who_text": self.rt.text(f"notify|who_{who}"),
+            "repair_failed": bool(s.repair.get("attempts")),
+            "situation_id": s.id,
+            "entities": list(s.entities),
+        }
+        return self._render("notify.template_title", variables, title), self._render(
+            "notify.template_message", variables, message
+        )
+
+    def _render(self, key: str, variables: dict[str, Any], fallback: str) -> str:
+        """The administrator's template (Home Assistant template syntax), or the built-in text when it is empty,
+        fails or renders nothing."""
+        source = str(self.rt.settings.get(key) or "").strip()
+        if not source:
+            return fallback
+        from homeassistant.helpers.template import Template
+
+        try:
+            text = str(Template(source, self.hass).async_render(variables, parse_result=False)).strip()
+        except Exception as err:  # a broken template must never stop a notification
+            LOGGER.warning("Notification template %s failed: %s", key, err)
+            return fallback
+        return text[:4000] or fallback
 
     async def _push(self, s: Situation, person: PersonState, *, critical: bool, severity: int) -> bool:
         targets = targets_for(self.hass, self.rt.settings, person.entity_id)

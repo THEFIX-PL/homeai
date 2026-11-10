@@ -48,6 +48,24 @@ async def answer(rt: Any, text: str, conversation: str, user_id: str | None) -> 
     }
 
 
+async def watch(rt: Any, call: ServiceCall) -> ServiceResponse:
+    """“Tell me when …” for the calling person."""
+    from ..schedule.commitments import CommitmentError
+
+    try:
+        item = _module(rt, "commitments").add(
+            call.context.user_id,
+            call.data["entity_id"],
+            call.data["condition"],
+            call.data.get("value"),
+            call.data.get("message", ""),
+            call.data.get("hours"),
+        )
+    except CommitmentError as err:
+        raise _error("watch_invalid", reason=str(err)) from err
+    return {"watch_id": item["id"], "expires": item["expires"]}
+
+
 async def run_mission(rt: Any, call: ServiceCall) -> ServiceResponse:
     """Run a mission now. Costs money with AI tiers, so only administrators and automations may call it."""
     if call.context.user_id:
@@ -97,6 +115,20 @@ SERVICES.extend(
                 }
             ),
             SupportsResponse.ONLY,
+        ),
+        ServiceDef(
+            "watch",
+            watch,
+            vol.Schema(
+                {
+                    vol.Required("entity_id"): cv.entity_id,
+                    vol.Required("condition"): vol.In(("state", "not_state", "above", "below", "changes")),
+                    vol.Optional("value"): vol.All(cv.string, vol.Length(max=100)),
+                    vol.Optional("message"): vol.All(cv.string, vol.Length(max=300)),
+                    vol.Optional("hours"): vol.All(vol.Coerce(float), vol.Range(min=0.1, max=168)),
+                }
+            ),
+            SupportsResponse.OPTIONAL,
         ),
         ServiceDef(
             "run_mission",

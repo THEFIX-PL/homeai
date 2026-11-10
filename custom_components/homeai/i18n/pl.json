@@ -49,7 +49,9 @@
     "repair_succeeded": "Naprawione: {title}",
     "setting_changed": "Zmiana ustawienia: {key}",
     "situation_opened": "Sprawa: {title}",
-    "situation_resolved": "Ustąpiło: {title}"
+    "situation_resolved": "Ustąpiło: {title}",
+    "watch_added": "Pilnuję: {what}",
+    "watch_met": "Powiedziano, jak obiecano: {what}"
   },
   "learning": {
     "habit_title": "{what}: {action} o {time} w {days}",
@@ -345,6 +347,15 @@
     "home_office": "Praca z domu",
     "sick": "Choroba",
     "vacation": "Wyjazd"
+  },
+  "schedule": {
+    "watch_above": "{name} przekracza {value}",
+    "watch_below": "{name} spada poniżej {value}",
+    "watch_changes": "{name} się zmienia",
+    "watch_done": "Zgodnie z prośbą: {what}.",
+    "watch_not_state": "{name} przestaje być {value}",
+    "watch_state": "{name} staje się {value}",
+    "watch_title": "HomeAI"
   },
   "sections": {
     "adapters": {
@@ -897,6 +908,18 @@
       "description": "Waga 0–4 dla: aktualizacje (0 tylko dziennik, 4 krytyczne).",
       "label": "Aktualizacje: waga"
     },
+    "detectors.watering.enabled": {
+      "description": "Pilnuj czujników wilgotności gleby i mów, kiedy rośliny potrzebują wody.",
+      "label": "Podlewanie roślin: pilnuj"
+    },
+    "detectors.watering.min": {
+      "description": "Poniżej tej wilgotności gleby roślina potrzebuje wody.",
+      "label": "Próg wilgotności gleby"
+    },
+    "detectors.watering.severity": {
+      "description": "Waga 0–4 rośliny, która potrzebuje wody (0 tylko dziennik, 4 krytyczna).",
+      "label": "Podlewanie roślin: waga"
+    },
     "detectors.window_heating.enabled": {
       "description": "Obserwuj okno otwarte w ogrzewanym pokoju.",
       "label": "Okno otwarte przy grzaniu: obserwuj"
@@ -1124,6 +1147,14 @@
     "notify.targets": {
       "description": "Encje albo usługi notify tej osoby, oprócz wykrytych telefonów.",
       "label": "Dodatkowe cele powiadomień"
+    },
+    "notify.template_message": {
+      "description": "Własna treść w składni szablonów Home Assistanta, z tymi samymi zmiennymi co tytuł. Puste albo z błędem: wbudowana treść.",
+      "label": "Szablon treści powiadomienia"
+    },
+    "notify.template_title": {
+      "description": "Własny tytuł w składni szablonów Home Assistanta, np. {{ title }} ({{ severity }}). Zmienne: title, message, description, severity, category, kind, who, who_text, repair_failed, situation_id, entities. Puste albo z błędem: wbudowany tytuł.",
+      "label": "Szablon tytułu powiadomienia"
     },
     "notify.tts_entity": {
       "description": "Encja syntezy mowy do powiadomień głosowych.",
@@ -1389,6 +1420,10 @@
       "description": "Jak długo wpisy planu wyglądają w kalendarzu.",
       "label": "Długość wpisu w kalendarzu"
     },
+    "schedule.external_plans": {
+      "description": "Pokazuj w kalendarzu planu i w panelu to, co planują inne integracje (atrybut homeai_plan na ich encjach). HomeAI nigdy ich nie wykonuje.",
+      "label": "Plany z innych integracji"
+    },
     "schedule.max_entries": {
       "description": "Najwięcej wpisów, jakie może mieć plan.",
       "label": "Rozmiar planu"
@@ -1396,6 +1431,14 @@
     "schedule.presence_keep_days": {
       "description": "Ile dni przechowywać wyjątki obecności po ich końcu.",
       "label": "Przechowuj minione wyjątki"
+    },
+    "schedule.watch_hours": {
+      "description": "Jak długo HomeAI pilnuje prośby „powiedz mi, kiedy”, zanim zrezygnuje.",
+      "label": "„Powiedz mi, kiedy”: najdłużej"
+    },
+    "schedule.watch_max": {
+      "description": "Najwięcej próśb „powiedz mi, kiedy”, jakie jedna osoba może mieć naraz.",
+      "label": "„Powiedz mi, kiedy”: na osobę"
     },
     "schedule.who_may_add": {
       "description": "Wszyscy, domownicy (administratorzy i członkowie, bez gości) albo tylko administratorzy. Administratorzy mogą zawsze.",
@@ -1611,6 +1654,11 @@
       "description": "{where}",
       "title": "Otwarte w nocy: {name}",
       "title_many": "{count} rzeczy otwartych w nocy"
+    },
+    "plant_dry": {
+      "title": "Podlej roślinę: {name}",
+      "title_many": "{count} roślin potrzebuje wody",
+      "description": "Wilgotność gleby {level} · {where}"
     },
     "plant_problem": {
       "description": "{problem} · {where}",
