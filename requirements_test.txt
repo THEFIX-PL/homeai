@@ -3,7 +3,7 @@
 pytest-homeassistant-custom-component==0.13.375
 ruff==0.17.4
 # Same version Home Assistant core pins for its Anthropic integration.
-anthropic==0.125.0
+anthropic==2.6.0
 # Requirements of Home Assistant components the tests load (conversation agent, scenes for undo).
 hassil==3.12.1
 home-assistant-intents==2026.10.6
