@@ -35,7 +35,7 @@ async def test_autonomous_action_runs_as_homeai_user(hass: HomeAssistant) -> Non
     calls = fake_lights(hass)
     rt = await setup_homeai(hass, {"policy.observation_days": 0, "executor.verify_seconds": 1})
     events = []
-    hass.bus.async_listen(EVENT_ACTION, events.append)
+    hass.bus.async_listen(EVENT_ACTION, callback(lambda e: events.append(e)))  # noqa: PLW0108
     result = await rt.module("executor").execute(ActionRequest("light", "turn_on", entity_ids=["light.ceiling"]))
     assert result.status == "done" and result.risk == 1
     assert calls[0].context.user_id == rt.system_user_id
@@ -105,7 +105,7 @@ async def test_ask_creates_approval_and_approve_runs_it(hass: HomeAssistant, has
     calls_phone = phones(hass, "anna")
     rt = await setup_homeai(hass, {"policy.observation_days": 0}, overrides=phone_targets("anna"))
     switched = []
-    hass.services.async_register("switch", "turn_off", switched.append)
+    hass.services.async_register("switch", "turn_off", callback(lambda c: switched.append(c)))  # noqa: PLW0108
     result = await rt.module("executor").execute(
         ActionRequest("switch", "turn_off", entity_ids=["switch.coffee"], reason="Saving energy")
     )
@@ -214,7 +214,7 @@ async def test_logbook_entry_names_homeai(hass: HomeAssistant) -> None:
     rt = await setup_homeai(hass, {"policy.observation_days": 0, "executor.verify_seconds": 1})
     hass.config.components.add("logbook")
     entries = []
-    hass.bus.async_listen("logbook_entry", entries.append)
+    hass.bus.async_listen("logbook_entry", callback(lambda e: entries.append(e)))  # noqa: PLW0108
     await rt.module("executor").execute(ActionRequest("light", "turn_on", entity_ids=["light.ceiling"]))
     await hass.async_block_till_done()
     assert entries and entries[0].data["name"] == "HomeAI" and entries[0].data["entity_id"] == "light.ceiling"

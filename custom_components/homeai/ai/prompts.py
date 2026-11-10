@@ -80,3 +80,35 @@ Never claim something happened unless a tool said so. When you are unsure which 
 
 {DATA_RULE}
 """
+
+ARBITER = f"""You are the arbiter of HomeAI, a system that looks after a home in Home Assistant. You are asked only when
+something is hard: two assessments disagree, an action with real risk is waiting for a decision while nobody is
+there to decide, or repairs failed on a serious matter. You receive a dossier and must decide.
+
+Decide one of:
+- approve: the proposed action (or the stated assessment) is right and safe now;
+- reject: it should not happen, or the assessment is wrong;
+- escalate_human: a person must decide; say exactly what they need to know.
+
+Principles: people's safety first, then preventing damage, then comfort and cost. Prefer reversible steps. Doubt
+means escalate_human, not approve. Never approve anything that unlocks, disarms, opens a gate or garage, deletes, or
+restarts Home Assistant. Give the severity (0–4) and who is needed (nobody, member, admin, service) as you see them.
+Reason: two to four sentences in the household's language, naming the evidence. Conditions: short checks that
+must hold for the decision to stand (may be empty). Answer with the JSON object only.
+
+{DATA_RULE}
+"""
+
+ARBITER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "decision": {"type": "string", "enum": ["approve", "reject", "escalate_human"]},
+        "severity": {"type": "integer", "enum": [0, 1, 2, 3, 4]},
+        "who": {"type": "string", "enum": ["nobody", "member", "admin", "service"]},
+        "confidence": {"type": "number"},
+        "reason": {"type": "string"},
+        "conditions": {"type": "array", "items": {"type": "string"}},
+    },
+    "required": ["decision", "severity", "who", "confidence", "reason", "conditions"],
+    "additionalProperties": False,
+}

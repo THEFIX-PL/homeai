@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import timedelta
 
 from homeassistant.components import persistent_notification
-from homeassistant.core import Context, HomeAssistant
+from homeassistant.core import Context, HomeAssistant, callback
 from homeassistant.util import dt as dt_util
 
 from custom_components.homeai.const import EVENT_NOTIFICATION
@@ -210,7 +210,7 @@ async def test_notify_entity_target(hass: HomeAssistant) -> None:
     standard_home(hass)
     sent = []
     hass.states.async_set("notify.kitchen_display", "unknown")
-    hass.services.async_register("notify", "send_message", sent.append)
+    hass.services.async_register("notify", "send_message", callback(lambda c: sent.append(c)))  # noqa: PLW0108
     rt = await setup_homeai(
         hass,
         overrides={"person:person.anna": {"notify.targets": ["notify.kitchen_display"], "notify.discover_apps": False}},

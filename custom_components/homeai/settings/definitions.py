@@ -422,6 +422,14 @@ def _ai() -> list[Setting]:
         Setting("ai.max_calls_per_hour", T.INT, 60, s, min=1, max=10000, advanced=True),
         Setting("ai.timeout", T.DURATION, 90, s, min=10, max=600, unit="s", advanced=True),
         Setting("ai.p3_timeout", T.DURATION, 900, s, min=60, max=3600, unit="s", advanced=True),
+        Setting("ai.arbiter_enabled", T.BOOL, True, s),
+        Setting("ai.arbiter_disputes", T.BOOL, True, s),
+        Setting("ai.arbiter_approvals", T.BOOL, True, s),
+        Setting("ai.arbiter_failed_repairs", T.BOOL, True, s),
+        Setting("ai.arbiter_can_approve", T.BOOL, False, s, confirm="change"),
+        Setting("ai.arbiter_min_confidence", T.FLOAT, 0.8, s, min=0.5, max=1, step=0.05, advanced=True),
+        Setting("ai.arbiter_effort", T.SELECT, "high", s, options=("medium", "high", "xhigh", "max"), advanced=True),
+        Setting("ai.arbiter_per_day", T.INT, 10, s, min=1, max=200),
     ]
 
 

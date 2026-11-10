@@ -186,6 +186,37 @@ class Approvals:
         self._changed(item)
         return item
 
+    def note(self, item: dict[str, Any]) -> None:
+        """Something was added to a request (e.g. the arbiter's recommendation)."""
+        self._changed(item)
+
+    async def approve_as_arbiter(self, approval_id: str, decision: dict[str, Any]) -> dict[str, Any] | None:
+        """The arbiter approves within its limits (checked by the arbiter; never above R3, never R6)."""
+        item = self.items.get(approval_id)
+        if item is None or item["status"] != "pending" or int(item["risk"]) > 3:
+            return None
+        who = self.rt.text("ai|arbiter_name")
+        item.update(status="approved", decided_by=who, decided_at=dt_util.utcnow().isoformat(timespec="seconds"))
+        request = ActionRequest.from_dict(item["request"])
+        request.approved_by = who
+        result = await self.rt.module("executor").execute(request)
+        item["result"] = result.as_dict()
+        self.rt.journal.add("approval", self.rt.text("journal|approval_granted", what=item["what"], who=who))
+        await self._clear(item)
+        self._changed(item)
+        return item
+
+    async def deny_as_arbiter(self, approval_id: str, decision: dict[str, Any]) -> dict[str, Any] | None:
+        item = self.items.get(approval_id)
+        if item is None or item["status"] != "pending":
+            return None
+        who = self.rt.text("ai|arbiter_name")
+        item.update(status="denied", decided_by=who, decided_at=dt_util.utcnow().isoformat(timespec="seconds"))
+        self.rt.journal.add("approval", self.rt.text("journal|approval_denied", what=item["what"], who=who))
+        await self._clear(item)
+        self._changed(item)
+        return item
+
     async def tick(self, now: datetime) -> None:
         for item in self.pending():
             expires = dt_util.parse_datetime(item["expires"])

@@ -4,8 +4,12 @@
   },
   "ai": {
     "all_quiet": "W domu wszystko w porządku. Nic nie wymaga uwagi.",
+    "arbiter_name": "Arbiter HomeAI",
     "budget_over": "Budżet AI na ten {period} się skończył ({spent} z {limit}).",
     "budget_warn": "AI zużyło {spent} z budżetu {limit} na ten {period}.",
+    "decision_approve": "zatwierdzone",
+    "decision_escalate_human": "musi zdecydować człowiek",
+    "decision_reject": "odrzucone",
     "no_tier": "Nie skonfigurowano poziomu AI. Dodaj go w ustawieniach integracji HomeAI.",
     "open_summary": "Otwartych spraw: {count}: {titles}.",
     "period_day": "dzień",
@@ -29,6 +33,8 @@
     "approval_expired": "Prośba wygasła: {what}",
     "approval_granted": "{who} zgoda: {what}",
     "approval_requested": "Prośba o zgodę: {what}",
+    "arbiter_decided": "Arbiter: {title} — {decision}. {reason}",
+    "arbiter_reviewed": "Arbiter: {what} — {decision}. {reason}",
     "digest_sent": "Wysłano podsumowanie",
     "notified": "Powiadomiono: {who} — {title}",
     "plan_removed": "Usunięto z planu: {title}",
@@ -62,6 +68,12 @@
     "who_service": "Potrzebny serwis albo część zamienna."
   },
   "options": {
+    "ai.arbiter_effort": {
+      "high": "Wysoki",
+      "max": "Maksymalny",
+      "medium": "Średni",
+      "xhigh": "Bardzo wysoki"
+    },
     "ai.budget_mode": {
       "block": "Wstrzymaj AI",
       "warn": "Tylko ostrzegaj"
@@ -237,6 +249,38 @@
     "adapters.zigbee2mqtt_addon": {
       "description": "Identyfikator dodatku Zigbee2MQTT (np. 45df7312_zigbee2mqtt) do restartu, gdy mostek jest offline. Puste: przeładowanie.",
       "label": "Dodatek Zigbee2MQTT"
+    },
+    "ai.arbiter_approvals": {
+      "description": "Pytaj arbitra o czekające akcje, które są ryzykowne albo pojawiają się, gdy nikogo nie ma.",
+      "label": "Oceniaj ryzykowne prośby"
+    },
+    "ai.arbiter_can_approve": {
+      "description": "Pozwól arbitrowi zatwierdzać albo odrzucać czekające akcje do napraw systemu (R3). Wyższe klasy zawsze wymagają administratora.",
+      "label": "Arbiter może zatwierdzać"
+    },
+    "ai.arbiter_disputes": {
+      "description": "Pytaj arbitra, gdy P1 i P2 się nie zgadzają.",
+      "label": "Rozstrzygaj spory"
+    },
+    "ai.arbiter_effort": {
+      "description": "Jak głęboko myśli arbiter (sprawy bezpieczeństwa i destrukcyjne zawsze na maksimum).",
+      "label": "Wysiłek arbitra"
+    },
+    "ai.arbiter_enabled": {
+      "description": "Pozwól poziomowi arbitra (P3) rozstrzygać trudne sprawy.",
+      "label": "Arbiter"
+    },
+    "ai.arbiter_failed_repairs": {
+      "description": "Pytaj arbitra, gdy naprawy poważnej sprawy się nie udały.",
+      "label": "Po nieudanych naprawach"
+    },
+    "ai.arbiter_min_confidence": {
+      "description": "Arbiter zatwierdza tylko przy co najmniej takiej pewności.",
+      "label": "Arbiter: zatwierdzaj od"
+    },
+    "ai.arbiter_per_day": {
+      "description": "Najwięcej decyzji arbitra na dzień.",
+      "label": "Decyzje arbitra dziennie"
     },
     "ai.budget_daily": {
       "description": "Szacowany koszt AI na dzień. 0: bez limitu.",

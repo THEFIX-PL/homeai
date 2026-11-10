@@ -42,3 +42,37 @@ async def ws_triage(
         s.assessment["assessed_by"] = "code"  # look again
     result = await ai.triage(s)
     connection.send_result(msg["id"], {"result": result, "assessment": s.assessment})
+
+
+@command(
+    {TYPE: "homeai/ai/arbitrate", vol.Optional("situation_id"): str, vol.Optional("approval_id"): str},
+    admin=True,
+    is_async=True,
+)
+async def ws_arbitrate(
+    hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any], rt: Any
+) -> None:
+    """Ask the arbiter now about a situation or a waiting action."""
+    arbiter = rt.module("arbiter")
+    if arbiter is None or not arbiter.enabled():
+        connection.send_error(msg["id"], "not_available", "No arbiter tier")
+        return
+    if msg.get("situation_id"):
+        s = rt.module("situations").get(msg["situation_id"])
+        if s is None:
+            connection.send_error(msg["id"], "not_found", "No such situation")
+            return
+        decision = await arbiter.decide_situation(s, "request")
+    else:
+        item = rt.module("approvals").items.get(msg.get("approval_id") or "")
+        if item is None:
+            connection.send_error(msg["id"], "not_found", "No such request")
+            return
+        decision = await arbiter.decide_approval(item)
+    connection.send_result(msg["id"], {"decision": decision})
+
+
+@command({TYPE: "homeai/ai/dossiers"}, admin=True)
+def ws_dossiers(hass: HomeAssistant, connection: websocket_api.ActiveConnection, msg: dict[str, Any], rt: Any) -> None:
+    arbiter = rt.module("arbiter")
+    connection.send_result(msg["id"], {"dossiers": list(reversed(arbiter.dossiers)) if arbiter else []})

@@ -4,8 +4,12 @@
   },
   "ai": {
     "all_quiet": "Everything is fine at home. Nothing needs attention.",
+    "arbiter_name": "HomeAI arbiter",
     "budget_over": "AI budget for this {period} is used up ({spent} of {limit}).",
     "budget_warn": "AI has used {spent} of the {limit} budget for this {period}.",
+    "decision_approve": "approved",
+    "decision_escalate_human": "a person must decide",
+    "decision_reject": "rejected",
     "no_tier": "No AI tier is configured. Add one in HomeAI's integration settings.",
     "open_summary": "{count} matters are open: {titles}.",
     "period_day": "day",
@@ -29,6 +33,8 @@
     "approval_expired": "Approval expired: {what}",
     "approval_granted": "{who} approved: {what}",
     "approval_requested": "Asked for approval: {what}",
+    "arbiter_decided": "Arbiter on {title}: {decision}. {reason}",
+    "arbiter_reviewed": "Arbiter on {what}: {decision}. {reason}",
     "digest_sent": "Summary sent",
     "notified": "Notified {who}: {title}",
     "plan_removed": "Removed from plan: {title}",
@@ -62,6 +68,12 @@
     "who_service": "A technician or a replacement part is needed."
   },
   "options": {
+    "ai.arbiter_effort": {
+      "high": "High",
+      "max": "Maximum",
+      "medium": "Medium",
+      "xhigh": "Very high"
+    },
     "ai.budget_mode": {
       "block": "Stop AI calls",
       "warn": "Only warn"
@@ -237,6 +249,38 @@
     "adapters.zigbee2mqtt_addon": {
       "description": "Slug of the Zigbee2MQTT add-on (e.g. 45df7312_zigbee2mqtt) to restart when the bridge is offline. Empty: reload instead.",
       "label": "Zigbee2MQTT add-on"
+    },
+    "ai.arbiter_approvals": {
+      "description": "Ask the arbiter about waiting actions that are risky or come up while nobody is home.",
+      "label": "Review risky requests"
+    },
+    "ai.arbiter_can_approve": {
+      "description": "Let the arbiter approve or refuse waiting actions up to system repairs (R3). Higher classes always need an administrator.",
+      "label": "Arbiter may approve"
+    },
+    "ai.arbiter_disputes": {
+      "description": "Ask the arbiter when P1 and P2 disagree.",
+      "label": "Settle disagreements"
+    },
+    "ai.arbiter_effort": {
+      "description": "How deeply the arbiter thinks (security and destructive matters always use maximum).",
+      "label": "Arbiter effort"
+    },
+    "ai.arbiter_enabled": {
+      "description": "Let the arbiter tier (P3) settle hard cases.",
+      "label": "Arbiter"
+    },
+    "ai.arbiter_failed_repairs": {
+      "description": "Ask the arbiter when repairs failed on a serious matter.",
+      "label": "After failed repairs"
+    },
+    "ai.arbiter_min_confidence": {
+      "description": "The arbiter approves only when at least this sure.",
+      "label": "Arbiter: approve from"
+    },
+    "ai.arbiter_per_day": {
+      "description": "Most arbiter decisions per day.",
+      "label": "Arbiter decisions per day"
     },
     "ai.budget_daily": {
       "description": "Estimated AI cost per day. 0: no limit.",

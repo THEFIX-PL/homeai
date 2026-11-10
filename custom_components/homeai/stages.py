@@ -70,6 +70,12 @@ def _ai(rt: Any) -> Any:
     return AIModule(rt)
 
 
+def _arbiter(rt: Any) -> Any:
+    from .ai.arbiter import Arbiter
+
+    return Arbiter(rt)
+
+
 def _triage(rt: Any) -> Any:
     from .triage.engine import Triage
 
@@ -95,4 +101,5 @@ STAGES: list[tuple[str, Callable[[Any], Any]]] = [
     ("presence_exceptions", _presence_exceptions),
     ("scheduler", _scheduler),
     ("ai", _ai),
+    ("arbiter", _arbiter),
 ]
