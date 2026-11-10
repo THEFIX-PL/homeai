@@ -16,6 +16,7 @@ from homeassistant.core import Context, Event, HomeAssistant, callback
 from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.util import dt as dt_util, ulid as ulid_util
 
+from .. import i18n
 from ..const import DOMAIN, EVENT_ACTION, LOGGER
 from ..policy import ActionRequest, Decision, Risk, Verdict
 
@@ -112,8 +113,20 @@ class Executor:
         if request.domain == "config":
             subject = request.data.get("id") or request.data.get("name") or request.data.get("domain") or ""
             return self.rt.text("actions|describe", service=f"config.{request.service}", targets=[str(subject) or "—"])
-        names = [self.rt.world.display_name(e) for e in self.targets(request)]
-        return self.rt.text("actions|describe", service=f"{request.domain}.{request.service}", targets=names or ["—"])
+        names = [self.rt.world.display_name(e) for e in self.targets(request)] or ["—"]
+        values: dict[str, Any] = {
+            k: v for k, v in request.data.items() if isinstance(v, (str, int, float)) and not isinstance(v, bool)
+        }
+        if request.domain == "homeassistant" and request.service == "reload_config_entry":
+            entry = self.hass.config_entries.async_get_entry(str(request.data.get("entry_id") or ""))
+            values["entry"] = entry.title if entry else request.data.get("entry_id", "")
+        # Plain words for common actions (“Set Thermostat to 24 °C”); the service name for everything else.
+        for key in (f"{request.domain}.{request.service}", request.service):
+            if i18n.has(self.rt.language, f"actions|services|{key}"):
+                text = self.rt.text(f"actions|services|{key}", targets=names, **values)
+                if "{" not in text:
+                    return text
+        return self.rt.text("actions|describe", service=f"{request.domain}.{request.service}", targets=names)
 
     # ——— Running ———
     async def execute(self, request: ActionRequest) -> ActionResult:

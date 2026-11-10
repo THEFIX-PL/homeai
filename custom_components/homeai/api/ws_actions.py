@@ -12,7 +12,7 @@ import voluptuous as vol
 
 from ..policy import ActionRequest
 from ..schedule.scheduler import PlanError
-from .websocket import TYPE, command
+from .websocket import TYPE, command, user_name
 
 Conn = websocket_api.ActiveConnection
 
@@ -57,7 +57,7 @@ async def ws_execute(hass: HomeAssistant, connection: Conn, msg: dict[str, Any],
             user_id=connection.user.id,
             confirmed=msg["confirmed"],
             dry_run=msg["dry_run"],
-            reason="panel",
+            reason=rt.text("actions|requested_by", who=user_name(hass, connection)),
         )
     )
     connection.send_result(msg["id"], result.as_dict())

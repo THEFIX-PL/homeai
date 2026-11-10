@@ -1,6 +1,30 @@
 {
   "actions": {
-    "describe": "{service}: {targets}"
+    "describe": "{service}: {targets}",
+    "requested_by": "Asked by {who}",
+    "services": {
+      "backup.create_automatic": "Make a backup",
+      "climate.set_hvac_mode": "{targets}: mode {hvac_mode}",
+      "climate.set_temperature": "Set {targets} to {temperature} °C",
+      "cover.close_cover": "Close: {targets}",
+      "cover.open_cover": "Open: {targets}",
+      "cover.set_cover_position": "Set {targets} to {position}%",
+      "hassio.addon_restart": "Restart the add-on: {addon}",
+      "homeassistant.reload_config_entry": "Reload the integration: {entry}",
+      "light.turn_off": "Turn off the light: {targets}",
+      "light.turn_on": "Turn on the light: {targets}",
+      "lock.lock": "Lock: {targets}",
+      "lock.unlock": "Unlock: {targets}",
+      "media_player.media_pause": "Pause: {targets}",
+      "media_player.media_stop": "Stop: {targets}",
+      "scene.turn_on": "Scene: {targets}",
+      "script.turn_on": "Run the script: {targets}",
+      "toggle": "Toggle: {targets}",
+      "turn_off": "Turn off: {targets}",
+      "turn_on": "Turn on: {targets}",
+      "valve.close_valve": "Close the valve: {targets}",
+      "valve.open_valve": "Open the valve: {targets}"
+    }
   },
   "ai": {
     "all_quiet": "Everything is fine at home. Nothing needs attention.",

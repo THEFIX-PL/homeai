@@ -1,6 +1,30 @@
 {
   "actions": {
-    "describe": "{service}: {targets}"
+    "describe": "{service}: {targets}",
+    "requested_by": "Prosi: {who}",
+    "services": {
+      "backup.create_automatic": "Zrób kopię zapasową",
+      "climate.set_hvac_mode": "{targets}: tryb {hvac_mode}",
+      "climate.set_temperature": "Ustaw {targets} na {temperature} °C",
+      "cover.close_cover": "Zamknij: {targets}",
+      "cover.open_cover": "Otwórz: {targets}",
+      "cover.set_cover_position": "Ustaw {targets} na {position}%",
+      "hassio.addon_restart": "Uruchom ponownie dodatek: {addon}",
+      "homeassistant.reload_config_entry": "Przeładuj integrację: {entry}",
+      "light.turn_off": "Wyłącz światło: {targets}",
+      "light.turn_on": "Włącz światło: {targets}",
+      "lock.lock": "Zamknij zamek: {targets}",
+      "lock.unlock": "Otwórz zamek: {targets}",
+      "media_player.media_pause": "Wstrzymaj: {targets}",
+      "media_player.media_stop": "Zatrzymaj: {targets}",
+      "scene.turn_on": "Scena: {targets}",
+      "script.turn_on": "Uruchom skrypt: {targets}",
+      "toggle": "Przełącz: {targets}",
+      "turn_off": "Wyłącz: {targets}",
+      "turn_on": "Włącz: {targets}",
+      "valve.close_valve": "Zamknij zawór: {targets}",
+      "valve.open_valve": "Otwórz zawór: {targets}"
+    }
   },
   "ai": {
     "all_quiet": "W domu wszystko w porządku. Nic nie wymaga uwagi.",

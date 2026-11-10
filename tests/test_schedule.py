@@ -58,7 +58,7 @@ async def test_plan_runs_through_executor(hass: HomeAssistant, freezer: FrozenDa
         },
         None,
     )
-    assert entry["approved_risk"] == 2 and entry["title"].startswith("switch.turn_on")
+    assert entry["approved_risk"] == 2 and entry["title"] == "Turn on: Coffee plug"
     freezer.tick(timedelta(minutes=11))
     await advance(hass, seconds=0)
     assert calls and calls[0].context.user_id == rt.system_user_id
