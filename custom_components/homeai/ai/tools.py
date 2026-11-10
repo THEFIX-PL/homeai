@@ -402,6 +402,9 @@ SETS = {
     "investigate": (*READ_TOOLS, "call_service"),
     "chat": tuple(TOOLS),
 }
+SETS["chat_read"] = (*READ_TOOLS, "remember")
+SETS["chat_act"] = tuple(name for name in SETS["chat"] if name != "edit_config")
+SETS["chat_act_config"] = SETS["chat"]
 
 
 async def run_tool(ctx: ToolContext, name: str, args: dict[str, Any]) -> tuple[str, bool]:

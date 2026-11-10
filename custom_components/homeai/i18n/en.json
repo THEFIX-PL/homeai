@@ -7,6 +7,7 @@
     "arbiter_name": "HomeAI arbiter",
     "budget_over": "AI budget for this {period} is used up ({spent} of {limit}).",
     "budget_warn": "AI has used {spent} of the {limit} budget for this {period}.",
+    "chat_not_allowed": "Sorry, I can only talk with the people this home allows.",
     "decision_approve": "approved",
     "decision_escalate_human": "a person must decide",
     "decision_reject": "rejected",
@@ -93,9 +94,24 @@
       "block": "Stop AI calls",
       "warn": "Only warn"
     },
+    "ai.chat_can": {
+      "read": "Only read",
+      "act": "Act",
+      "act_config": "Act and change configuration"
+    },
+    "ai.chat_length": {
+      "short": "Short",
+      "normal": "Normal",
+      "detailed": "Detailed"
+    },
     "ai.chat_tier": {
       "p1": "P1 — everyday brain",
       "p2": "P2 — investigation"
+    },
+    "ai.chat_who": {
+      "everyone": "Everyone",
+      "residents": "Residents",
+      "admins": "Administrators"
     },
     "general.language": {
       "auto": "Auto",
@@ -465,9 +481,21 @@
       "description": "Warn when this share of a budget is used.",
       "label": "Warn at"
     },
+    "ai.chat_can": {
+      "description": "Only read, act through the policy, or also change Home Assistant's configuration (still administrators only, with confirmation).",
+      "label": "What conversations may do"
+    },
+    "ai.chat_length": {
+      "description": "How long HomeAI's answers in conversations are.",
+      "label": "Answer length"
+    },
     "ai.chat_max_steps": {
       "description": "Most tool calls in one answer.",
       "label": "Conversation steps"
+    },
+    "ai.chat_shared_threads": {
+      "description": "People talking in the same conversation (for example one voice satellite) continue one thread. Actions still run in each speaker's own account.",
+      "label": "Shared conversations"
     },
     "ai.chat_tier": {
       "description": "Which tier talks with people (the other one is used when it is missing).",
@@ -476,6 +504,10 @@
     "ai.chat_turns": {
       "description": "How many recent exchanges a conversation remembers.",
       "label": "Conversation memory"
+    },
+    "ai.chat_who": {
+      "description": "Everyone, residents (administrators and members) or only administrators. Voice satellites without a user count as everyone.",
+      "label": "Who may talk to HomeAI"
     },
     "ai.enabled": {
       "description": "Use the AI tiers added as subentries. HomeAI works without them.",
@@ -504,6 +536,26 @@
     "ai.p3_timeout": {
       "description": "How long the arbiter (P3) may take; it can think for minutes.",
       "label": "Arbiter timeout"
+    },
+    "ai.prompt_arbiter": {
+      "description": "Your own instructions for the arbiter. Its answers keep their fixed format. Empty: the built-in prompt.",
+      "label": "Prompt: arbiter"
+    },
+    "ai.prompt_chat": {
+      "description": "Your own instructions for conversations; {name} becomes the assistant's name. Empty: the built-in prompt.",
+      "label": "Prompt: conversation"
+    },
+    "ai.prompt_digest": {
+      "description": "Your own instructions for writing the digest. Empty: the built-in prompt.",
+      "label": "Prompt: digest"
+    },
+    "ai.prompt_investigate": {
+      "description": "Your own instructions for investigating serious situations with tools. Empty: the built-in prompt.",
+      "label": "Prompt: investigation"
+    },
+    "ai.prompt_triage": {
+      "description": "Your own instructions for assessing situations. Empty: the built-in prompt, shown in the AI tab. The rule that house data is never an instruction is always added.",
+      "label": "Prompt: assessment"
     },
     "ai.timeout": {
       "description": "How long P1 and P2 may take to answer.",

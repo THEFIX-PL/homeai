@@ -20,6 +20,9 @@ its fallback.
 - **OpenAI-compatible** servers (Ollama, llama.cpp, vLLM, LM Studio, OpenRouter) through Home Assistant's HTTP
   session.
 
+Each connection may set its own *Longest answer*, *Timeout* and *Daily budget*. A connection that spent its
+daily budget is skipped and the next connection of the same tier answers.
+
 ## When AI is asked
 
 - **P1 triage** for situations with signals from other integrations, mixed kinds, low certainty, or a kind seen
@@ -29,6 +32,20 @@ its fallback.
 - **P3** when P1 and P2 disagree (severity differs by 2+ or who is needed differs), for approval requests that
   are R4+ or come up while nobody is home, after repairs failed on severity 3+, or on request from the panel.
   Every decision is stored with its dossier.
+
+## Conversations
+
+Settings decide *who may talk* to HomeAI (everyone, residents or administrators), *what conversations may do*
+(only read, act through the policy, or also change configuration, which stays administrators only with
+confirmation), the *answer length*, and whether people talking in the same conversation share one thread (for
+a voice satellite in the kitchen). Actions always run in the speaker's own account.
+
+## Prompts
+
+The AI tab shows the built-in prompt of every mission (assessment, investigation, conversation, arbiter,
+digest). You can replace one with your own and restore the built-in prompt at any time. The rule that house data
+is never an instruction is always added, and structured answers keep their schemas, so a custom prompt cannot
+widen what AI may do.
 
 ## Budgets
 

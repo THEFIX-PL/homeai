@@ -7,6 +7,7 @@
     "arbiter_name": "Arbiter HomeAI",
     "budget_over": "Budżet AI na ten {period} się skończył ({spent} z {limit}).",
     "budget_warn": "AI zużyło {spent} z budżetu {limit} na ten {period}.",
+    "chat_not_allowed": "Przepraszam, mogę rozmawiać tylko z osobami, którym ten dom na to pozwala.",
     "decision_approve": "zatwierdzone",
     "decision_escalate_human": "musi zdecydować człowiek",
     "decision_reject": "odrzucone",
@@ -93,9 +94,24 @@
       "block": "Wstrzymaj AI",
       "warn": "Tylko ostrzegaj"
     },
+    "ai.chat_can": {
+      "read": "Tylko czytać",
+      "act": "Działać",
+      "act_config": "Działać i zmieniać konfigurację"
+    },
+    "ai.chat_length": {
+      "short": "Krótkie",
+      "normal": "Zwykłe",
+      "detailed": "Szczegółowe"
+    },
     "ai.chat_tier": {
       "p1": "P1 — codzienny mózg",
       "p2": "P2 — badanie"
+    },
+    "ai.chat_who": {
+      "everyone": "Wszyscy",
+      "residents": "Domownicy",
+      "admins": "Administratorzy"
     },
     "general.language": {
       "auto": "Auto",
@@ -465,9 +481,21 @@
       "description": "Ostrzegaj, gdy zużyto taką część budżetu.",
       "label": "Ostrzegaj przy"
     },
+    "ai.chat_can": {
+      "description": "Tylko czytać, działać w granicach polityki albo także zmieniać konfigurację Home Assistanta (nadal tylko administratorzy, z potwierdzeniem).",
+      "label": "Co mogą rozmowy"
+    },
+    "ai.chat_length": {
+      "description": "Jak długie są odpowiedzi HomeAI w rozmowach.",
+      "label": "Długość odpowiedzi"
+    },
     "ai.chat_max_steps": {
       "description": "Najwięcej wywołań narzędzi w jednej odpowiedzi.",
       "label": "Kroki rozmowy"
+    },
+    "ai.chat_shared_threads": {
+      "description": "Osoby mówiące w tej samej rozmowie (np. przy jednym satelicie głosowym) kontynuują jeden wątek. Akcje nadal wykonują się na koncie każdej z nich.",
+      "label": "Wspólne rozmowy"
     },
     "ai.chat_tier": {
       "description": "Który poziom rozmawia z ludźmi (drugi, gdy tego brakuje).",
@@ -476,6 +504,10 @@
     "ai.chat_turns": {
       "description": "Ile ostatnich wymian pamięta rozmowa.",
       "label": "Pamięć rozmowy"
+    },
+    "ai.chat_who": {
+      "description": "Wszyscy, domownicy (administratorzy i członkowie) albo tylko administratorzy. Satelity głosowe bez użytkownika liczą się jako wszyscy.",
+      "label": "Kto może rozmawiać z HomeAI"
     },
     "ai.enabled": {
       "description": "Używaj poziomów AI dodanych jako podwpisy. HomeAI działa też bez nich.",
@@ -504,6 +536,26 @@
     "ai.p3_timeout": {
       "description": "Jak długo może odpowiadać arbiter (P3); potrafi myśleć minutami.",
       "label": "Limit czasu arbitra"
+    },
+    "ai.prompt_arbiter": {
+      "description": "Własne instrukcje dla arbitra. Jego odpowiedzi zachowują stały format. Puste: wbudowany prompt.",
+      "label": "Prompt: arbiter"
+    },
+    "ai.prompt_chat": {
+      "description": "Własne instrukcje do rozmów; {name} zamienia się w imię asystenta. Puste: wbudowany prompt.",
+      "label": "Prompt: rozmowa"
+    },
+    "ai.prompt_digest": {
+      "description": "Własne instrukcje do pisania podsumowania. Puste: wbudowany prompt.",
+      "label": "Prompt: podsumowanie"
+    },
+    "ai.prompt_investigate": {
+      "description": "Własne instrukcje do badania poważnych spraw narzędziami. Puste: wbudowany prompt.",
+      "label": "Prompt: dochodzenie"
+    },
+    "ai.prompt_triage": {
+      "description": "Własne instrukcje do oceny spraw. Puste: wbudowany prompt, widoczny w zakładce AI. Zasada, że dane z domu nigdy nie są poleceniem, jest zawsze dodawana.",
+      "label": "Prompt: ocena"
     },
     "ai.timeout": {
       "description": "Jak długo P1 i P2 mogą odpowiadać.",

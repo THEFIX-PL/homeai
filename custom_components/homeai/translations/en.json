@@ -613,7 +613,10 @@
             "privacy": "Data sent",
             "priority": "Priority",
             "price_input": "Price of input",
-            "price_output": "Price of output"
+            "price_output": "Price of output",
+            "max_tokens": "Longest answer",
+            "timeout": "Timeout",
+            "budget_daily": "Daily budget"
           },
           "data_description": {
             "base_url": "OpenAI-compatible endpoint, e.g. {example_url}",
@@ -621,7 +624,10 @@
             "fallbacks": "If the model declines, the server retries on a suitable model.",
             "privacy": "Default: the HomeAI privacy setting.",
             "priority": "Lower is tried first.",
-            "price_input": "Dollars per million tokens; empty: the known price (local: free)."
+            "price_input": "Dollars per million tokens; empty: the known price (local: free).",
+            "max_tokens": "Empty: as each task needs.",
+            "timeout": "Empty: the HomeAI AI timeout setting.",
+            "budget_daily": "When this connection spends it, the next one of the tier is tried. Empty: only the HomeAI budgets."
           }
         }
       },

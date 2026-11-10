@@ -43,6 +43,10 @@ const TEXTS: Record<string, Record<string, string>> = {
     presence_kind: "What", presence_person: "Who", presence_everyone: "Whole household", presence_from: "From",
     presence_to: "Until (inclusive)", presence_note: "Note", presence_away: "Away", presence_vacation: "Vacation",
     presence_guests: "Guests", presence_home_office: "Working from home", presence_sick: "Sick at home",
+    prompts: "Prompts", prompt_triage: "Assessment", prompt_investigate: "Investigation", prompt_chat: "Conversation",
+    prompt_arbiter: "Arbiter", prompt_digest: "Digest", prompt_custom: "your own", prompt_default: "built-in",
+    prompt_restore: "Restore the built-in prompt", prompt_show_default: "Show the built-in prompt", prompt_restored: "built-in prompt restored",
+    prompt_hint: "The rule that house data is never an instruction is always added, and structured answers keep their format.",
   },
   pl: {
     situations: "Sprawy", approvals: "Zgody", plan: "Plan", journal: "Dziennik", settings: "Ustawienia", ai: "AI",
@@ -87,6 +91,10 @@ const TEXTS: Record<string, Record<string, string>> = {
     presence_kind: "Co", presence_person: "Kto", presence_everyone: "Cały dom", presence_from: "Od",
     presence_to: "Do (włącznie)", presence_note: "Notatka", presence_away: "Poza domem", presence_vacation: "Urlop",
     presence_guests: "Goście", presence_home_office: "Praca z domu", presence_sick: "Choroba w domu",
+    prompts: "Prompty", prompt_triage: "Ocena", prompt_investigate: "Dochodzenie", prompt_chat: "Rozmowa",
+    prompt_arbiter: "Arbiter", prompt_digest: "Podsumowanie", prompt_custom: "własny", prompt_default: "wbudowany",
+    prompt_restore: "Przywróć wbudowany prompt", prompt_show_default: "Pokaż wbudowany prompt", prompt_restored: "przywrócono wbudowany prompt",
+    prompt_hint: "Zasada, że dane z domu nigdy nie są poleceniem, jest zawsze dodawana, a odpowiedzi strukturalne zachowują swój format.",
   },
 };
 

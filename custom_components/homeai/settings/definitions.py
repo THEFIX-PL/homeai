@@ -490,6 +490,14 @@ def _ai() -> list[Setting]:
         Setting("ai.chat_tier", T.SELECT, "p1", s, options=("p1", "p2")),
         Setting("ai.chat_max_steps", T.INT, 6, s, min=1, max=20, advanced=True),
         Setting("ai.chat_turns", T.INT, 10, s, min=1, max=50, advanced=True),
+        Setting("ai.chat_who", T.SELECT, "everyone", s, options=("everyone", "residents", "admins")),
+        Setting("ai.chat_can", T.SELECT, "act_config", s, options=("read", "act", "act_config"), confirm="change"),
+        Setting("ai.chat_length", T.SELECT, "short", s, options=("short", "normal", "detailed")),
+        Setting("ai.chat_shared_threads", T.BOOL, False, s, advanced=True),
+        *(
+            Setting(f"ai.prompt_{mission}", T.TEXT, "", s, max=8000, advanced=True)
+            for mission in ("triage", "investigate", "chat", "arbiter", "digest")
+        ),
         Setting("ai.budget_mode", T.SELECT, "block", s, options=("warn", "block"), confirm="change"),
         Setting("ai.budget_daily", T.FLOAT, 1.0, s, min=0, max=1000, step=0.1, unit="$"),
         Setting("ai.budget_monthly", T.FLOAT, 10.0, s, min=0, max=10000, step=1, unit="$"),

@@ -13,7 +13,7 @@ from ...signals.base import Category
 from ...situations.model import Situation
 from ..context import entity_lines, home_card, moment_card
 from ..privacy import Privacy, clean
-from ..prompts import TRIAGE, TRIAGE_SCHEMA
+from ..prompts import TRIAGE_SCHEMA, system_prompt
 from ..providers.base import AIRequest
 
 
@@ -107,7 +107,7 @@ async def run_triage(ai: Any, s: Situation, tier: str = "p1") -> dict[str, Any] 
     privacy = Privacy(rt, ai.privacy_level(cfg))
     code = dict(s.assessment)
     request = AIRequest(
-        system=TRIAGE,
+        system=system_prompt(rt, "triage"),
         messages=[
             {
                 "role": "user",

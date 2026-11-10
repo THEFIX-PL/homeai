@@ -331,6 +331,15 @@ AI tiers, assessment, budgets.
 | **Conversation tier** — Which tier talks with people (the other one is used when it is missing). | `ai.chat_tier` | `p1` | P1 — everyday brain (`p1`), P2 — investigation (`p2`) | home |  |
 | **Conversation steps** — Most tool calls in one answer. | `ai.chat_max_steps` | 6 | 1–20 | home | advanced |
 | **Conversation memory** — How many recent exchanges a conversation remembers. | `ai.chat_turns` | 10 | 1–50 | home | advanced |
+| **Who may talk to HomeAI** — Everyone, residents (administrators and members) or only administrators. Voice satellites without a user count as everyone. | `ai.chat_who` | `everyone` | Everyone (`everyone`), Residents (`residents`), Administrators (`admins`) | home |  |
+| **What conversations may do** — Only read, act through the policy, or also change Home Assistant's configuration (still administrators only, with confirmation). | `ai.chat_can` | `act_config` | Only read (`read`), Act (`act`), Act and change configuration (`act_config`) | home | confirm (change) |
+| **Answer length** — How long HomeAI's answers in conversations are. | `ai.chat_length` | `short` | Short (`short`), Normal (`normal`), Detailed (`detailed`) | home |  |
+| **Shared conversations** — People talking in the same conversation (for example one voice satellite) continue one thread. Actions still run in each speaker's own account. | `ai.chat_shared_threads` | false |  | home | advanced |
+| **Prompt: assessment** — Your own instructions for assessing situations. Empty: the built-in prompt, shown in the AI tab. The rule that house data is never an instruction is always added. | `ai.prompt_triage` | `` | up to 8000 characters | home | advanced |
+| **Prompt: investigation** — Your own instructions for investigating serious situations with tools. Empty: the built-in prompt. | `ai.prompt_investigate` | `` | up to 8000 characters | home | advanced |
+| **Prompt: conversation** — Your own instructions for conversations; {name} becomes the assistant's name. Empty: the built-in prompt. | `ai.prompt_chat` | `` | up to 8000 characters | home | advanced |
+| **Prompt: arbiter** — Your own instructions for the arbiter. Its answers keep their fixed format. Empty: the built-in prompt. | `ai.prompt_arbiter` | `` | up to 8000 characters | home | advanced |
+| **Prompt: digest** — Your own instructions for writing the digest. Empty: the built-in prompt. | `ai.prompt_digest` | `` | up to 8000 characters | home | advanced |
 | **When the budget is used up** — Only warn, or stop AI calls until the period ends. | `ai.budget_mode` | `block` | Only warn (`warn`), Stop AI calls (`block`) | home | confirm (change) |
 | **Daily budget** — Estimated AI cost per day. 0: no limit. | `ai.budget_daily` | 1.0 | 0–1000 $ | home |  |
 | **Monthly budget** — Estimated AI cost per month. 0: no limit. | `ai.budget_monthly` | 10.0 | 0–10000 $ | home |  |

@@ -9,7 +9,7 @@ from ...situations.model import Situation
 from ..agent import run_agent
 from ..context import home_card, moment_card
 from ..privacy import Privacy
-from ..prompts import INVESTIGATE, TRIAGE_SCHEMA
+from ..prompts import TRIAGE_SCHEMA, system_prompt
 from ..tools import ToolContext
 from .triage import situation_text, validate
 
@@ -25,7 +25,7 @@ async def investigate(ai: Any, s: Situation) -> dict[str, Any] | None:
     result = await run_agent(
         ai,
         "p2",
-        system=INVESTIGATE,
+        system=system_prompt(rt, "investigate"),
         messages=[
             {
                 "role": "user",

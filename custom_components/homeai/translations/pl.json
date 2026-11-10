@@ -613,7 +613,10 @@
             "privacy": "Wysyłane dane",
             "priority": "Priorytet",
             "price_input": "Cena wejścia",
-            "price_output": "Cena wyjścia"
+            "price_output": "Cena wyjścia",
+            "max_tokens": "Najdłuższa odpowiedź",
+            "timeout": "Limit czasu",
+            "budget_daily": "Budżet dzienny"
           },
           "data_description": {
             "base_url": "Punkt zgodny z OpenAI, np. {example_url}",
@@ -621,7 +624,10 @@
             "fallbacks": "Gdy model odmówi, serwer ponowi na odpowiednim modelu.",
             "privacy": "Domyślnie: ustawienie prywatności HomeAI.",
             "priority": "Niższy jest próbowany pierwszy.",
-            "price_input": "Dolary za milion tokenów; puste: znana cena (lokalnie: za darmo)."
+            "price_input": "Dolary za milion tokenów; puste: znana cena (lokalnie: za darmo).",
+            "max_tokens": "Puste: tyle, ile potrzebuje zadanie.",
+            "timeout": "Puste: ustawienie limitu czasu AI w HomeAI.",
+            "budget_daily": "Gdy to połączenie go wyda, próbowane jest następne z tego poziomu. Puste: tylko budżety HomeAI."
           }
         }
       },
