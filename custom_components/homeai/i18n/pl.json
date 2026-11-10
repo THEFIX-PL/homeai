@@ -1,0 +1,217 @@
+{
+  "common": {
+    "and": "i"
+  },
+  "journal": {
+    "setting_changed": "Zmiana ustawienia: {key}"
+  },
+  "options": {
+    "general.language": {
+      "auto": "Auto",
+      "en": "English",
+      "pl": "Polski"
+    },
+    "presence.role": {
+      "admin": "Administrator",
+      "guest": "Gość",
+      "ignore": "Pomiń",
+      "member": "Domownik"
+    },
+    "presence.sleep_sources": {
+      "ai": "Wniosek AI",
+      "helper": "Pomocnik",
+      "hours": "Godziny nocy",
+      "sensors": "Czujniki"
+    },
+    "privacy.level": {
+      "full": "Pełny",
+      "minimal": "Minimalny",
+      "standard": "Standardowy"
+    },
+    "world.scope": {
+      "all": "Wszystkie encje",
+      "exposed": "Udostępnione asystentom",
+      "selected": "Wybrane pomieszczenia"
+    }
+  },
+  "sections": {
+    "general": {
+      "description": "Język, pory dnia, dziennik i panel.",
+      "label": "Ogólne"
+    },
+    "presence": {
+      "description": "Role, tryb domu i skąd HomeAI wie, kto śpi.",
+      "label": "Domownicy i sen"
+    },
+    "privacy": {
+      "description": "Co może trafić do AI w chmurze.",
+      "label": "Prywatność"
+    },
+    "world": {
+      "description": "Które encje HomeAI obserwuje i jakie etykiety rozumie.",
+      "label": "Model domu"
+    }
+  },
+  "settings": {
+    "general.assistant_name": {
+      "description": "Jak HomeAI przedstawia się w wiadomościach i rozmowach.",
+      "label": "Nazwa asystenta"
+    },
+    "general.day_start": {
+      "description": "Od kiedy jest dzień.",
+      "label": "Początek dnia"
+    },
+    "general.evening_start": {
+      "description": "Od kiedy jest wieczór.",
+      "label": "Początek wieczoru"
+    },
+    "general.journal_retention_days": {
+      "description": "Jak długo wpisy zostają w dzienniku HomeAI.",
+      "label": "Jak długo trzymać dziennik"
+    },
+    "general.language": {
+      "description": "Język powiadomień, dziennika i odpowiedzi AI. Auto oznacza język Home Assistanta.",
+      "label": "Język"
+    },
+    "general.morning_start": {
+      "description": "Od kiedy jest poranek.",
+      "label": "Początek poranka"
+    },
+    "general.night_start": {
+      "description": "Od kiedy jest noc.",
+      "label": "Początek nocy"
+    },
+    "general.panel_admin_only": {
+      "description": "Ukryj panel HomeAI przed osobami bez uprawnień administratora.",
+      "label": "Panel tylko dla administratorów"
+    },
+    "general.panel_sidebar": {
+      "description": "Pokazuj panel HomeAI w pasku bocznym Home Assistanta.",
+      "label": "Panel w pasku bocznym"
+    },
+    "general.startup_grace": {
+      "description": "Po starcie Home Assistanta integracje potrzebują czasu. W tym czasie HomeAI nie ogłasza spraw i nie działa.",
+      "label": "Spokój po starcie"
+    },
+    "general.tick_seconds": {
+      "description": "Jak często działają sprawdzenia zależne od czasu (niedostępność, terminy, harmonogram).",
+      "label": "Co ile sprawdzać"
+    },
+    "presence.bed_entities": {
+      "description": "Czujniki zajętości łóżka osoby.",
+      "label": "Czujniki łóżka"
+    },
+    "presence.charging_entities": {
+      "description": "Czujniki ładowania telefonu osoby; ładowanie w nocy sugeruje sen.",
+      "label": "Czujniki ładowania telefonu"
+    },
+    "presence.home_mode_entity": {
+      "description": "Opcjonalny pomocnik (np. input_select) z trybem domu, np. dom, poza domem, urlop.",
+      "label": "Pomocnik trybu domu"
+    },
+    "presence.night_end": {
+      "description": "Zwykła pora pobudki w dni robocze.",
+      "label": "Koniec nocy (dni robocze)"
+    },
+    "presence.night_start": {
+      "description": "Zwykła pora snu w dni robocze.",
+      "label": "Początek nocy (dni robocze)"
+    },
+    "presence.quiet_minutes": {
+      "description": "Jak długo zmiana obecności musi trwać, zanim HomeAI zareaguje.",
+      "label": "Czas uspokojenia"
+    },
+    "presence.role": {
+      "description": "Administratorzy zatwierdzają ryzykowne akcje i zmiany konfiguracji, domownicy dostają powiadomienia, goście i osoby pominięte nie są mieszkańcami.",
+      "label": "Rola"
+    },
+    "presence.sleep_helper": {
+      "description": "Przełącznik albo pomocnik mówiący, że osoba śpi.",
+      "label": "Pomocnik snu"
+    },
+    "presence.sleep_helper_state": {
+      "description": "Stan pomocnika snu oznaczający sen.",
+      "label": "Stan pomocnika snu"
+    },
+    "presence.sleep_sources": {
+      "description": "Skąd HomeAI wie, że ktoś śpi, w kolejności zaufania: pomocnik, czujniki, wniosek AI, godziny nocy.",
+      "label": "Źródła snu"
+    },
+    "presence.vacation_states": {
+      "description": "Stany pomocnika trybu domu oznaczające dłuższą nieobecność.",
+      "label": "Stany urlopu"
+    },
+    "presence.weekend_night_end": {
+      "description": "Zwykła pora pobudki w weekend.",
+      "label": "Koniec nocy (weekend)"
+    },
+    "presence.weekend_night_start": {
+      "description": "Zwykła pora snu w piątek i sobotę.",
+      "label": "Początek nocy (weekend)"
+    },
+    "privacy.level": {
+      "description": "Standardowy wysyła nazwy urządzeń, pokoi i osób. Minimalny zastępuje osoby i pokoje neutralnymi etykietami. Pełny wysyła też tytuły z kalendarzy.",
+      "label": "Dane wysyłane do AI w chmurze"
+    },
+    "privacy.log_prompts": {
+      "description": "Przechowuj zapytania i odpowiedzi AI do diagnozowania problemów.",
+      "label": "Zapisuj zapytania AI"
+    },
+    "privacy.log_retention_days": {
+      "description": "Jak długo przechowywać zapisane zapytania AI.",
+      "label": "Jak długo trzymać zapytania AI"
+    },
+    "privacy.never_send_areas": {
+      "description": "Pomieszczenia, których dane nigdy nie opuszczają domu.",
+      "label": "Nigdy nie wysyłaj tych pomieszczeń"
+    },
+    "privacy.never_send_entities": {
+      "description": "Encje, których dane nigdy nie opuszczają domu.",
+      "label": "Nigdy nie wysyłaj tych encji"
+    },
+    "world.create_labels": {
+      "description": "Utwórz etykiety rozumiane przez HomeAI (pomiń, osobiste, krytyczne, akcja ochronna, prywatne), jeśli ich nie ma.",
+      "label": "Twórz etykiety HomeAI"
+    },
+    "world.exclude_entities": {
+      "description": "Wzorce encji, które HomeAI pomija, np. light.*_wyswietlacz.",
+      "label": "Pominięte encje"
+    },
+    "world.include_areas": {
+      "description": "Pomieszczenia, które HomeAI obserwuje przy zakresie „wybrane pomieszczenia”.",
+      "label": "Wybrane pomieszczenia"
+    },
+    "world.include_domains": {
+      "description": "Ogranicz HomeAI do tych domen encji. Puste oznacza wszystkie.",
+      "label": "Tylko te domeny"
+    },
+    "world.include_hidden": {
+      "description": "Obserwuj też encje ukryte w Home Assistancie.",
+      "label": "Uwzględniaj ukryte encje"
+    },
+    "world.label_critical": {
+      "description": "Problemy z tymi urządzeniami mają zawsze najwyższą wagę.",
+      "label": "Etykieta: krytyczne"
+    },
+    "world.label_ignore": {
+      "description": "Encje i urządzenia z tą etykietą są dla HomeAI niewidoczne.",
+      "label": "Etykieta: pomiń"
+    },
+    "world.label_personal": {
+      "description": "Urządzenia osobiste (telefony, laptopy) bywają offline; to nie awaria domu.",
+      "label": "Etykieta: osobiste"
+    },
+    "world.label_private": {
+      "description": "Dane tych encji nigdy nie trafiają do AI w chmurze.",
+      "label": "Etykieta: prywatne"
+    },
+    "world.label_protective": {
+      "description": "Akcje na tych encjach mogą działać automatycznie, by chronić dom (np. zamknięcie zaworu wody przy zalaniu).",
+      "label": "Etykieta: akcja ochronna"
+    },
+    "world.scope": {
+      "description": "Wszystkie encje, tylko udostępnione asystentom głosowym albo tylko wybrane pomieszczenia.",
+      "label": "Które encje HomeAI widzi"
+    }
+  }
+}

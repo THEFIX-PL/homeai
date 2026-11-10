@@ -3,11 +3,82 @@
     "step": {
       "user": {
         "title": "Set up HomeAI",
-        "description": "HomeAI is in early development. This version only adds the integration and does not do anything in your home yet."
+        "description": "HomeAI notices what changes in your home, decides what to do, fixes what it can and tells you only when a person is needed. It works without AI; AI tiers can be added later as subentries.",
+        "data": {
+          "language": "Language of HomeAI's messages",
+          "privacy": "Data sent to cloud AI"
+        },
+        "data_description": {
+          "language": "Auto follows Home Assistant's language.",
+          "privacy": "Standard sends device, room and people names. Minimal replaces people and rooms with neutral labels. Full also sends calendar event titles."
+        }
+      },
+      "people": {
+        "title": "People",
+        "description": "Choose each person's role. Administrators approve risky actions and configuration changes; members get notifications; guests and ignored people are not tracked as residents. People: {people}"
       }
     },
     "abort": {
       "single_instance_allowed": "HomeAI is already set up. Only one instance is allowed."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "HomeAI quick settings",
+        "description": "All other settings are in the HomeAI panel.",
+        "data": {
+          "general_language": "Language",
+          "privacy_level": "Data sent to cloud AI",
+          "notify_paused": "Pause notifications"
+        }
+      }
+    },
+    "abort": {
+      "not_loaded": "HomeAI is not running. Reload the integration and try again."
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "auto": "Auto (Home Assistant's language)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "general_language": {
+      "options": {
+        "auto": "Auto (Home Assistant's language)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "privacy": {
+      "options": {
+        "standard": "Standard",
+        "minimal": "Minimal",
+        "full": "Full"
+      }
+    },
+    "privacy_level": {
+      "options": {
+        "standard": "Standard",
+        "minimal": "Minimal",
+        "full": "Full"
+      }
+    },
+    "role": {
+      "options": {
+        "admin": "Administrator",
+        "member": "Member",
+        "guest": "Guest",
+        "ignore": "Ignore"
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "HomeAI is not loaded."
     }
   }
 }

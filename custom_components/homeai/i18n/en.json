@@ -1,0 +1,217 @@
+{
+  "common": {
+    "and": "and"
+  },
+  "journal": {
+    "setting_changed": "Setting changed: {key}"
+  },
+  "options": {
+    "general.language": {
+      "auto": "Auto",
+      "en": "English",
+      "pl": "Polski"
+    },
+    "presence.role": {
+      "admin": "Administrator",
+      "guest": "Guest",
+      "ignore": "Ignore",
+      "member": "Member"
+    },
+    "presence.sleep_sources": {
+      "ai": "AI inference",
+      "helper": "Helper",
+      "hours": "Night hours",
+      "sensors": "Sensors"
+    },
+    "privacy.level": {
+      "full": "Full",
+      "minimal": "Minimal",
+      "standard": "Standard"
+    },
+    "world.scope": {
+      "all": "All entities",
+      "exposed": "Exposed to assistants",
+      "selected": "Selected areas"
+    }
+  },
+  "sections": {
+    "general": {
+      "description": "Language, parts of the day, journal and panel.",
+      "label": "General"
+    },
+    "presence": {
+      "description": "Roles, house mode and how HomeAI knows who sleeps.",
+      "label": "People and sleep"
+    },
+    "privacy": {
+      "description": "What may be sent to cloud AI.",
+      "label": "Privacy"
+    },
+    "world": {
+      "description": "Which entities HomeAI watches and the labels it understands.",
+      "label": "Home model"
+    }
+  },
+  "settings": {
+    "general.assistant_name": {
+      "description": "How HomeAI calls itself in messages and conversations.",
+      "label": "Assistant name"
+    },
+    "general.day_start": {
+      "description": "Start of the day part of the day.",
+      "label": "Day starts"
+    },
+    "general.evening_start": {
+      "description": "Start of the evening part of the day.",
+      "label": "Evening starts"
+    },
+    "general.journal_retention_days": {
+      "description": "How long entries stay in HomeAI's journal.",
+      "label": "Journal retention"
+    },
+    "general.language": {
+      "description": "Language of HomeAI's notifications, journal and AI replies. Auto follows Home Assistant.",
+      "label": "Language"
+    },
+    "general.morning_start": {
+      "description": "Start of the morning part of the day.",
+      "label": "Morning starts"
+    },
+    "general.night_start": {
+      "description": "Start of the night part of the day.",
+      "label": "Night starts"
+    },
+    "general.panel_admin_only": {
+      "description": "Hide the HomeAI panel from non-administrators.",
+      "label": "Panel for administrators only"
+    },
+    "general.panel_sidebar": {
+      "description": "Show the HomeAI panel in Home Assistant's sidebar.",
+      "label": "Show panel in sidebar"
+    },
+    "general.startup_grace": {
+      "description": "After Home Assistant starts, integrations need time to come up. HomeAI does not announce situations or act during this time.",
+      "label": "Startup grace period"
+    },
+    "general.tick_seconds": {
+      "description": "How often time-based checks run (unavailability, deadlines, schedules).",
+      "label": "Evaluation interval"
+    },
+    "presence.bed_entities": {
+      "description": "Bed occupancy sensors of the person.",
+      "label": "Bed sensors"
+    },
+    "presence.charging_entities": {
+      "description": "Charging sensors of the person's phone; charging at night suggests sleep.",
+      "label": "Phone charging sensors"
+    },
+    "presence.home_mode_entity": {
+      "description": "Optional helper (for example input_select) describing the house mode, such as home, away or vacation.",
+      "label": "House mode helper"
+    },
+    "presence.night_end": {
+      "description": "Usual wake-up time on workdays.",
+      "label": "Night ends (workdays)"
+    },
+    "presence.night_start": {
+      "description": "Usual bedtime on workdays.",
+      "label": "Night starts (workdays)"
+    },
+    "presence.quiet_minutes": {
+      "description": "How long a change in presence must last before HomeAI reacts.",
+      "label": "Settling time"
+    },
+    "presence.role": {
+      "description": "Administrators approve risky actions and configuration changes; members receive notifications; guests and ignored people are not residents.",
+      "label": "Role"
+    },
+    "presence.sleep_helper": {
+      "description": "Switch or helper that says a person is asleep.",
+      "label": "Sleep helper"
+    },
+    "presence.sleep_helper_state": {
+      "description": "State of the sleep helper that means asleep.",
+      "label": "Sleep helper state"
+    },
+    "presence.sleep_sources": {
+      "description": "Where HomeAI learns that someone sleeps, in order of trust: helper, sensors, AI inference, night hours.",
+      "label": "Sleep sources"
+    },
+    "presence.vacation_states": {
+      "description": "States of the house mode helper that mean a longer absence.",
+      "label": "Vacation states"
+    },
+    "presence.weekend_night_end": {
+      "description": "Usual wake-up time on weekends.",
+      "label": "Night ends (weekends)"
+    },
+    "presence.weekend_night_start": {
+      "description": "Usual bedtime on Friday and Saturday.",
+      "label": "Night starts (weekends)"
+    },
+    "privacy.level": {
+      "description": "Standard sends names of devices, rooms and people. Minimal replaces people and rooms with neutral labels. Full also sends calendar titles.",
+      "label": "Data sent to cloud AI"
+    },
+    "privacy.log_prompts": {
+      "description": "Store requests and replies of AI calls for troubleshooting.",
+      "label": "Keep AI requests"
+    },
+    "privacy.log_retention_days": {
+      "description": "How long stored AI requests are kept.",
+      "label": "Keep AI requests for"
+    },
+    "privacy.never_send_areas": {
+      "description": "Areas whose data never leaves your home.",
+      "label": "Never send these areas"
+    },
+    "privacy.never_send_entities": {
+      "description": "Entities whose data never leaves your home.",
+      "label": "Never send these entities"
+    },
+    "world.create_labels": {
+      "description": "Create the labels HomeAI understands (ignore, personal, critical, protective action, private) if they do not exist.",
+      "label": "Create HomeAI labels"
+    },
+    "world.exclude_entities": {
+      "description": "Entity patterns HomeAI ignores, for example light.*_display.",
+      "label": "Excluded entities"
+    },
+    "world.include_areas": {
+      "description": "Areas HomeAI watches when the scope is “selected areas”.",
+      "label": "Selected areas"
+    },
+    "world.include_domains": {
+      "description": "Limit HomeAI to these entity domains. Empty means all.",
+      "label": "Only these domains"
+    },
+    "world.include_hidden": {
+      "description": "Also watch entities hidden in Home Assistant.",
+      "label": "Include hidden entities"
+    },
+    "world.label_critical": {
+      "description": "Problems with these devices are always treated as the highest severity.",
+      "label": "Label: critical"
+    },
+    "world.label_ignore": {
+      "description": "Entities and devices with this label are invisible to HomeAI.",
+      "label": "Label: ignore"
+    },
+    "world.label_personal": {
+      "description": "Personal devices (phones, laptops) may go offline; that is not a problem of the home.",
+      "label": "Label: personal"
+    },
+    "world.label_private": {
+      "description": "Data of these entities is never sent to cloud AI.",
+      "label": "Label: private"
+    },
+    "world.label_protective": {
+      "description": "Actions on these entities may run automatically to protect the home (for example closing a water valve during a leak).",
+      "label": "Label: protective action"
+    },
+    "world.scope": {
+      "description": "All entities, only those exposed to voice assistants, or only selected areas.",
+      "label": "Which entities HomeAI sees"
+    }
+  }
+}

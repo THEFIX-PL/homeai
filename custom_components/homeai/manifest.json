@@ -1,14 +1,32 @@
 {
   "domain": "homeai",
   "name": "HomeAI",
-  "codeowners": ["@THEFIX-PL"],
+  "after_dependencies": [
+    "backup",
+    "calendar",
+    "conversation",
+    "frontend",
+    "logbook",
+    "mobile_app",
+    "notify",
+    "panel_custom",
+    "persistent_notification",
+    "recorder",
+    "tts"
+  ],
+  "codeowners": [
+    "@THEFIX-PL"
+  ],
   "config_flow": true,
-  "dependencies": [],
+  "dependencies": [
+    "http",
+    "websocket_api"
+  ],
   "documentation": "https://github.com/THEFIX-PL/homeai",
   "integration_type": "service",
   "iot_class": "calculated",
   "issue_tracker": "https://github.com/THEFIX-PL/homeai/issues",
   "requirements": [],
   "single_config_entry": true,
-  "version": "0.0.1"
+  "version": "0.1.0"
 }

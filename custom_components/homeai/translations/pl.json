@@ -3,11 +3,82 @@
     "step": {
       "user": {
         "title": "Konfiguracja HomeAI",
-        "description": "HomeAI jest na wczesnym etapie rozwoju. Ta wersja tylko dodaje integrację i jeszcze niczego w domu nie robi."
+        "description": "HomeAI zauważa, co zmienia się w domu, decyduje, co z tym zrobić, naprawia, co może, i odzywa się tylko wtedy, gdy potrzebny jest człowiek. Działa bez AI; poziomy AI można dodać później jako podwpisy.",
+        "data": {
+          "language": "Język komunikatów HomeAI",
+          "privacy": "Dane wysyłane do AI w chmurze"
+        },
+        "data_description": {
+          "language": "Auto oznacza język Home Assistanta.",
+          "privacy": "Standardowy wysyła nazwy urządzeń, pokoi i osób. Minimalny zastępuje osoby i pokoje neutralnymi etykietami. Pełny wysyła też tytuły wydarzeń z kalendarzy."
+        }
+      },
+      "people": {
+        "title": "Domownicy",
+        "description": "Wybierz rolę każdej osoby. Administratorzy zatwierdzają ryzykowne akcje i zmiany konfiguracji, domownicy dostają powiadomienia, a goście i osoby pominięte nie są liczeni jako mieszkańcy. Osoby: {people}"
       }
     },
     "abort": {
       "single_instance_allowed": "HomeAI jest już skonfigurowany. Dozwolona jest tylko jedna instancja."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Szybkie ustawienia HomeAI",
+        "description": "Wszystkie pozostałe ustawienia są w panelu HomeAI.",
+        "data": {
+          "general_language": "Język",
+          "privacy_level": "Dane wysyłane do AI w chmurze",
+          "notify_paused": "Wstrzymaj powiadomienia"
+        }
+      }
+    },
+    "abort": {
+      "not_loaded": "HomeAI nie działa. Przeładuj integrację i spróbuj ponownie."
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "auto": "Auto (język Home Assistanta)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "general_language": {
+      "options": {
+        "auto": "Auto (język Home Assistanta)",
+        "en": "English",
+        "pl": "Polski"
+      }
+    },
+    "privacy": {
+      "options": {
+        "standard": "Standardowy",
+        "minimal": "Minimalny",
+        "full": "Pełny"
+      }
+    },
+    "privacy_level": {
+      "options": {
+        "standard": "Standardowy",
+        "minimal": "Minimalny",
+        "full": "Pełny"
+      }
+    },
+    "role": {
+      "options": {
+        "admin": "Administrator",
+        "member": "Domownik",
+        "guest": "Gość",
+        "ignore": "Pomiń"
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "HomeAI nie jest załadowany."
     }
   }
 }
