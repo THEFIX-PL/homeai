@@ -119,6 +119,126 @@
       "home_or_all": "Osoby w domu, a gdy nikogo — wszyscy",
       "none": "Nikt"
     },
+    "policy.actor_ai_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_ai_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_ai_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_ai_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
+    },
+    "policy.actor_homeai_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_homeai_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_homeai_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_homeai_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
+    },
+    "policy.actor_repair_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_repair_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_repair_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_repair_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
+    },
+    "policy.actor_schedule_r1": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_schedule_r2": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_schedule_r3": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj",
+      "act_tell": "Działaj i informuj",
+      "act": "Działaj"
+    },
+    "policy.actor_schedule_r4": {
+      "inherit": "Jak dla klasy",
+      "never": "Nigdy",
+      "observe": "Tylko obserwuj",
+      "propose": "Proponuj i pytaj"
+    },
     "policy.autonomy_r1": {
       "act": "Działaj",
       "act_tell": "Działaj i powiedz",
@@ -183,6 +303,19 @@
       "full": "Pełny",
       "minimal": "Minimalny",
       "standard": "Standardowy"
+    },
+    "repair.playbooks": {
+      "reload_entry": "Przeładuj integrację",
+      "wait_then_reload": "Poczekaj na ponowienie integracji, potem przeładuj",
+      "reload_after_outage": "Przeładuj po powrocie internetu",
+      "retry_backup": "Ponów nieudaną kopię",
+      "restart_addon": "Uruchom ponownie dodatek",
+      "action": "Sugerowane szybkie akcje"
+    },
+    "schedule.who_may_add": {
+      "everyone": "Wszyscy",
+      "residents": "Domownicy",
+      "admins": "Administratorzy"
     },
     "world.scope": {
       "all": "Wszystkie encje",
@@ -948,6 +1081,70 @@
       "description": "Odtwarzacze do powiadomień głosowych.",
       "label": "Głośniki"
     },
+    "policy.actor_ai_r1": {
+      "description": "Poziom dla: AI, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: komfort (R1)"
+    },
+    "policy.actor_ai_r2": {
+      "description": "Poziom dla: AI, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: urządzenia (R2)"
+    },
+    "policy.actor_ai_r3": {
+      "description": "Poziom dla: AI, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: system (R3)"
+    },
+    "policy.actor_ai_r4": {
+      "description": "Poziom dla: AI, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "AI: konfiguracja (R4)"
+    },
+    "policy.actor_homeai_r1": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: komfort (R1)"
+    },
+    "policy.actor_homeai_r2": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: urządzenia (R2)"
+    },
+    "policy.actor_homeai_r3": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: system (R3)"
+    },
+    "policy.actor_homeai_r4": {
+      "description": "Poziom dla: Własne reguły HomeAI, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Własne reguły HomeAI: konfiguracja (R4)"
+    },
+    "policy.actor_repair_r1": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: komfort (R1)"
+    },
+    "policy.actor_repair_r2": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: urządzenia (R2)"
+    },
+    "policy.actor_repair_r3": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: system (R3)"
+    },
+    "policy.actor_repair_r4": {
+      "description": "Poziom dla: Naprawy, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Naprawy: konfiguracja (R4)"
+    },
+    "policy.actor_schedule_r1": {
+      "description": "Poziom dla: Plan, przy akcjach klasy komfort (R1); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: komfort (R1)"
+    },
+    "policy.actor_schedule_r2": {
+      "description": "Poziom dla: Plan, przy akcjach klasy urządzenia (R2); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: urządzenia (R2)"
+    },
+    "policy.actor_schedule_r3": {
+      "description": "Poziom dla: Plan, przy akcjach klasy system (R3); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: system (R3)"
+    },
+    "policy.actor_schedule_r4": {
+      "description": "Poziom dla: Plan, przy akcjach klasy konfiguracja (R4); „Jak dla klasy” używa poziomu klasy. Suwak autonomii nadal działa.",
+      "label": "Plan: konfiguracja (R4)"
+    },
     "policy.approval_minutes": {
       "description": "Jak długo prośba o zgodę czeka na odpowiedź.",
       "label": "Prośba o zgodę wygasa po"
@@ -983,6 +1180,14 @@
     "policy.repairs_per_day": {
       "description": "Najwięcej automatycznych napraw systemu (R3) na dzień; więcej wymaga administratora.",
       "label": "Naprawy systemu dziennie"
+    },
+    "policy.risk_by_label": {
+      "description": "Klasa dla wszystkiego z etykietą, według id etykiety, np. {\"kids_room\": \"R4\"}. Przy kilku etykietach wygrywa najwyższa klasa; nadpisanie dla encji, urządzenia, obszaru lub piętra ma pierwszeństwo.",
+      "label": "Klasa ryzyka według etykiety"
+    },
+    "policy.risk_by_service": {
+      "description": "Własna klasa dla całej domeny albo jednej akcji, np. {\"switch\": \"R3\", \"script.turn_on\": \"R4\"}. Wygrywa najbardziej szczegółowy klucz.",
+      "label": "Klasa ryzyka według akcji"
     },
     "policy.risk_override": {
       "description": "Nadpisz klasę ryzyka akcji na tej encji, urządzeniu, obszarze albo piętrze.",
@@ -1088,9 +1293,17 @@
       "description": "Ile razy próbować playbooka, zanim powiadomisz ludzi.",
       "label": "Próby"
     },
+    "repair.never_reload": {
+      "description": "Integracje, których HomeAI nigdy nie przeładowuje, według domeny (zha, mqtt) albo id wpisu. Ich awarie od razu trafiają do ludzi.",
+      "label": "Nigdy nie przeładowuj"
+    },
     "repair.outage_wait": {
       "description": "Minuty przed przeładowaniem integracji, której wszystkie urządzenia zamilkły.",
       "label": "Urządzenia jednej integracji milczą: czekaj"
+    },
+    "repair.playbooks": {
+      "description": "Które naprawy HomeAI może spróbować samo, zanim kogoś powiadomi.",
+      "label": "Używane scenariusze napraw"
     },
     "repair.protective_enabled": {
       "description": "Przy zalaniu, gazie, dymie albo czadzie wykonaj od razu akcje ochronne (ludzie dostają powiadomienie równocześnie).",
@@ -1116,13 +1329,25 @@
       "description": "Wykonaj wpisy planu pominięte, gdy Home Assistant nie działał, jeśli spóźnienie jest najwyżej takie.",
       "label": "Nadrabiaj pominięte wpisy"
     },
+    "schedule.default_skip_when_away": {
+      "description": "Nowe wpisy planu pomijają wykonanie, gdy nikogo nie ma w domu albo trwa urlop, chyba że wpis mówi inaczej.",
+      "label": "Nowe wpisy pomijają, gdy nikogo nie ma"
+    },
     "schedule.event_minutes": {
       "description": "Jak długo wpisy planu wyglądają w kalendarzu.",
       "label": "Długość wpisu w kalendarzu"
     },
+    "schedule.max_entries": {
+      "description": "Najwięcej wpisów, jakie może mieć plan.",
+      "label": "Rozmiar planu"
+    },
     "schedule.presence_keep_days": {
       "description": "Ile dni przechowywać wyjątki obecności po ich końcu.",
       "label": "Przechowuj minione wyjątki"
+    },
+    "schedule.who_may_add": {
+      "description": "Wszyscy, domownicy (administratorzy i członkowie, bez gości) albo tylko administratorzy. Administratorzy mogą zawsze.",
+      "label": "Kto może dodawać do planu"
     },
     "situations.close_after": {
       "description": "Jak długo sprawa musi ustąpić, zanim zostanie zamknięta.",

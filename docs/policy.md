@@ -16,8 +16,14 @@ own autonomy, the plan, repair playbooks or an AI tier.
 | R6 destructive | deleting configuration, restarting Home Assistant, purging the recorder | never | administrators, with confirmation |
 
 The class comes from the domain and service, then the device class (a garage or gate cover is R5; a switch on a
-device that also has a lock is R5). Administrators can override the class per entity, device, area or floor
-(setting *Risk class*). When an action targets several entities the highest class counts.
+device that also has a lock is R5). Administrators can change it at three levels, each more specific than the
+last:
+
+1. *Risk class by action*: a class for a whole domain (`switch`) or one action (`script.turn_on`).
+2. *Risk class by label*: a class for everything with a label; with several labels the highest wins.
+3. *Risk class* per entity, device, area or floor.
+
+When an action targets several entities the highest class counts.
 
 ## Autonomy levels
 
@@ -25,6 +31,14 @@ For R1–R4 each class has a level: *never*, *only observe* (journal only), *pro
 request), *act and tell*, *act*. During the observation period (default 14 days after installation) R1–R2
 autonomy only observes. An automatic action that people undo too often goes back to *propose*; a request that
 was refused is not asked again for a while.
+
+The **autonomy slider** (`select.homeai_autonomy`) moves every level at once: *only observe*, *cautious* (at most
+propose, system repairs still run), *balanced* (the levels as set) and *bold* (comfort and device actions run).
+
+The **actor × class matrix** gives one actor its own level for a class: HomeAI's own rules, AI, repairs or the
+plan (settings *AI: devices (R2)* and so on, *As the class* by default). For example AI may only propose device
+actions while HomeAI's own rules act on them. Plan entries normally run up to the class their author approved;
+a level set for the plan in the matrix applies on top of that. The slider still applies to every actor.
 
 ## People
 

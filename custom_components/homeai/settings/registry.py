@@ -173,6 +173,8 @@ class Setting:
         except TypeError:
             return True
         if self.confirm == "disable":
+            if isinstance(old, list) and isinstance(new, list):
+                return bool(set(old) - set(new))  # switching something off in a list
             return old is True and new is False
         return True
 

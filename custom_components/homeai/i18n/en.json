@@ -119,6 +119,126 @@
       "home_or_all": "People at home, else everyone",
       "none": "Nobody"
     },
+    "policy.actor_ai_r1": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_ai_r2": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_ai_r3": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_ai_r4": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
+    "policy.actor_homeai_r1": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_homeai_r2": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_homeai_r3": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_homeai_r4": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
+    "policy.actor_repair_r1": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_repair_r2": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_repair_r3": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_repair_r4": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
+    "policy.actor_schedule_r1": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_schedule_r2": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_schedule_r3": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask",
+      "act_tell": "Act and tell",
+      "act": "Act"
+    },
+    "policy.actor_schedule_r4": {
+      "inherit": "As the class",
+      "never": "Never",
+      "observe": "Only observe",
+      "propose": "Propose and ask"
+    },
     "policy.autonomy_r1": {
       "act": "Act",
       "act_tell": "Act and tell",
@@ -183,6 +303,19 @@
       "full": "Full",
       "minimal": "Minimal",
       "standard": "Standard"
+    },
+    "repair.playbooks": {
+      "reload_entry": "Reload an integration",
+      "wait_then_reload": "Wait for an integration to retry, then reload",
+      "reload_after_outage": "Reload after the internet returns",
+      "retry_backup": "Retry a failed backup",
+      "restart_addon": "Restart an add-on",
+      "action": "Suggested quick actions"
+    },
+    "schedule.who_may_add": {
+      "everyone": "Everyone",
+      "residents": "Residents",
+      "admins": "Administrators"
     },
     "world.scope": {
       "all": "All entities",
@@ -948,6 +1081,70 @@
       "description": "Media players used for spoken notifications.",
       "label": "Speakers"
     },
+    "policy.actor_ai_r1": {
+      "description": "Level for AI with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "AI: comfort (R1)"
+    },
+    "policy.actor_ai_r2": {
+      "description": "Level for AI with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "AI: devices (R2)"
+    },
+    "policy.actor_ai_r3": {
+      "description": "Level for AI with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "AI: system (R3)"
+    },
+    "policy.actor_ai_r4": {
+      "description": "Level for AI with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "AI: configuration (R4)"
+    },
+    "policy.actor_homeai_r1": {
+      "description": "Level for HomeAI's own rules with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "HomeAI's own rules: comfort (R1)"
+    },
+    "policy.actor_homeai_r2": {
+      "description": "Level for HomeAI's own rules with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "HomeAI's own rules: devices (R2)"
+    },
+    "policy.actor_homeai_r3": {
+      "description": "Level for HomeAI's own rules with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "HomeAI's own rules: system (R3)"
+    },
+    "policy.actor_homeai_r4": {
+      "description": "Level for HomeAI's own rules with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "HomeAI's own rules: configuration (R4)"
+    },
+    "policy.actor_repair_r1": {
+      "description": "Level for Repairs with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "Repairs: comfort (R1)"
+    },
+    "policy.actor_repair_r2": {
+      "description": "Level for Repairs with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "Repairs: devices (R2)"
+    },
+    "policy.actor_repair_r3": {
+      "description": "Level for Repairs with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "Repairs: system (R3)"
+    },
+    "policy.actor_repair_r4": {
+      "description": "Level for Repairs with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "Repairs: configuration (R4)"
+    },
+    "policy.actor_schedule_r1": {
+      "description": "Level for The plan with comfort (R1) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "The plan: comfort (R1)"
+    },
+    "policy.actor_schedule_r2": {
+      "description": "Level for The plan with devices (R2) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "The plan: devices (R2)"
+    },
+    "policy.actor_schedule_r3": {
+      "description": "Level for The plan with system (R3) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "The plan: system (R3)"
+    },
+    "policy.actor_schedule_r4": {
+      "description": "Level for The plan with configuration (R4) actions; “As the class” uses the class's level. The autonomy slider still applies.",
+      "label": "The plan: configuration (R4)"
+    },
     "policy.approval_minutes": {
       "description": "How long a request for approval waits for an answer.",
       "label": "Approval expires after"
@@ -983,6 +1180,14 @@
     "policy.repairs_per_day": {
       "description": "Most automatic system repairs (R3) per day; more need an administrator.",
       "label": "System repairs per day"
+    },
+    "policy.risk_by_label": {
+      "description": "A class for everything with a label, by label id, e.g. {\"kids_room\": \"R4\"}. With several labels the highest class wins; an entity, device, area or floor override still comes first.",
+      "label": "Risk class by label"
+    },
+    "policy.risk_by_service": {
+      "description": "Your own class for a whole domain or one action, e.g. {\"switch\": \"R3\", \"script.turn_on\": \"R4\"}. The most specific key wins.",
+      "label": "Risk class by action"
     },
     "policy.risk_override": {
       "description": "Override the risk class of actions on this entity, device, area or floor.",
@@ -1088,9 +1293,17 @@
       "description": "How many times a playbook is tried before people are told.",
       "label": "Attempts"
     },
+    "repair.never_reload": {
+      "description": "Integrations HomeAI never reloads, by domain (zha, mqtt) or config entry id. Their failures go straight to people.",
+      "label": "Never reload"
+    },
     "repair.outage_wait": {
       "description": "Minutes before reloading an integration whose devices all went silent.",
       "label": "Devices of one integration down: wait"
+    },
+    "repair.playbooks": {
+      "description": "Which repairs HomeAI may try on its own before telling anyone.",
+      "label": "Repair playbooks in use"
     },
     "repair.protective_enabled": {
       "description": "On a leak, gas, smoke or carbon monoxide alarm run protective actions right away (people are notified at the same time).",
@@ -1116,13 +1329,25 @@
       "description": "Run plan entries missed while Home Assistant was down if they are at most this late.",
       "label": "Catch up missed entries"
     },
+    "schedule.default_skip_when_away": {
+      "description": "New plan entries skip their run while everyone is away or on vacation, unless the entry says otherwise.",
+      "label": "New entries skip when away"
+    },
     "schedule.event_minutes": {
       "description": "How long plan entries look in the calendar.",
       "label": "Plan event length"
     },
+    "schedule.max_entries": {
+      "description": "Most entries the plan may hold.",
+      "label": "Plan size"
+    },
     "schedule.presence_keep_days": {
       "description": "Days to keep presence exceptions after they end.",
       "label": "Keep past exceptions"
+    },
+    "schedule.who_may_add": {
+      "description": "Everyone, residents (administrators and members, not guests) or only administrators. Administrators may always.",
+      "label": "Who may add to the plan"
     },
     "situations.close_after": {
       "description": "How long a situation must be gone before it is closed.",

@@ -104,7 +104,11 @@ class Scheduler:
             raise PlanError("not_found")
         if existing and not admin and existing.get("author") != user_id:
             raise PlanError("not_author")
-        if existing is None and len(self.entries) >= MAX_ENTRIES:
+        if not admin:
+            self._may_add(user_id)
+        if existing is None and len(self.entries) >= min(
+            MAX_ENTRIES, int(self.rt.settings.get("schedule.max_entries"))
+        ):
             raise PlanError("too_many")
         title = str(raw.get("title") or "").strip()[:200]
         try:
@@ -116,7 +120,7 @@ class Scheduler:
             "title": title,
             "when": when,
             "enabled": bool(raw.get("enabled", True)),
-            "skip_when_away": bool(raw.get("skip_when_away", False)),
+            "skip_when_away": bool(raw.get("skip_when_away", self.rt.settings.get("schedule.default_skip_when_away"))),
             "skip_dates": sorted({d for d in raw.get("skip_dates", []) if isinstance(d, str)})[-100:],
             "author": existing["author"] if existing else user_id,
             "author_name": existing["author_name"] if existing else (user.name if user else "HomeAI"),
@@ -159,6 +163,17 @@ class Scheduler:
         )
         self._changed()
         return entry
+
+    def _may_add(self, user_id: str | None) -> None:
+        """`schedule.who_may_add`: everyone, residents (administrators and members, not guests) or administrators."""
+        who = str(self.rt.settings.get("schedule.who_may_add"))
+        if who == "everyone":
+            return
+        if who == "admins":
+            raise PlanError("admin_required")
+        person = next((p for p in self.rt.world.persons.values() if user_id and p.user_id == user_id), None)
+        if person is None or self.rt.presence.role(person.entity_id) not in ("admin", "member"):
+            raise PlanError("not_allowed")
 
     async def remove(self, entry_id: str, user_id: str | None) -> bool:
         entry = self.entries.get(entry_id)

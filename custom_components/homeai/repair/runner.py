@@ -60,11 +60,23 @@ class RepairRunner:
         p = s.primary
         if p is None:
             return None
-        if p.repair and p.repair.get("playbook") in PLAYBOOKS:
-            return p.repair["playbook"], {k: v for k, v in p.repair.items() if k != "playbook"}
-        if p.action and self.rt.settings.get("repair.quick_actions"):
+        enabled = set(self.rt.settings.get("repair.playbooks"))
+        if p.repair and p.repair.get("playbook") in PLAYBOOKS and p.repair["playbook"] in enabled:
+            params = {k: v for k, v in p.repair.items() if k != "playbook"}
+            if self._never_reload(params.get("entry_id")):
+                return None
+            return p.repair["playbook"], params
+        if p.action and self.rt.settings.get("repair.quick_actions") and "action" in enabled:
             return "action", dict(p.action)
         return None
+
+    def _never_reload(self, entry_id: str | None) -> bool:
+        """The administrator listed this integration (domain or entry id) as one HomeAI never reloads."""
+        if not entry_id:
+            return False
+        never = set(self.rt.settings.get("repair.never_reload"))
+        entry = self.rt.hass.config_entries.async_get_entry(entry_id)
+        return entry_id in never or (entry is not None and entry.domain in never)
 
     def start(self, s: Situation, now: datetime | None = None) -> None:
         if not self.rt.settings.get("repair.enabled") or s.phase is not Phase.OPEN:
