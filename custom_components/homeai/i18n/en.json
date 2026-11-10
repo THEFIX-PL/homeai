@@ -456,6 +456,14 @@
       "description": "Consumable sensors that show how much is used (100 = worn out) instead of what is left.",
       "label": "Sensors showing usage"
     },
+    "detectors.custom": {
+      "description": "Your own rules: when an entity (or entities with a label, in an area, of a domain) meets a condition for a while, open a situation. Edit them in the panel's Rules tab.",
+      "label": "Custom detectors"
+    },
+    "detectors.custom.enabled": {
+      "description": "Run your own rules.",
+      "label": "Custom detectors: watch"
+    },
     "detectors.divergence.degrees": {
       "description": "Maximum difference between temperature sensors in one room.",
       "label": "Allowed difference"

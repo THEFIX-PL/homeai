@@ -64,6 +64,12 @@ def validate_severity_map(value: Any) -> dict[str, int]:
     return out
 
 
+def _custom_rules(value: Any) -> list[dict[str, Any]]:
+    from ..signals.detectors.custom import validate_rules
+
+    return validate_rules(value)
+
+
 def _sev(key: str, default: int, section: str, scopes: frozenset = G, advanced: bool = True) -> Setting:
     return Setting(key, T.INT, default, section, scopes=scopes, min=0, max=4, advanced=advanced)
 
@@ -143,6 +149,7 @@ def _detectors() -> list[Setting]:
     s = "detectors"
     out = [
         Setting("detectors.system_refresh", T.DURATION, 300, s, min=60, max=3600, unit="s", advanced=True),
+        Setting("detectors.custom", T.JSON, [], s, validator=_custom_rules),
     ]
     for key in (
         "safety",
@@ -163,6 +170,7 @@ def _detectors() -> list[Setting]:
         "window_heating",
         "external",
         "bridges",
+        "custom",
     ):
         out.append(
             Setting(

@@ -97,7 +97,7 @@ class Situation:
         p = self.primary
         if p is None:
             return ""
-        if p.kind == "external":
+        if p.kind in ("external", "custom"):
             return str(p.data.get("title", ""))
         same = [s for s in self.signals.values() if s.kind == p.kind]
         if len(same) > 1 and i18n.has(lang, f"signals|{p.kind}|title_many"):
@@ -111,7 +111,7 @@ class Situation:
         p = self.primary
         if p is None:
             return ""
-        if p.kind == "external":
+        if p.kind in ("external", "custom"):
             return str(p.data.get("description", ""))
         return (
             i18n.text(lang, f"signals|{p.kind}|description", **_data(p))

@@ -12,7 +12,7 @@ learning when you add them.
   backups, updates, log errors, the internet connection, batteries, consumables, plants, silent sensors,
   indoor climate, disagreeing sensors, lights in an empty home, windows open while heating, hubs and bridges
   (Zigbee2MQTT and any hub other devices connect through), unusual values against learned norms, and
-  signals from other integrations.
+  signals from other integrations, plus your own rules (custom detectors) written in the panel.
 - **Understands.** Signals become *situations*: related signals are grouped (a hub offline explains every
   device behind it, the internet down explains cloud devices), flickers are ignored, and each situation has a
   lifecycle (pending, open, clearing, resolved).

@@ -19,6 +19,7 @@ from homeassistant.util import dt as dt_util
 from ..const import LOGGER
 from .base import DetectionContext, Detector, Signal
 from .detectors.behaviour import LightsAwayDetector, WindowHeatingDetector
+from .detectors.custom import CustomDetector
 from .detectors.environment import DivergenceDetector, EnvironmentDetector
 from .detectors.external import ExternalDetector
 from .detectors.maintenance import BatteryDetector, ConsumableDetector, ProblemDetector, StaleSensorDetector
@@ -57,6 +58,7 @@ def default_detectors() -> list[Detector]:
         LightsAwayDetector(),
         WindowHeatingDetector(),
         ExternalDetector(),
+        CustomDetector(),
     ]
 
 

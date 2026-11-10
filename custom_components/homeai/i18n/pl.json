@@ -456,6 +456,14 @@
       "description": "Czujniki pokazujące zużycie (100 = zużyty) zamiast pozostałej żywotności.",
       "label": "Czujniki zużycia"
     },
+    "detectors.custom": {
+      "description": "Twoje reguły: gdy encja (albo encje z etykietą, w obszarze, z domeny) spełnia warunek przez jakiś czas, otwórz sprawę. Edytuj je w zakładce Reguły panelu.",
+      "label": "Własne detektory"
+    },
+    "detectors.custom.enabled": {
+      "description": "Uruchamiaj własne reguły.",
+      "label": "Własne detektory: obserwuj"
+    },
     "detectors.divergence.degrees": {
       "description": "Największa różnica między czujnikami temperatury w jednym pokoju.",
       "label": "Dozwolona różnica"

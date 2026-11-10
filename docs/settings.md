@@ -83,6 +83,7 @@ What HomeAI watches and its limits.
 | Setting | Key | Default | Range / options | Scope | Notes |
 |---|---|---|---|---|---|
 | **System data refresh** — How often backups, the log and automation traces are read. | `detectors.system_refresh` | 300 | 60–3600 s | home | advanced |
+| **Custom detectors** — Your own rules: when an entity (or entities with a label, in an area, of a domain) meets a condition for a while, open a situation. Edit them in the panel's Rules tab. | `detectors.custom` | see panel |  | home |  |
 | **Safety sensors: watch** — Watch leak, smoke, gas, carbon monoxide and tamper sensors. | `detectors.safety.enabled` | true |  | home | confirm (disable) |
 | **Security: watch** — Watch doors, windows, gates and locks left open while nobody is home or everyone sleeps. | `detectors.security.enabled` | true |  | home | confirm (disable) |
 | **Internet connection: watch** — Watch the home's internet connection. | `detectors.internet.enabled` | true |  | home |  |
@@ -101,6 +102,7 @@ What HomeAI watches and its limits.
 | **Window open while heating: watch** — Watch a window open in a room that is being heated. | `detectors.window_heating.enabled` | true |  | home |  |
 | **Signals from other integrations: watch** — Watch signals reported by automations and integrations. | `detectors.external.enabled` | true |  | home |  |
 | **Hubs and bridges: watch** — Watch hubs and bridges (Zigbee2MQTT, hubs other devices connect through) and fold the devices behind them into one situation. | `detectors.bridges.enabled` | true |  | home |  |
+| **Custom detectors: watch** — Run your own rules. | `detectors.custom.enabled` | true |  | home |  |
 | **Water leak: severity** — Severity 0–4 of water leak (0 journal only, 4 critical). | `detectors.safety.severity_leak` | 4 | 0–4 | area, device, entity, floor, home | advanced |
 | **Smoke: severity** — Severity 0–4 of smoke (0 journal only, 4 critical). | `detectors.safety.severity_smoke` | 4 | 0–4 | area, device, entity, floor, home | advanced |
 | **Gas: severity** — Severity 0–4 of gas (0 journal only, 4 critical). | `detectors.safety.severity_gas` | 4 | 0–4 | area, device, entity, floor, home | advanced |
