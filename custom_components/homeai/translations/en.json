@@ -547,7 +547,7 @@
             "price_output": "Price of output"
           },
           "data_description": {
-            "base_url": "OpenAI-compatible endpoint, e.g. http://ollama.local:11434/v1",
+            "base_url": "OpenAI-compatible endpoint, e.g. {example_url}",
             "effort": "How deeply the model thinks. Higher costs more.",
             "fallbacks": "If the model declines, the server retries on a suitable model.",
             "privacy": "Default: the HomeAI privacy setting.",

@@ -126,7 +126,10 @@ class TierSubentryFlow(ConfigSubentryFlow):
                 self._data["provider"], self._data["tier"], {**self._data, **(user_input or {})}
             ),
             errors=errors,
-            description_placeholders={"tier": self._data["tier"].upper()},
+            description_placeholders={
+                "tier": self._data["tier"].upper(),
+                "example_url": "http://ollama.local:11434/v1",
+            },
         )
 
     async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> SubentryFlowResult:

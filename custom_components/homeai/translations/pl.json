@@ -547,7 +547,7 @@
             "price_output": "Cena wyjścia"
           },
           "data_description": {
-            "base_url": "Punkt zgodny z OpenAI, np. http://ollama.local:11434/v1",
+            "base_url": "Punkt zgodny z OpenAI, np. {example_url}",
             "effort": "Jak głęboko model myśli. Wyższy kosztuje więcej.",
             "fallbacks": "Gdy model odmówi, serwer ponowi na odpowiednim modelu.",
             "privacy": "Domyślnie: ustawienie prywatności HomeAI.",

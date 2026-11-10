@@ -13,6 +13,7 @@
     "persistent_notification",
     "recorder",
     "scene",
+    "trace",
     "tts"
   ],
   "codeowners": [
