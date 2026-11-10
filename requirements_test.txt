@@ -7,4 +7,4 @@ anthropic==0.125.0
 # Requirements of Home Assistant components the tests load (conversation agent, scenes for undo).
 hassil==3.12.1
 home-assistant-intents==2026.10.6
-gazetteer-matcher==1.1.0
+gazetteer-matcher==1.2.0
