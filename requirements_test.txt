@@ -2,8 +2,10 @@
 # 0.13.375 pins homeassistant 2026.10.4; move to the release that pins 2026.11.x as soon as it is published.
 pytest-homeassistant-custom-component==0.13.375
 ruff==0.17.4
+# The packages below follow the pins of Home Assistant 2026.11 (the minimum version in hacs.json), not the latest
+# releases. Dependabot ignores them; update them by hand together with Home Assistant.
 # Same version Home Assistant core pins for its Anthropic integration.
-anthropic==0.125.0
+anthropic==2.3.0
 # Requirements of Home Assistant components the tests load (conversation agent, scenes for undo).
 hassil==3.12.1
 home-assistant-intents==2026.10.27

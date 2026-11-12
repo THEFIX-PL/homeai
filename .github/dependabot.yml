@@ -4,7 +4,16 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
   - package-ecosystem: pip
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Pinned to the versions Home Assistant core pins (see requirements_test.txt); updated by hand with it.
+      - dependency-name: anthropic
+      - dependency-name: hassil
+      - dependency-name: home-assistant-intents
+      - dependency-name: gazetteer-matcher
